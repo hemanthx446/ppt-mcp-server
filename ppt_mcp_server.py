@@ -7,8 +7,34 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN
 
+# Professional Presentation Design Guardrails for MCP Server
+MCP_PPT_SYSTEM_PROMPT = """
+You are an expert Enterprise Solutions Architect and Presentation Designer. When generating slides using python-pptx or MCP tools, you MUST strictly follow these layout rules:
+
+1. THE "3-BULLET MAXIMUM" RULE:
+   - Never output dense walls of text or long vertical bullet lists.
+   - Limit any text block/card to a maximum of 3 concise, high-impact bullet points or short lines.
+
+2. MULTI-COLUMN CARD LAYOUTS:
+   - For comparisons, value propositions, or feature overviews, divide the slide canvas into 2 or 3 distinct side-by-side rectangular container cards with clear visual headers and whitespace.
+
+3. ARCHITECTURE & WORKFLOW SPLIT LAYOUTS:
+   - For slides categorized under "Architecture", "Pipeline", or "Workflow", allocate at least 50% of the slide to structured horizontal block diagrams (e.g., [ SAP Core ] -> [ Middleware ] -> [ Edge Terminals ]) or numbered sequence cards (1, 2, 3) rather than text descriptions.
+
+4. NARRATIVE HEADINGS & SUBHEADERS:
+   - Slide titles must use action-oriented narrative subheaders (e.g., "HOW IT WORKS: One-way reads out of SAP, a human gate back in") rather than dry single-word labels.
+
+5. TYPOGRAPHY & EMPHASIS:
+   - Dynamically increase font sizing for key metrics (ROI figures, timeline days, percentages) while keeping body text clean and readable (14pt-16pt range).
+"""
+
 # Initialize FastMCP Server
-mcp = FastMCP("PowerPoint-MCP-Server")
+mcp = FastMCP("PowerPoint-MCP-Server", instructions=MCP_PPT_SYSTEM_PROMPT)
+
+@mcp.prompt("presentation_design_guardrails")
+def get_design_guardrails() -> str:
+    """Returns the professional presentation design guardrails and layout rules."""
+    return MCP_PPT_SYSTEM_PROMPT
 
 # Map user-friendly shape names to MSO_SHAPE enums
 SHAPE_MAP = {
@@ -189,6 +215,78 @@ def add_bullet_points(
         
     prs.save(path)
     return f"Successfully added {len(points)} bullet points to slide {slide_idx}."
+
+def add_split_cards_to_slide(slide, left_title: str, left_bullets: List[str], right_title: str, right_bullets: List[str],
+                             bg_rgb: RGBColor = RGBColor(245, 247, 250),
+                             border_rgb: RGBColor = RGBColor(210, 215, 225),
+                             top_in: float = 1.8, height_in: float = 4.5):
+    """Creates a clean 2-column comparison or architectural breakdown card layout."""
+    # Left Card Container
+    left_box = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(top_in), Inches(5.6), Inches(height_in))
+    left_box.fill.solid()
+    left_box.fill.fore_color.rgb = bg_rgb
+    left_box.line.color.rgb = border_rgb
+    
+    tf = left_box.text_frame
+    tf.word_wrap = True
+    p = tf.paragraphs[0]
+    p.text = left_title
+    p.font.bold = True
+    p.font.size = Pt(16)
+    
+    for bullet in left_bullets[:3]: # Enforce max 3 bullets
+        bp = tf.add_paragraph()
+        bp.text = f"• {bullet}"
+        bp.font.size = Pt(13)
+
+    # Right Card Container
+    right_box = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(6.8), Inches(top_in), Inches(5.6), Inches(height_in))
+    right_box.fill.solid()
+    right_box.fill.fore_color.rgb = bg_rgb
+    right_box.line.color.rgb = border_rgb
+    
+    rtf = right_box.text_frame
+    rtf.word_wrap = True
+    rp = rtf.paragraphs[0]
+    rp.text = right_title
+    rp.font.bold = True
+    rp.font.size = Pt(16)
+    
+    for bullet in right_bullets[:3]: # Enforce max 3 bullets
+        rbp = rtf.add_paragraph()
+        rbp.text = f"• {bullet}"
+        rbp.font.size = Pt(13)
+        
+    return left_box, right_box
+
+@mcp.tool
+def add_split_cards(
+    path: str,
+    slide_idx: int,
+    left_title: str,
+    left_bullets: List[str],
+    right_title: str,
+    right_bullets: List[str],
+    bg_color_hex: str = "F5F7FA",
+    border_color_hex: str = "D2D7E1",
+    top_in: float = 1.8,
+    height_in: float = 4.5
+) -> str:
+    """
+    Creates a clean 2-column comparison or architectural breakdown card layout.
+    Enforces the '3-bullet maximum' rule per card container.
+    """
+    prs = load_prs(path)
+    if slide_idx < 0 or slide_idx >= len(prs.slides):
+        return f"Error: Slide index {slide_idx} is out of range."
+        
+    slide = prs.slides[slide_idx]
+    bg_rgb = parse_hex_color(bg_color_hex)
+    border_rgb = parse_hex_color(border_color_hex)
+    add_split_cards_to_slide(slide, left_title, left_bullets, right_title, right_bullets, bg_rgb, border_rgb, top_in, height_in)
+    
+    prs.save(path)
+    return f"Successfully added split cards layout to slide {slide_idx}."
 
 @mcp.tool
 def add_shape(
