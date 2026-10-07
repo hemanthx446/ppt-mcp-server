@@ -437,6 +437,12 @@ def generate_all_representative_decks():
 
     # Slide 2: Frontline Operator Journey
     s2 = prs_proc.slides.add_slide(blank_layout)
+    from pptx.enum.shapes import MSO_SHAPE
+    bg_s2 = s2.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(CanvasBounds.width), Inches(CanvasBounds.height))
+    bg_s2.fill.solid()
+    bg_s2.fill.fore_color.rgb = ExecutiveNavyTheme.canvas
+    bg_s2.line.fill.background()
+
     HeaderPrimitive.render(s2, "2. OPERATOR EXECUTION", "Frontline Operator Workflow with Poka-Yoke Interlocks", "Deterministic digital work instructions eliminate human assembly errors.", ExecutiveNavyTheme)
     FooterPrimitive.render(s2, 2, 2, "Boeing Commercial Airplanes • Operator Workflow Advisory", ExecutiveNavyTheme)
     lib.OperationalWorkflowPrimitive.render(
@@ -459,8 +465,9 @@ def generate_all_representative_decks():
     prs_swim = Presentation()
     prs_swim.slide_width = Inches(CanvasBounds.width)
     prs_swim.slide_height = Inches(CanvasBounds.height)
+    layout_swim = prs_swim.slide_layouts[6] if len(prs_swim.slide_layouts) > 6 else prs_swim.slide_layouts[0]
 
-    s_sw1 = prs_swim.slides.add_slide(blank_layout)
+    s_sw1 = prs_swim.slides.add_slide(layout_swim)
     HeaderPrimitive.render(s_sw1, "1. CROSS-FUNCTIONAL SWIMLANE", "End-to-End Enterprise Order-to-Confirmation Swimlane", "Multi-tier transactional handoffs and Poka-Yoke interlocks across 5 enterprise lanes.", ConsultingSlateTheme)
     FooterPrimitive.render(s_sw1, 1, 1, "Siemens Industrial • Cross-Functional Swimlane Advisory", ConsultingSlateTheme)
 
@@ -502,8 +509,9 @@ def generate_all_representative_decks():
     prs_mat = Presentation()
     prs_mat.slide_width = Inches(CanvasBounds.width)
     prs_mat.slide_height = Inches(CanvasBounds.height)
+    layout_mat = prs_mat.slide_layouts[6] if len(prs_mat.slide_layouts) > 6 else prs_mat.slide_layouts[0]
 
-    s_m1 = prs_mat.slides.add_slide(blank_layout)
+    s_m1 = prs_mat.slides.add_slide(layout_mat)
     HeaderPrimitive.render(s_m1, "1. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
     FooterPrimitive.render(s_m1, 1, 1, "Caterpillar Manufacturing • Digital Maturity Audit", ConsultingSlateTheme)
 
@@ -529,8 +537,15 @@ def generate_all_representative_decks():
     prs_cl = Presentation()
     prs_cl.slide_width = Inches(CanvasBounds.width)
     prs_cl.slide_height = Inches(CanvasBounds.height)
+    layout_cl = prs_cl.slide_layouts[6] if len(prs_cl.slide_layouts) > 6 else prs_cl.slide_layouts[0]
 
-    s_cl1 = prs_cl.slides.add_slide(blank_layout)
+    s_cl1 = prs_cl.slides.add_slide(layout_cl)
+    from pptx.enum.shapes import MSO_SHAPE
+    bg_cl = s_cl1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(CanvasBounds.width), Inches(CanvasBounds.height))
+    bg_cl.fill.solid()
+    bg_cl.fill.fore_color.rgb = ExecutiveNavyTheme.canvas
+    bg_cl.line.fill.background()
+
     HeaderPrimitive.render(s_cl1, "1. CLOSED-LOOP ARCHITECTURE", "Physical-to-Digital Closed-Loop Cyber-Physical Architecture", "Continuous cyber-physical feedback from machine sensors through S/4HANA intelligence.", ExecutiveNavyTheme)
     FooterPrimitive.render(s_cl1, 1, 1, "Honeywell Aerospace • Closed-Loop Manufacturing Advisory", ExecutiveNavyTheme)
 
@@ -562,6 +577,7 @@ def generate_all_representative_decks():
     prs_sap_mes = Presentation()
     prs_sap_mes.slide_width = Inches(CanvasBounds.width)
     prs_sap_mes.slide_height = Inches(CanvasBounds.height)
+    layout_sap_mes = prs_sap_mes.slide_layouts[6] if len(prs_sap_mes.slide_layouts) > 6 else prs_sap_mes.slide_layouts[0]
 
     # Slide 1: Clean-Core Architecture Blueprint
     arch_spec = ArchitectureBlueprintFactory.clean_core_sap_to_shopfloor(client_name="General Electric")
@@ -571,19 +587,19 @@ def generate_all_representative_decks():
     EnterpriseArchitectureComposer.compose_and_render(prs_sap_mes, arch_spec)
 
     # Slide 2: Cross-Functional Swimlane
-    s_sm2 = prs_sap_mes.slides.add_slide(blank_layout)
+    s_sm2 = prs_sap_mes.slides.add_slide(layout_sap_mes)
     HeaderPrimitive.render(s_sm2, "2. OPERATIONAL SWIMLANE", "Cross-Functional SAP, MES & Shop Floor Handoff Architecture", "End-to-end transactional handoffs with Poka-Yoke error-proofing interlocks.", ConsultingSlateTheme)
     FooterPrimitive.render(s_sm2, 2, 5, "General Electric • Operational Swimlane Advisory", ConsultingSlateTheme)
     SwimlaneDiagramComposer.render(s_sm2, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, swim_model, ConsultingSlateTheme)
 
     # Slide 3: Branching Production Execution Flow
-    s_sm3 = prs_sap_mes.slides.add_slide(blank_layout)
+    s_sm3 = prs_sap_mes.slides.add_slide(layout_sap_mes)
     HeaderPrimitive.render(s_sm3, "3. PROCESS EXECUTION", "Production Execution, Quality Clearance & Rework Loopback", "Sequential order dispatch with automated Poka-Yoke decision gate and rework loopback.", ConsultingSlateTheme)
     FooterPrimitive.render(s_sm3, 3, 5, "General Electric • Production Execution Flow", ConsultingSlateTheme)
     ProcessFlowComposer.render_branching_process(s_sm3, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, flow_model_1, ConsultingSlateTheme)
 
     # Slide 4: Transformation Intervention Bridge
-    s_sm4 = prs_sap_mes.slides.add_slide(blank_layout)
+    s_sm4 = prs_sap_mes.slides.add_slide(layout_sap_mes)
     HeaderPrimitive.render(s_sm4, "4. TRANSFORMATION BLUEPRINT", "Current State to Future Operating Model Transformation Bridge", "Bridging legacy operational friction through S/4HANA clean-core and MES execution enablers.", ConsultingSlateTheme)
     FooterPrimitive.render(s_sm4, 4, 5, "General Electric • Transformation Bridge", ConsultingSlateTheme)
     trans_model = TransformationBridgeModel(
@@ -608,7 +624,7 @@ def generate_all_representative_decks():
     TransformationBridgeComposer.render_bridge(s_sm4, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, trans_model, ConsultingSlateTheme)
 
     # Slide 5: Digital Maturity Staircase & Scorecard
-    s_sm5 = prs_sap_mes.slides.add_slide(blank_layout)
+    s_sm5 = prs_sap_mes.slides.add_slide(layout_sap_mes)
     HeaderPrimitive.render(s_sm5, "5. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
     FooterPrimitive.render(s_sm5, 5, 5, "General Electric • Maturity Assessment", ConsultingSlateTheme)
     MaturityAssessmentComposer.render_staircase_scorecard(s_sm5, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, mat_model, ConsultingSlateTheme)
@@ -621,6 +637,7 @@ def generate_all_representative_decks():
     prs_full = Presentation()
     prs_full.slide_width = Inches(CanvasBounds.width)
     prs_full.slide_height = Inches(CanvasBounds.height)
+    layout_full = prs_full.slide_layouts[6] if len(prs_full.slide_layouts) > 6 else prs_full.slide_layouts[0]
 
     # Slide 1: Executive Opening Tell
     from design_system.density_intelligence import LowDensitySlideRenderer
@@ -635,7 +652,7 @@ def generate_all_representative_decks():
     )
 
     # Slide 2: Transformation Bridge
-    s_f2 = prs_full.slides.add_slide(blank_layout)
+    s_f2 = prs_full.slides.add_slide(layout_full)
     HeaderPrimitive.render(s_f2, "2. TRANSFORMATION BLUEPRINT", "Current State to Future Operating Model Transformation Bridge", "Bridging legacy operational friction through S/4HANA clean-core and MES execution enablers.", ConsultingSlateTheme)
     FooterPrimitive.render(s_f2, 2, 7, "Global Aerospace & Defense • Transformation Blueprint", ConsultingSlateTheme)
     TransformationBridgeComposer.render_bridge(s_f2, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, trans_model, ConsultingSlateTheme)
@@ -646,25 +663,31 @@ def generate_all_representative_decks():
     EnterpriseArchitectureComposer.compose_and_render(prs_full, arch_spec_full)
 
     # Slide 4: Cross-Functional Operational Swimlane
-    s_f4 = prs_full.slides.add_slide(blank_layout)
+    s_f4 = prs_full.slides.add_slide(layout_full)
     HeaderPrimitive.render(s_f4, "4. OPERATIONAL SWIMLANE", "Cross-Functional SAP, MES & Shop Floor Handoff Architecture", "End-to-end transactional handoffs with Poka-Yoke error-proofing interlocks.", ConsultingSlateTheme)
     FooterPrimitive.render(s_f4, 4, 7, "Global Aerospace & Defense • Operational Swimlane", ConsultingSlateTheme)
     SwimlaneDiagramComposer.render(s_f4, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, swim_model, ConsultingSlateTheme)
 
     # Slide 5: Branching Production Execution Process Flow
-    s_f5 = prs_full.slides.add_slide(blank_layout)
+    s_f5 = prs_full.slides.add_slide(layout_full)
     HeaderPrimitive.render(s_f5, "5. PROCESS ARCHITECTURE", "Production Execution, Quality Clearance & Rework Loopback", "Sequential order dispatch with automated Poka-Yoke decision gate and rework loopback.", ConsultingSlateTheme)
     FooterPrimitive.render(s_f5, 5, 7, "Global Aerospace & Defense • Process Architecture", ConsultingSlateTheme)
     ProcessFlowComposer.render_branching_process(s_f5, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, flow_model_1, ConsultingSlateTheme)
 
     # Slide 6: Digital Maturity Staircase
-    s_f6 = prs_full.slides.add_slide(blank_layout)
+    s_f6 = prs_full.slides.add_slide(layout_full)
     HeaderPrimitive.render(s_f6, "6. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
     FooterPrimitive.render(s_f6, 6, 7, "Global Aerospace & Defense • Maturity Assessment", ConsultingSlateTheme)
     MaturityAssessmentComposer.render_staircase_scorecard(s_f6, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, mat_model, ConsultingSlateTheme)
 
     # Slide 7: Closed-Loop Manufacturing Architecture
-    s_f7 = prs_full.slides.add_slide(blank_layout)
+    s_f7 = prs_full.slides.add_slide(layout_full)
+    from pptx.enum.shapes import MSO_SHAPE
+    bg_f7 = s_f7.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(CanvasBounds.width), Inches(CanvasBounds.height))
+    bg_f7.fill.solid()
+    bg_f7.fill.fore_color.rgb = ExecutiveNavyTheme.canvas
+    bg_f7.line.fill.background()
+
     HeaderPrimitive.render(s_f7, "7. CLOSED-LOOP ARCHITECTURE", "Physical-to-Digital Closed-Loop Cyber-Physical Architecture", "Continuous cyber-physical feedback from machine sensors through S/4HANA intelligence.", ExecutiveNavyTheme)
     FooterPrimitive.render(s_f7, 7, 7, "Global Aerospace & Defense • Closed-Loop Architecture", ExecutiveNavyTheme)
     ProcessFlowComposer.render_closed_loop_manufacturing(s_f7, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, cl_model, ExecutiveNavyTheme)
@@ -677,6 +700,8 @@ def generate_all_representative_decks():
     rep_full = PresentationQualityGate.audit_and_remediate(prs_full, auto_remediate=True)
     prs_full.save("representative_complete_enterprise_solution.pptx")
     print(f"[GENERATED] representative_complete_enterprise_solution.pptx: {len(prs_full.slides)} slides | Quality Score: {rep_full.overall_quality_score}/100 | Status: {rep_full.status.name}")
+
+
 
 
 if __name__ == "__main__":

@@ -163,58 +163,71 @@ class SwimlaneDiagramComposer:
             col_idx = step.sequence_order - 1
             sx = body_col_x + 0.15 + (col_idx * col_w)
             sw = col_w - 0.20
-            sh = lh - 0.18
-            sy = ly + 0.09
+            # Step height proportional to lane height so it stays cleanly inside lane boundaries
+            sh = min(lh * 0.72, 0.56)
+            sy = ly + (lh - sh) / 2.0
 
             step_centers[step.step_id] = (sx, sy, sw, sh)
 
-            # Render Step Box
-            shape_type = MSO_SHAPE.DIAMOND if step.is_decision else MSO_SHAPE.ROUNDED_RECTANGLE
+            # Render Step Box (clean rounded rectangle with decision styling when applicable)
             s_box = slide.shapes.add_shape(
-                shape_type,
+                MSO_SHAPE.ROUNDED_RECTANGLE,
                 Inches(sx), Inches(sy), Inches(sw), Inches(sh)
             )
             s_box.fill.solid()
-            s_box.fill.fore_color.rgb = theme.surface
-            s_box.line.color.rgb = theme.border_accent if step.is_decision else theme.border
-            s_box.line.width = Pt(1.2 if step.is_decision else 1.0)
+            s_box.fill.fore_color.rgb = theme.surface_highlight if step.is_decision else theme.surface
+            s_box.line.color.rgb = theme.status_warning if step.is_decision else theme.border
+            s_box.line.width = Pt(1.5 if step.is_decision else 1.0)
 
             tf_s = s_box.text_frame
             tf_s.word_wrap = True
-            tf_s.margin_left = Inches(0.08)
-            tf_s.margin_right = Inches(0.08)
-            tf_s.margin_top = Inches(0.06)
+            tf_s.margin_left = Inches(0.05)
+            tf_s.margin_right = Inches(0.05)
+            tf_s.margin_top = Inches(0.02)
+            tf_s.margin_bottom = Inches(0.01)
 
-            # Sequence tag
+            # Sequence & System badge (compact 7.5pt bold)
             p_seq = tf_s.paragraphs[0]
-            TypographySystem.apply_to_paragraph(
-                p_seq, TypographySystem.ANNOTATION,
-                f"[{step.sequence_order}] {step.system_badge or ''}",
-                theme.text_accent
-            )
+            p_seq.space_after = Pt(0)
+            p_seq.space_before = Pt(0)
+            if step.is_decision:
+                p_seq.text = f"◆ GATE [{step.sequence_order}]"
+                badge_color = theme.status_warning
+            else:
+                p_seq.text = f"[{step.sequence_order}] {step.system_badge or ''}".strip()
+                badge_color = theme.text_accent
+            p_seq.font.name = "Inter"
+            p_seq.font.size = Pt(7.5)
+            p_seq.font.bold = True
+            p_seq.font.color.rgb = badge_color
 
             p_title = tf_s.add_paragraph()
-            TypographySystem.apply_to_paragraph(
-                p_title, TypographySystem.BODY_STRONG,
-                step.title,
-                theme.text_primary
-            )
+            p_title.space_after = Pt(0)
+            p_title.space_before = Pt(0)
+            p_title.text = step.title
+            p_title.font.name = "Inter"
+            p_title.font.size = Pt(8.0)
+            p_title.font.bold = True
+            p_title.font.color.rgb = theme.text_primary
 
             if step.subtitle:
                 p_sub = tf_s.add_paragraph()
-                TypographySystem.apply_to_paragraph(
-                    p_sub, TypographySystem.ANNOTATION,
-                    step.subtitle,
-                    theme.text_muted
-                )
-
-            if step.kpi_annotation:
+                p_sub.space_after = Pt(0)
+                p_sub.space_before = Pt(0)
+                p_sub.text = step.subtitle
+                p_sub.font.name = "Inter"
+                p_sub.font.size = Pt(7.0)
+                p_sub.font.bold = False
+                p_sub.font.color.rgb = theme.text_muted
+            elif step.kpi_annotation:
                 p_kpi = tf_s.add_paragraph()
-                TypographySystem.apply_to_paragraph(
-                    p_kpi, TypographySystem.ANNOTATION,
-                    step.kpi_annotation,
-                    theme.status_info
-                )
+                p_kpi.space_after = Pt(0)
+                p_kpi.space_before = Pt(0)
+                p_kpi.text = step.kpi_annotation
+                p_kpi.font.name = "Inter"
+                p_kpi.font.size = Pt(7.0)
+                p_kpi.font.bold = True
+                p_kpi.font.color.rgb = theme.status_info
 
         # 3. RENDER CROSS-LANE & STEP HANDOFF CONNECTORS
         for handoff in model.handoffs:
@@ -233,11 +246,11 @@ class SwimlaneDiagramComposer:
             if abs(to_center_y - from_center_y) < 0.20:
                 # Same lane horizontal connector
                 arr_x = fx + fw + 0.02
-                arr_y = from_center_y - 0.08
+                arr_y = from_center_y - 0.07
                 arr_w = max(tx - (fx + fw) - 0.04, 0.15)
                 arr = slide.shapes.add_shape(
                     MSO_SHAPE.RIGHT_ARROW,
-                    Inches(arr_x), Inches(arr_y), Inches(arr_w), Inches(0.16)
+                    Inches(arr_x), Inches(arr_y), Inches(arr_w), Inches(0.14)
                 )
                 arr.fill.solid()
                 arr.fill.fore_color.rgb = theme.border_accent
@@ -245,36 +258,40 @@ class SwimlaneDiagramComposer:
 
             elif to_center_y > from_center_y:
                 # Downward cross-lane connector
-                arr_x = from_center_x - 0.08
+                arr_x = from_center_x - 0.07
                 arr_y = fy + fh + 0.02
-                arr_h = max(ty - (fy + fh) - 0.04, 0.15)
+                arr_h = max(ty - (fy + fh) - 0.04, 0.14)
                 arr = slide.shapes.add_shape(
                     MSO_SHAPE.DOWN_ARROW,
-                    Inches(arr_x), Inches(arr_y), Inches(0.16), Inches(arr_h)
+                    Inches(arr_x), Inches(arr_y), Inches(0.14), Inches(arr_h)
                 )
                 arr.fill.solid()
                 arr.fill.fore_color.rgb = theme.status_warning if handoff.is_feedback else theme.border_accent
                 arr.line.fill.background()
 
-                # Label tag
+                # Label tag placed with dedicated clearance
                 if handoff.label:
-                    cls._render_handoff_label(slide, arr_x + 0.20, arr_y + (arr_h / 2) - 0.10, handoff.label, theme)
+                    lbl_x = max(arr_x + 0.16, from_center_x + 0.05)
+                    lbl_y = fy + fh + (arr_h / 2.0) - 0.09
+                    cls._render_handoff_label(slide, lbl_x, lbl_y, handoff.label, theme)
 
             else:
                 # Upward loop / feedback connector
-                arr_x = from_center_x - 0.08
+                arr_x = from_center_x - 0.07
                 arr_y = ty + th + 0.02
-                arr_h = max(fy - (ty + th) - 0.04, 0.15)
+                arr_h = max(fy - (ty + th) - 0.04, 0.14)
                 arr = slide.shapes.add_shape(
                     MSO_SHAPE.UP_ARROW,
-                    Inches(arr_x), Inches(arr_y), Inches(0.16), Inches(arr_h)
+                    Inches(arr_x), Inches(arr_y), Inches(0.14), Inches(arr_h)
                 )
                 arr.fill.solid()
                 arr.fill.fore_color.rgb = theme.status_success if not handoff.is_feedback else theme.status_warning
                 arr.line.fill.background()
 
                 if handoff.label:
-                    cls._render_handoff_label(slide, arr_x + 0.20, arr_y + (arr_h / 2) - 0.10, handoff.label, theme)
+                    lbl_x = arr_x + 0.18
+                    lbl_y = arr_y + (arr_h / 2.0) - 0.09
+                    cls._render_handoff_label(slide, lbl_x, lbl_y, handoff.label, theme)
 
     @classmethod
     def _render_handoff_label(
@@ -288,18 +305,19 @@ class SwimlaneDiagramComposer:
         """Renders small informative pill badge beside cross-lane arrows."""
         badge = slide.shapes.add_shape(
             MSO_SHAPE.ROUNDED_RECTANGLE,
-            Inches(x), Inches(y), Inches(1.30), Inches(0.24)
+            Inches(x), Inches(y), Inches(1.10), Inches(0.18)
         )
         badge.fill.solid()
         badge.fill.fore_color.rgb = theme.surface_highlight
         badge.line.color.rgb = theme.border
         badge.line.width = Pt(0.5)
         tf = badge.text_frame
+        tf.word_wrap = False
         tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
         p = tf.paragraphs[0]
         p.alignment = PP_ALIGN.CENTER
-        TypographySystem.apply_to_paragraph(
-            p, TypographySystem.ANNOTATION,
-            label_text,
-            theme.text_accent
-        )
+        p.text = label_text
+        p.font.name = "Inter"
+        p.font.size = Pt(7.0)
+        p.font.bold = True
+        p.font.color.rgb = theme.text_accent

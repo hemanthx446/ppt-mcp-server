@@ -187,8 +187,10 @@ class TransformationBridgeComposer:
             theme.status_critical
         )
 
+        # Top Zone: Pain Points & Constraints
+        top_h = h - 1.55
         tb = slide.shapes.add_textbox(
-            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(h - 0.44)
+            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(top_h)
         )
         tf = tb.text_frame
         tf.word_wrap = True
@@ -211,23 +213,39 @@ class TransformationBridgeComposer:
                 theme.status_critical
             )
 
-        # Baseline metrics section
+        # Bottom Zone: Structured Baseline Metrics Container
         if state.baseline_metrics:
-            p_m_hdr = tf.add_paragraph()
-            p_m_hdr.space_before = Pt(8)
-            p_m_hdr.space_after = Pt(2)
+            panel_y = y + h - 1.45
+            metric_panel = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE,
+                Inches(x + 0.10), Inches(panel_y), Inches(w - 0.20), Inches(1.35)
+            )
+            metric_panel.fill.solid()
+            metric_panel.fill.fore_color.rgb = theme.surface_alt
+            metric_panel.line.color.rgb = theme.border
+            metric_panel.line.width = Pt(0.75)
+
+            tb_m = slide.shapes.add_textbox(
+                Inches(x + 0.16), Inches(panel_y + 0.06), Inches(w - 0.32), Inches(1.22)
+            )
+            tf_m = tb_m.text_frame
+            tf_m.word_wrap = True
+            tf_m.margin_left = tf_m.margin_top = tf_m.margin_right = tf_m.margin_bottom = 0
+
+            p_m_hdr = tf_m.paragraphs[0]
+            p_m_hdr.space_after = Pt(3)
             TypographySystem.apply_to_paragraph(
                 p_m_hdr, TypographySystem.LABEL,
-                "BASELINE METRICS",
+                "BASELINE FRICTION METRICS",
                 theme.text_muted
             )
             for m_lbl, m_val in state.baseline_metrics[:3]:
-                p_m = tf.add_paragraph()
+                p_m = tf_m.add_paragraph()
                 p_m.space_after = Pt(2)
                 TypographySystem.apply_to_paragraph(
                     p_m, TypographySystem.ANNOTATION,
                     f"• {m_lbl}: {m_val}",
-                    theme.text_muted
+                    theme.status_critical
                 )
 
     @classmethod
@@ -268,8 +286,9 @@ class TransformationBridgeComposer:
             theme.border_accent
         )
 
+        top_h = h - 1.55
         tb = slide.shapes.add_textbox(
-            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(h - 0.44)
+            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(top_h)
         )
         tf = tb.text_frame
         tf.word_wrap = True
@@ -292,22 +311,39 @@ class TransformationBridgeComposer:
                 theme.text_primary
             )
 
+        # Bottom Zone: Architectural Enablers Container
         if intervention.enablers:
-            p_e_hdr = tf.add_paragraph()
-            p_e_hdr.space_before = Pt(8)
-            p_e_hdr.space_after = Pt(2)
+            panel_y = y + h - 1.45
+            enabler_panel = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE,
+                Inches(x + 0.10), Inches(panel_y), Inches(w - 0.20), Inches(1.35)
+            )
+            enabler_panel.fill.solid()
+            enabler_panel.fill.fore_color.rgb = theme.surface
+            enabler_panel.line.color.rgb = theme.border_accent
+            enabler_panel.line.width = Pt(0.75)
+
+            tb_e = slide.shapes.add_textbox(
+                Inches(x + 0.16), Inches(panel_y + 0.06), Inches(w - 0.32), Inches(1.22)
+            )
+            tf_e = tb_e.text_frame
+            tf_e.word_wrap = True
+            tf_e.margin_left = tf_e.margin_top = tf_e.margin_right = tf_e.margin_bottom = 0
+
+            p_e_hdr = tf_e.paragraphs[0]
+            p_e_hdr.space_after = Pt(3)
             TypographySystem.apply_to_paragraph(
                 p_e_hdr, TypographySystem.LABEL,
-                "ENABLERS & ARCHITECTURE",
+                "CORE ARCHITECTURAL ENABLERS",
                 theme.border_accent
             )
             for en in intervention.enablers[:3]:
-                p_en = tf.add_paragraph()
+                p_en = tf_e.add_paragraph()
                 p_en.space_after = Pt(2)
                 TypographySystem.apply_to_paragraph(
                     p_en, TypographySystem.ANNOTATION,
                     f"✔ {en}",
-                    theme.text_muted
+                    theme.text_primary
                 )
 
     @classmethod
@@ -348,8 +384,9 @@ class TransformationBridgeComposer:
             theme.status_success
         )
 
+        top_h = h - 1.55
         tb = slide.shapes.add_textbox(
-            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(h - 0.44)
+            Inches(x + 0.12), Inches(y + 0.38), Inches(w - 0.24), Inches(top_h)
         )
         tf = tb.text_frame
         tf.word_wrap = True
@@ -372,18 +409,34 @@ class TransformationBridgeComposer:
                 theme.status_success
             )
 
-        # Target outcomes section
+        # Bottom Zone: Target Audited Outcomes Container
         if future.target_outcomes:
-            p_o_hdr = tf.add_paragraph()
-            p_o_hdr.space_before = Pt(8)
-            p_o_hdr.space_after = Pt(2)
+            panel_y = y + h - 1.45
+            outcome_panel = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE,
+                Inches(x + 0.10), Inches(panel_y), Inches(w - 0.20), Inches(1.35)
+            )
+            outcome_panel.fill.solid()
+            outcome_panel.fill.fore_color.rgb = theme.surface_alt
+            outcome_panel.line.color.rgb = theme.status_success
+            outcome_panel.line.width = Pt(1.0)
+
+            tb_o = slide.shapes.add_textbox(
+                Inches(x + 0.16), Inches(panel_y + 0.06), Inches(w - 0.32), Inches(1.22)
+            )
+            tf_o = tb_o.text_frame
+            tf_o.word_wrap = True
+            tf_o.margin_left = tf_o.margin_top = tf_o.margin_right = tf_o.margin_bottom = 0
+
+            p_o_hdr = tf_o.paragraphs[0]
+            p_o_hdr.space_after = Pt(3)
             TypographySystem.apply_to_paragraph(
                 p_o_hdr, TypographySystem.LABEL,
-                "MEASURABLE OUTCOMES",
+                "AUDITED VALUE OUTCOMES",
                 theme.status_success
             )
             for o_lbl, o_val in future.target_outcomes[:3]:
-                p_o = tf.add_paragraph()
+                p_o = tf_o.add_paragraph()
                 p_o.space_after = Pt(2)
                 TypographySystem.apply_to_paragraph(
                     p_o, TypographySystem.ANNOTATION,

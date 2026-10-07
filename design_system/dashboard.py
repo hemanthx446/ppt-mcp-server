@@ -180,10 +180,9 @@ class ExecutiveDashboardComposer:
         # ---------------------------------------------------------------------
         # ZONE 1: Executive KPI Strip ("WHAT CHANGED?")
         # ---------------------------------------------------------------------
-        kpi_top = 1.30
-        kpi_height = 1.15
+        kpi_top = 1.36
+        kpi_height = 1.08
         if spec.kpi_strip:
-            cls._render_zone_label(slide, left, kpi_top - 0.22, "1. WHAT CHANGED? (EXECUTIVE KPI TRAJECTORY)", theme)
             lib.KPIStripPrimitive.render(
                 slide=slide,
                 left=left,

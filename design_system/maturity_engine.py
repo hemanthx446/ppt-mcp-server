@@ -81,9 +81,13 @@ class MaturityAssessmentComposer:
         hdr_box.fill.fore_color.rgb = theme.surface_highlight
         hdr_box.line.fill.background()
 
-        tf_h = hdr_box.text_frame
-        tf_h.margin_left = Inches(0.20)
-        tf_h.margin_top = Inches(0.08)
+        # Dedicated title textbox constrained to leave ample room for right score chips
+        tb_title = slide.shapes.add_textbox(
+            Inches(left + 0.16), Inches(top + 0.08), Inches(width - 4.40), Inches(0.36)
+        )
+        tf_h = tb_title.text_frame
+        tf_h.word_wrap = True
+        tf_h.margin_left = tf_h.margin_right = tf_h.margin_top = tf_h.margin_bottom = 0
         p_h = tf_h.paragraphs[0]
         TypographySystem.apply_to_paragraph(
             p_h, TypographySystem.LABEL,
@@ -225,8 +229,9 @@ class MaturityAssessmentComposer:
 
         num_steps = len(levels)
         stair_bottom = y + h - 0.15
+        max_usable_w = w - 0.28
+        min_step_w = max_usable_w * 0.44
         step_h = (h - 0.65) / num_steps
-        step_w_increment = (w - 0.28) / num_steps
 
         # Determine current and target integer steps
         cur_level_idx = min(max(int(round(current_score)) - 1, 0), num_steps - 1)
@@ -236,7 +241,7 @@ class MaturityAssessmentComposer:
             # Step ascends: Step 1 is at bottom left, Step 5 is at top right
             step_y = stair_bottom - ((i + 1) * step_h)
             step_x = x + 0.14
-            step_cur_w = (i + 1) * step_w_increment
+            step_cur_w = min_step_w + (i / max(num_steps - 1, 1)) * (max_usable_w - min_step_w)
 
             is_current = (i == cur_level_idx)
             is_target = (i == tar_level_idx)
@@ -344,8 +349,18 @@ class MaturityAssessmentComposer:
             d_box.line.color.rgb = theme.border_accent if dim.priority == "P1" else theme.border
             d_box.line.width = Pt(1.0 if dim.priority == "P1" else 0.5)
 
+            # Left priority accent strip
+            bar_color = theme.status_critical if dim.priority == "P1" else (theme.status_warning if dim.priority == "P2" else theme.border_accent)
+            accent_bar = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE,
+                Inches(x + 0.12), Inches(ry + 0.06), Inches(0.08), Inches(row_h - 0.12)
+            )
+            accent_bar.fill.solid()
+            accent_bar.fill.fore_color.rgb = bar_color
+            accent_bar.line.fill.background()
+
             tb = slide.shapes.add_textbox(
-                Inches(x + 0.16), Inches(ry + 0.06), Inches(w - 0.32), Inches(row_h - 0.12)
+                Inches(x + 0.26), Inches(ry + 0.06), Inches(w - 0.44), Inches(row_h - 0.12)
             )
             tf = tb.text_frame
             tf.word_wrap = True
@@ -356,7 +371,7 @@ class MaturityAssessmentComposer:
             gap_val = dim.target_score - dim.current_score
             TypographySystem.apply_to_paragraph(
                 p_top, TypographySystem.BODY_STRONG,
-                f"{dim.dimension_name}  [{dim.priority}]",
+                f"{dim.dimension_name}   [{dim.priority}]",
                 theme.text_primary
             )
 
@@ -364,7 +379,7 @@ class MaturityAssessmentComposer:
             p_sc = tf.add_paragraph()
             TypographySystem.apply_to_paragraph(
                 p_sc, TypographySystem.CAPTION,
-                f"Current: {dim.current_score:.1f} / 5.0  ➔  Target: {dim.target_score:.1f} / 5.0 (Gap: +{gap_val:.1f})",
+                f"Current: {dim.current_score:.1f} / 5.0   ➔   Target: {dim.target_score:.1f} / 5.0  (Gap: +{gap_val:.1f})",
                 theme.border_accent
             )
 
@@ -372,7 +387,7 @@ class MaturityAssessmentComposer:
             p_gap = tf.add_paragraph()
             TypographySystem.apply_to_paragraph(
                 p_gap, TypographySystem.ANNOTATION,
-                f"Gap: {dim.identified_gap}",
+                f"▸ Gap: {dim.identified_gap}",
                 theme.status_critical if dim.priority == "P1" else theme.text_muted
             )
 
@@ -380,6 +395,6 @@ class MaturityAssessmentComposer:
             p_int = tf.add_paragraph()
             TypographySystem.apply_to_paragraph(
                 p_int, TypographySystem.ANNOTATION,
-                f"Intervention: {dim.priority_intervention}",
+                f"✓ Action: {dim.priority_intervention}",
                 theme.status_success
             )

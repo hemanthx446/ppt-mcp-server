@@ -138,6 +138,7 @@ class ProcessFlowComposer:
             cur_x += step_w + step_gap
 
         # 2. DECISION DIAMOND
+        diamond_w = max(step_w * 1.15, 1.35)
         diamond_x = cur_x
         diamond_y = diagram_top
 
@@ -152,16 +153,20 @@ class ProcessFlowComposer:
         )
 
         # 3. BRANCH A: PASS / CONFIRM (Continues horizontally on the main line)
-        pass_x = diamond_x + diamond_w + step_gap
-        pass_arr_x = diamond_x + diamond_w + 0.03
-        pass_arr_w = step_gap - 0.06
-        cls._render_directional_arrow(slide, pass_arr_x, diamond_y + (diamond_h / 2) - 0.12, max(pass_arr_w, 0.14), 0.24, "right", theme)
+        # Dedicated clearance for PASS badge so it never collides with Step 6
+        pass_gap = max(step_gap + 0.40, 0.68)
+        pass_arr_x = diamond_x + diamond_w + 0.04
+        pass_arr_w = pass_gap - 0.08
+        cls._render_directional_arrow(slide, pass_arr_x, diamond_y + (diamond_h / 2) - 0.12, pass_arr_w, 0.24, "right", theme)
 
-        # "PASS" condition tag
-        cls._render_condition_badge(slide, pass_arr_x - 0.10, diamond_y + 0.08, 0.60, 0.24, "PASS", theme.status_success)
+        # "PASS" condition tag centered over the connector arrow
+        pass_badge_w = 0.52
+        pass_badge_h = 0.22
+        pass_badge_x = pass_arr_x + (pass_arr_w - pass_badge_w) / 2
+        cls._render_condition_badge(slide, pass_badge_x, diamond_y + (diamond_h / 2) - 0.30, pass_badge_w, pass_badge_h, "PASS", theme.status_success)
 
         # Render post-decision pass nodes
-        cur_pass_x = pass_x
+        cur_pass_x = diamond_x + diamond_w + pass_gap
         for j, p_node in enumerate(post_nodes):
             cls._render_process_step_node(
                 slide=slide,
@@ -243,32 +248,35 @@ class ProcessFlowComposer:
         rework_arr_w = rework_gap - 0.08
         cls._render_directional_arrow(slide, rework_arr_x, bottom_y + (track_h / 2) - 0.12, max(rework_arr_w, 0.14), 0.24, "right", theme)
 
-        # Re-inspection feedback loop up back to Diamond / Re-entry
+        # Re-inspection feedback loop up back to Confirmation & Ledger
         loop_arr_x = reinspect_x + reinspect_w + 0.08
-        # Upward arrow returning to inspection/confirmation
+        loop_arr_h = 0.55
+        loop_arr_y = bottom_y - loop_arr_h
         up_arr = slide.shapes.add_shape(
             MSO_SHAPE.UP_ARROW,
-            Inches(loop_arr_x), Inches(bottom_y - 0.35), Inches(0.24), Inches(0.35)
+            Inches(loop_arr_x), Inches(loop_arr_y), Inches(0.24), Inches(loop_arr_h)
         )
         up_arr.fill.solid()
         up_arr.fill.fore_color.rgb = theme.status_warning
         up_arr.line.fill.background()
 
-        # Feedback loop banner strictly within right canvas bound
-        loop_badge_w = min(1.50, max(left + width - (loop_arr_x + 0.30) - 0.10, 0.90))
-        loop_badge_x = min(loop_arr_x + 0.26, left + width - loop_badge_w - 0.08)
+        # Feedback loop banner cleanly routed above the clearance gate
+        loop_badge_w = 1.35
+        loop_badge_x = loop_arr_x + 0.28
         loop_badge = slide.shapes.add_shape(
             MSO_SHAPE.ROUNDED_RECTANGLE,
-            Inches(loop_badge_x), Inches(bottom_y - 0.45), Inches(loop_badge_w), Inches(0.40)
+            Inches(loop_badge_x), Inches(loop_arr_y + 0.08), Inches(loop_badge_w), Inches(0.42)
         )
         loop_badge.fill.solid()
         loop_badge.fill.fore_color.rgb = theme.surface_highlight
         loop_badge.line.color.rgb = theme.status_warning
+        loop_badge.line.width = Pt(1.0)
         tf_lb = loop_badge.text_frame
         tf_lb.word_wrap = True
+        tf_lb.margin_left = tf_lb.margin_right = tf_lb.margin_top = tf_lb.margin_bottom = Inches(0.04)
         TypographySystem.apply_to_paragraph(
             tf_lb.paragraphs[0], TypographySystem.ANNOTATION,
-            "CLOSED-LOOP RE-ENTRY\nCleared for Confirmation",
+            "↺ RE-ENTRY LOOP\nCleared for Confirmation",
             theme.status_warning
         )
 
@@ -515,21 +523,25 @@ class ProcessFlowComposer:
 
         tf = diamond.text_frame
         tf.word_wrap = True
-        tf.margin_left = Inches(0.15)
-        tf.margin_right = Inches(0.15)
+        tf.margin_left = Inches(0.04)
+        tf.margin_right = Inches(0.04)
+        tf.margin_top = Inches(0.06)
+        tf.margin_bottom = Inches(0.06)
 
         p1 = tf.paragraphs[0]
         p1.alignment = PP_ALIGN.CENTER
         TypographySystem.apply_to_paragraph(
-            p1, TypographySystem.LABEL,
-            "DECISION GATE",
+            p1, TypographySystem.ANNOTATION,
+            "GATE",
             theme.border_accent
         )
         p2 = tf.add_paragraph()
         p2.alignment = PP_ALIGN.CENTER
+        # Format concise label for diamond layout
+        clean_label = node.label.replace(" & ", "\n& ") if len(node.label) > 16 else node.label
         TypographySystem.apply_to_paragraph(
-            p2, TypographySystem.BODY_STRONG,
-            node.label,
+            p2, TypographySystem.LABEL,
+            clean_label,
             theme.text_primary
         )
 

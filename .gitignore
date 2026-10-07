@@ -5,3 +5,6 @@ __pycache__/
 .env
 *.log
 ~$*.pptx
+audit_renderings/
+test_*.pptx
+Hical_*.pptx

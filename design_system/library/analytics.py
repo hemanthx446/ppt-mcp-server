@@ -373,13 +373,17 @@ class AgingAnalysisPrimitive:
             border_c = theme.status_critical if ">90" in b_name else (theme.status_warning if "60" in b_name else theme.border)
             SurfacePrimitive.render(slide, cx, top, cw, height, theme, border_color=border_c)
 
-            tb = slide.shapes.add_textbox(Inches(cx + 0.14), Inches(top + 0.14), Inches(cw - 0.28), Inches(height - 0.28))
+            tb = slide.shapes.add_textbox(Inches(cx + 0.08), Inches(top + 0.12), Inches(cw - 0.16), Inches(height - 0.24))
             tf = tb.text_frame
             tf.word_wrap = True
+            tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
             TypographySystem.apply_to_paragraph(tf.paragraphs[0], TypographySystem.LABEL, b_name, border_c)
             p_val = tf.add_paragraph()
-            TypographySystem.apply_to_paragraph(p_val, TypographySystem.KPI_NUMBER, amount, theme.text_primary)
-            p_val.space_after = Pt(4)
+            clean_amount = amount.replace(" ", "")
+            from design_system.typography import TypographyToken, FONT_FAMILY
+            kpi_card_token = TypographyToken(font_name=FONT_FAMILY, size_pt=17.0, bold=True, weight_name="Bold")
+            TypographySystem.apply_to_paragraph(p_val, kpi_card_token, clean_amount, theme.text_primary)
+            p_val.space_after = Pt(2)
             p_cnt = tf.add_paragraph()
             TypographySystem.apply_to_paragraph(p_cnt, TypographySystem.CAPTION, count_info, theme.text_muted)
 
