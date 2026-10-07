@@ -1,0 +1,227 @@
+=== File: Lumbini Elite SAP GRC Services.pptx ===
+Slide count: 14
+  Slide 0:
+    - [TextBox 19 / TEXT_BOX (17)]: Company Profile
+    - [TextBox 10 / TEXT_BOX (17)]: Lumbini Elite SAP GRC Solutions
+    - [TextBox 2 / TEXT_BOX (17)]: Mastering Risk, Compliance, and Governance for Future-Ready Enterprises
+  Slide 1:
+    - [TextBox 7 / TEXT_BOX (17)]: Who We Are?
+    - [TextBox 8 / TEXT_BOX (17)]: Lumbini Elite Solutions is positioned at the forefront of digital transformation, providing cutting-edge SAP services that drive innovation, efficiency, and sustainability for global enterprises. 
+		Our comprehensive offerings—from S4HANA implementations to advanced cloud platforms like SAP BTP—enable organizations to harness the full potential of Industry 4.0. 
+	With a proven track record, scalable solutions, and an experienced leadership team, we’re primed for rapid global expansion and significant revenue growth. 
+    - [TextBox 13 / TEXT_BOX (17)]: To accelerate the digital transformation of global enterprises through innovative SAP services and technologies.
+    - [TextBox 14 / TEXT_BOX (17)]: Mission:
+    - [TextBox 18 / TEXT_BOX (17)]: To be a global leader in delivering cutting-edge technology solutions that enable organizations to achieve excellence.
+    - [TextBox 19 / TEXT_BOX (17)]: Vision:
+    - [TextBox 26 / TEXT_BOX (17)]: Innovation, Integrity, Customer-Centricity, Collaboration, and Continuous Improvement.
+    - [TextBox 27 / TEXT_BOX (17)]: Core Values:
+  Slide 2:
+    - [TextBox 8 / TEXT_BOX (17)]: Focus Industry Verticals
+    - [Subtitle 2 / TEXT_BOX (17)]: Renewable Energy
+    - [Subtitle 2 / TEXT_BOX (17)]: E-Governance
+    - [Subtitle 2 / TEXT_BOX (17)]: AFS
+    - [Subtitle 2 / TEXT_BOX (17)]: Manufacturing
+    - [Subtitle 2 / TEXT_BOX (17)]: Consumer Goods and Retail
+    - [Subtitle 2 / TEXT_BOX (17)]: Pharmaceuticals
+  Slide 3:
+    - [Title 1 / PLACEHOLDER (14)]: Our SAP GRC Expertise
+    - [Rectangle 9 / AUTO_SHAPE (1)]: SAP Change management: SAP R/3 change management and control and the related policies, processes, training, and implementation of the change control system for managing SAP R/3 system changes - both from a business and technology perspective. In the process, we manage and drive your SAP R/3 implementations toward “Governance”
+    - [Rectangle 5 / AUTO_SHAPE (1)]: SAP Security & Authorizations: SAP R/3 security, authorizations, access control, and related process, policies, segregation of duties, design, review, audit, and implementation for very small to large multi-location, multi-language, multi-region SAP R/3 landscapes – both from a project perspective and from enhancement-support perspective. In the process, we have seen these implementations grow in size and complexity and transition from the initial version to the latest releases.  In the process, we manage and mitigate the access “Risk”
+SAP - Security & access policies
+SAP - User  access and provisioning process
+SAP - User de-provisioning process
+SAP - Role creation process
+SAP - Role enhancement process
+SAP - Role design documents
+SAP - Policy and processes for managing background jobs for security
+SAP - Periodic security audit review policies and processes
+SAP Security - Issue resolution process and supporting escalation processes.
+SAP Security - Super-user access policies and process around exception authorizations
+    - [Rectangle 2 / AUTO_SHAPE (1)]: Compliance: Regulatory compliance of various industries and agencies.
+  Slide 4:
+    - [CuadroTexto 350 / TEXT_BOX (17)]: SAP GRC (Governance, Risk & Compliance) 
+    - [Content Placeholder 4 / TABLE (19) (Table)]: [['\nRisk Management ', '\nAccess Control ', '\nProcess Control '], ['Formal integration of risk management with strategy ', 'Segregation of duties \n', 'Automated control and transaction monitoring to evaluate compliance effectiveness and business process acceptability '], ['Repeatable framework to analyze and mitigate risk ', 'Fraud, safeguard of assets \n', 'Configuration \n'], ['Continuously monitor key risk indicators across strategic objectives ', 'User access management \n', 'Master Data \n'], ['', 'Compliance ', 'Business transactions \n']]
+  Slide 5:
+    - [CuadroTexto 350 / TEXT_BOX (17)]: Our GRC Solutions
+    - [TextBox 15 / TEXT_BOX (17)]: SAP Security & Authorizations: SAP R/3, BI security, authorizations, access control, and related process, policies, segregation of duties, design, review, audit, and implementation for very small to large multi-location, multi-language, multi-region SAP R/3 landscapes – both from project perspective and from enhancement-support perspective. 
+BI Security by creating Analysis Authorizations using RSECADMIN, and running the reports for different users through RSECADMIN.
+Expertise in implementing GRC AC 10.1 components such as ARM, ARA, and Emergency Access.
+Expertise in  SAP security in terms of creating (users, profiles & roles), and assigning (profiles, roles, authorization) to users using Profile Generator [PFCG].
+We have good knowledge and work experience in Virtual authorization
+ The team has Worked extensively on Analysis Authorization
+Maintaining SLAs for all the issues
+User management defining multilevel security privileges for the users.
+  Slide 6:
+    - [CuadroTexto 350 / TEXT_BOX (17)]: Key integration benefits of the SAP GRC solutions
+    - [TextBox 15 / TEXT_BOX (17)]: Master data
+Organizations can be shared between SAP GRC Process Control, SAP GRC Risk Management and SAP GRC Access Control. Some organization data may be shared, and other data may be specific to a single application; Controls may be shared between SAP GRC Process Control and SAP GRC Access Control. 
+There is application-specific information for SAP GRC Process Control and SAP GRC Access Control applications. The access to this data is controlled by the user’s authorizations.
+    - [TextBox 2 / TEXT_BOX (17)]: Integration of SAP GRC Process Control with Access Control
+SAP GRC Process Control is integrated with the Access Risk Analysis component in SAP GRC Access Control to monitor Segregation of Duties (SoD) violations;
+Controls in SAP GRC Process Control can be used as mitigation controls in SAP GRC Access Control and vice versa;
+Processes in SAP GRC Process Control can be used as business processes in SAP GRC Access Control.
+The shared Risk Catalog is by SAP GRC Process Control and SAP GRC Risk Management. There is application-specific information for SAP GRC Process Control and SAP GRC Access Control applications
+  Slide 7:
+    - [Slide Number Placeholder 3 / PLACEHOLDER (14)]: 8
+    - [Title 1 / PLACEHOLDER (14)]: Projects & Case Studies –I  - MLT (Marketing Leadership Team)
+    - [Content Placeholder 2 / TEXT_BOX (17)]: In this Project BI team developed a mobile (iPad) compatible BI solution which allowed the MLT (Marketing Leadership Team) to easily access and understand year to date KPI and results. 
+This solution is now embedded in the performance management process for the Marketing organization. 
+There is a need to automate the data-access process and streamline the information access through the dashboard
+We delivered Security and Modelling concept based on HANA  DB
+    - [Content Placeholder 2 / TEXT_BOX (17)]: Our Team worked on Analyzing  the proponents and Stakeholders, Build Security Concept  for Role based access to System. Designed  Roles, Profiles, Analysis Authorizations using SAP GRC 10.0 ARM and SAP BI 7.3
+  Slide 8:
+    - [Title 1 / PLACEHOLDER (14)]: Projects & Case Studies –II (Global Customer Experience) 
+    - [Slide Number Placeholder 3 / PLACEHOLDER (14)]: 9
+    - [Content Placeholder 2 / TEXT_BOX (17)]: The SAP Global Customer Experience (GCE) goal is to provide timely, understandable, and actionable insight into the state of customer / partner satisfaction and loyalty and its impact on SAP‘s growth.
+In this project the entire security concept which was based on profiles were replaced with new security based on roles.
+We introduce SAP IDM for better User management 
+This is inline with the new Authorization concept from SAP called Virtual Authorization.
+    - [Content Placeholder 2 / TEXT_BOX (17)]: Provided Data  access restriction on top of views by creating Analytical Privileges
+Worked on Profile Administration Process(PAP) for Roles availability in ARM so that end user can request these roles through CUP
+  Slide 9:
+    - [Title 1 / PLACEHOLDER (14)]: Projects & Case Studies –III (Intellectual Property Management Reporting )
+    - [Slide Number Placeholder 3 / PLACEHOLDER (14)]: 10
+    - [Content Placeholder 2 / TEXT_BOX (17)]: Intellectual Property Management Reporting Project is Based on IPM@SAP.
+It was required to provide full visibility and analytical support to all relevant SAP Development Units (Global IP department, Global F&A TIP, etc.) around available IP, 3rd Party and Opensource technologies via searchable IP Assets Database and related analytic dashboards
+Here BI security is based on 4 main profiles which can control the entire flow
+    - [Content Placeholder 2 / TEXT_BOX (17)]: We designed the Security concept to understand the Business Requirement. Designed the profiles with Analysis Authorizations and assigned to required users 
+Worked on Analysis Authorization based on Exit variables.  Used GRC tools like CUP and ARM to streamline the approval process.
+  Slide 10:
+    - [CuadroTexto 350 / TEXT_BOX (17)]: Our Engagement Models
+    - [TextBox 2 / TEXT_BOX (17)]: Lumbini offers three service delivery models,  which clients can choose from depending on the level of control/oversight that the clients would like. This typically depends on the nature of the engagement, the lifecycle of the application, and clients goals.
+    - [object 4 / TEXT_BOX (17)]: CONSULTING
+    - [object 6 / TEXT_BOX (17)]: Client  controls   the   project   while   engaging   Lumbini consultants for specific services   exclusively   or among  multiple  vendor  partners,  each  meeting their specific project requirements
+    - [object 8 / TEXT_BOX (17)]: CO-SOURCING
+    - [object 10 / TEXT_BOX (17)]: Client  and  Lumbini  both  have  acute  insight  on  the engagement. Client is responsible for engagement planning   and  user  coordination,  while  the  Lumbini team  is  responsible  for  deliverables  and  resource planning
+    - [object 12 / TEXT_BOX (17)]: OUTSOURCING
+    - [object 14 / TEXT_BOX (17)]: Lumbini is given the control as the outsourced vendor partner. Engagement is usually managed through a set of service level agreements (SLAs).
+    - [object 20 / TEXT_BOX (17)]: Client Control / Management
+    - [object 21 / TEXT_BOX (17)]: Engagement Value / Scalability
+    - [object 24 / TEXT_BOX (17)]: CONSULTING
+    - [object 27 / TEXT_BOX (17)]: OUTSOURCING
+    - [object 30 / TEXT_BOX (17)]: CO-SOURCING
+  Slide 11:
+    - [Text 2 / AUTO_SHAPE (1)]: OUR CLIENTS & PARTNERS
+  Slide 12:
+    - [TextBox 6 / TEXT_BOX (17)]: WHY LUMBINI ELITE ?
+    - [TextBox 7 / TEXT_BOX (17)]: Company Overview and Expertise
+    - [TextBox 9 / TEXT_BOX (17)]: 12+ years of experience, focusing on SAP, PLM, and MES Product Suites, along with expertise in new Dimension areas like DevOps, Analytics, Mobility, Cloud, and IoT.
+    - [TextBox 11 / TEXT_BOX (17)]: Certifications and Partnerships
+    - [TextBox 12 / TEXT_BOX (17)]:  ISO-9001:2015/ISO-14001:2015 certifications, as well as its strong associations with German software product companies like SAP, Microsoft (as a Bizspark Member), and Siemens (as a consulting partner for TeamCenter).
+    - [TextBox 13 / TEXT_BOX (17)]: Geographical Presence
+    - [TextBox 14 / TEXT_BOX (17)]: Presence in Bangalore, Jharkhand (Ranchi), Delhi (Noida), and  Qatar(Middle East) highlighting its strategic location in the IT hub of India and its ability to cater to clients across different regions.
+  Slide 13:
+    - [CuadroTexto 395 / TEXT_BOX (17)]: CORPORATE OFFICE
+    - [Rectangle 140 / AUTO_SHAPE (1)]: Email:- info@lumbinielite.com 
+    - [CuadroTexto 350 / TEXT_BOX (17)]: GET IN TOUCH WITH US
+    - [TextBox 7 / TEXT_BOX (17)]:  #7, SJR Eternity, Phase 1 Kodigehalli Road, Hoodi Bangalore, Karnataka, India. Pincode-560048
+    - [CuadroTexto 395 / TEXT_BOX (17)]: DEVELOPMENT CENTER
+    - [TextBox 9 / TEXT_BOX (17)]: 1102 & 1103, 1st Floor, A - Block,        Ardente Office One, Hoodi,        Bangalore, Karnataka, India.        Pincode-560048
+    - [TextBox 11 / TEXT_BOX (17)]: www.lumbinielite.com
+    - [TextBox 12 / TEXT_BOX (17)]: Thank
+You
+
+=== File: Lumbini_Elite_SAP_GRC_Strategic.pptx ===
+Slide count: 10
+  Slide 0:
+    - [Text 0 / AUTO_SHAPE (1)]: THE INTELLIGENT ENTERPRISE
+    - [Text 1 / AUTO_SHAPE (1)]: Governance, Risk, and Control as the Architectural Backbone of Enterprise Integration
+    - [Text 2 / AUTO_SHAPE (1)]: Lumbini Elite Solutions
+  Slide 1:
+    - [Text 1 / AUTO_SHAPE (1)]: The GRC Paradox
+    - [Text 2 / AUTO_SHAPE (1)]: Most enterprises treat GRC as a compliance obligation—a control layer imposed on business operations.
+    - [Text 3 / AUTO_SHAPE (1)]: The reality: GRC is the connective tissue that transforms fragmented systems into an intelligent operating model.
+    - [Text 4 / AUTO_SHAPE (1)]: • Strategy Cascades Through Control
+    - [Text 5 / AUTO_SHAPE (1)]: Risk frameworks operationalize strategy; governance embeds intent into every transaction.
+    - [Text 6 / AUTO_SHAPE (1)]: • Control Enables, Not Constrains
+    - [Text 7 / AUTO_SHAPE (1)]: When properly architected, governance accelerates decision-making and competitive response.
+    - [Text 8 / AUTO_SHAPE (1)]: • Integration Is the Multiplier
+    - [Text 9 / AUTO_SHAPE (1)]: SAP GRC bridges people, process, and systems—turning compliance from cost center into strategic asset.
+  Slide 2:
+    - [Text 1 / AUTO_SHAPE (1)]: Intelligent Enterprise Architecture
+    - [Text 3 / AUTO_SHAPE (1)]: Business Strategy
+    - [Text 5 / AUTO_SHAPE (1)]: Governance Framework
+    - [Text 7 / AUTO_SHAPE (1)]: Enterprise Applications (SAP)
+    - [Text 9 / AUTO_SHAPE (1)]: Operational Systems & Data
+    - [Text 11 / AUTO_SHAPE (1)]: Outcomes & Performance
+    - [Text 12 / AUTO_SHAPE (1)]: GRC connects all layers—governance flows down, risk flows up, compliance is continuous.
+  Slide 3:
+    - [Text 1 / AUTO_SHAPE (1)]: SAP GRC: The Architectural Backbone
+    - [Text 3 / AUTO_SHAPE (1)]: Access Control
+    - [Text 4 / AUTO_SHAPE (1)]: • Segregation of Duties
+    - [Text 5 / AUTO_SHAPE (1)]: • User Access Governance
+    - [Text 6 / AUTO_SHAPE (1)]: • Role-Based Authorization
+    - [Text 7 / AUTO_SHAPE (1)]: • Fraud Prevention
+    - [Text 9 / AUTO_SHAPE (1)]: Process Control
+    - [Text 10 / AUTO_SHAPE (1)]: • Business Process Mapping
+    - [Text 11 / AUTO_SHAPE (1)]: • Control Design & Testing
+    - [Text 12 / AUTO_SHAPE (1)]: • Compliance Automation
+    - [Text 13 / AUTO_SHAPE (1)]: • Exception Monitoring
+    - [Text 15 / AUTO_SHAPE (1)]: Risk Management
+    - [Text 16 / AUTO_SHAPE (1)]: • Enterprise Risk Framework
+    - [Text 17 / AUTO_SHAPE (1)]: • Risk-to-Control Mapping
+    - [Text 18 / AUTO_SHAPE (1)]: • Key Risk Indicators
+    - [Text 19 / AUTO_SHAPE (1)]: • Continuous Monitoring
+    - [Text 21 / AUTO_SHAPE (1)]: These pillars are not silos. Shared master data, integrated controls, and unified risk catalogs create a single system of record for enterprise governance.
+  Slide 4:
+    - [Text 1 / AUTO_SHAPE (1)]: The Implementation Reality
+    - [Text 3 / AUTO_SHAPE (1)]: Point Solutions Instead of Integration
+    - [Text 4 / AUTO_SHAPE (1)]: Deploying access control without process control. Risk management on spreadsheets. Governance scattered across tools.
+    - [Text 5 / AUTO_SHAPE (1)]: → Blind spots, duplicate effort, slow incident response.
+    - [Text 7 / AUTO_SHAPE (1)]: Governance Without Architecture
+    - [Text 8 / AUTO_SHAPE (1)]: Policies written in isolation from system design. Role hierarchies that don't reflect strategy. Control design disconnected from business process flow.
+    - [Text 9 / AUTO_SHAPE (1)]: → Controls that slow operations. Poor user adoption. Governance seen as an IT constraint.
+    - [Text 11 / AUTO_SHAPE (1)]: Compliance, Not Risk Management
+    - [Text 12 / AUTO_SHAPE (1)]: Focusing on audit readiness rather than continuous risk mitigation. Exception handling is manual and reactive.
+    - [Text 13 / AUTO_SHAPE (1)]: → High operational cost. Late detection of issues. Governance doesn't scale.
+  Slide 5:
+    - [Text 1 / AUTO_SHAPE (1)]: The Lumbini Approach: Architecture First
+    - [Text 2 / AUTO_SHAPE (1)]: 1. Understand enterprise strategy and business model. What are the true sources of risk? Where must governance enable, not hinder?
+    - [Text 3 / AUTO_SHAPE (1)]: 2. Design the operating model. How do people, process, and systems integrate? What is the single source of truth for each domain?
+    - [Text 4 / AUTO_SHAPE (1)]: 3. Architect SAP GRC as the backbone. Integrate AC, PC, and RM from day one.
+    - [Text 5 / AUTO_SHAPE (1)]: 4. Enable continuous intelligence. Move from periodic audits to real-time monitoring.
+    - [Text 6 / AUTO_SHAPE (1)]: 5. Build organizational capability. Governance owned by the business, not inherited from IT.
+  Slide 6:
+    - [Text 1 / AUTO_SHAPE (1)]: Our Capabilities
+    - [Text 2 / AUTO_SHAPE (1)]: Strategy & Assessment
+    - [Text 3 / AUTO_SHAPE (1)]:   • Enterprise risk assessment
+    - [Text 4 / AUTO_SHAPE (1)]:   • GRC maturity evaluation
+    - [Text 5 / AUTO_SHAPE (1)]:   • Operating model design
+    - [Text 6 / AUTO_SHAPE (1)]: Architecture & Design
+    - [Text 7 / AUTO_SHAPE (1)]:   • SAP GRC system architecture
+    - [Text 8 / AUTO_SHAPE (1)]:   • Governance framework design
+    - [Text 9 / AUTO_SHAPE (1)]:   • Process-to-system mapping
+    - [Text 10 / AUTO_SHAPE (1)]: Implementation & Integration
+    - [Text 11 / AUTO_SHAPE (1)]:   • Access Control deployment
+    - [Text 12 / AUTO_SHAPE (1)]:   • Process Control configuration
+    - [Text 13 / AUTO_SHAPE (1)]:   • Risk Management implementation
+    - [Text 14 / AUTO_SHAPE (1)]:   • Cross-SAP integration
+    - [Text 15 / AUTO_SHAPE (1)]: Enablement & Optimization
+    - [Text 16 / AUTO_SHAPE (1)]:   • User access provisioning
+    - [Text 17 / AUTO_SHAPE (1)]:   • Role management
+    - [Text 18 / AUTO_SHAPE (1)]:   • Continuous monitoring
+    - [Text 19 / AUTO_SHAPE (1)]:   • Support
+  Slide 7:
+    - [Text 1 / AUTO_SHAPE (1)]: Why Lumbini Elite
+    - [Text 3 / AUTO_SHAPE (1)]: Built on Institutional Resilience
+    - [Text 4 / AUTO_SHAPE (1)]: 9+ years of deep enterprise SAP delivery. Strategic architecture across GRC, MES, supply chain, and digital transformation. CEO-recognized for unique combination of technical depth and governance expertise.
+    - [Text 6 / AUTO_SHAPE (1)]: Architects, Not Vendors
+    - [Text 7 / AUTO_SHAPE (1)]: We design enterprise operating models, not just implement software. From strategy through systems to outcomes—governance is never deployed in isolation.
+    - [Text 9 / AUTO_SHAPE (1)]: The Steady Hand in Crisis
+    - [Text 10 / AUTO_SHAPE (1)]: Extensive experience in M&A integration, regulatory response, and complex multi-region governance. When stakes are high and decisions must be fast, architecture enables both speed and control.
+  Slide 8:
+    - [Text 1 / AUTO_SHAPE (1)]: Engagement Models
+    - [Text 4 / AUTO_SHAPE (1)]: Consulting
+    - [Text 5 / AUTO_SHAPE (1)]: You lead, we advise. Strategic guidance, architecture, and specialized implementation support on your timeline.
+    - [Text 8 / AUTO_SHAPE (1)]: Co-Sourcing
+    - [Text 9 / AUTO_SHAPE (1)]: Shared responsibility. Our team partners with yours for design, delivery, and knowledge transfer.
+    - [Text 12 / AUTO_SHAPE (1)]: Outsourcing
+    - [Text 13 / AUTO_SHAPE (1)]: End-to-end delivery. Full program ownership, SLA-backed service delivery, ongoing optimization.
+  Slide 9:
+    - [Text 0 / AUTO_SHAPE (1)]: Let's Transform Your Enterprise
+    - [Text 1 / AUTO_SHAPE (1)]: Governance. Risk. Control. Architecture.
+    - [Text 2 / AUTO_SHAPE (1)]: Lumbini Elite Solutions
+    - [Text 3 / AUTO_SHAPE (1)]: Bangalore | Jharkhand | Delhi | Qatar
+    - [Text 5 / AUTO_SHAPE (1)]: www.lumbinielite.com
+    - [Text 6 / AUTO_SHAPE (1)]: info@lumbinielite.com
+

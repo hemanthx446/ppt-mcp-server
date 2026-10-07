@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ppt-mcp-server": {
+      "command": "c:\\Users\\Lumbini_User\\Desktop\\PPT\\.venv\\Scripts\\python.exe",
+      "args": [
+        "c:\\Users\\Lumbini_User\\Desktop\\PPT\\ppt_mcp_server.py"
+      ]
+    }
+  }
+}
