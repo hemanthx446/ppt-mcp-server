@@ -2037,7 +2037,471 @@ def generate_scenario_presentation(
     }
 
 
+# -----------------------------------------------------------------------------
+# Transformation & Process Intelligence MCP Tools (Step 15)
+# -----------------------------------------------------------------------------
+from design_system.transformation_semantic import (
+    TransformationRelationType,
+    ProcessNodeType,
+    ProcessNode,
+    ProcessBranch,
+    ProcessFlowModel,
+    SwimlaneLane,
+    SwimlaneStep,
+    SwimlaneHandoff,
+    SwimlaneDiagramModel,
+    CurrentStateSnapshot,
+    TransformationIntervention,
+    FutureStateVision,
+    TransformationBridgeModel,
+    MaturityDimensionScore,
+    MaturityStaircaseLevel,
+    MaturityAssessmentModel,
+    ClosedLoopStage,
+    ClosedLoopManufacturingModel,
+    TransformationSemanticInferrer
+)
+from design_system.process_flow_engine import ProcessFlowComposer
+from design_system.swimlane_engine import SwimlaneDiagramComposer
+from design_system.transformation_engine import TransformationBridgeComposer
+from design_system.maturity_engine import MaturityAssessmentComposer
+from design_system.primitives import HeaderPrimitive, FooterPrimitive
+from design_system.spacing import Margins, SpacingScale
+from design_system.color import ExecutiveNavyTheme, ConsultingSlateTheme
+
+
+@mcp.tool
+def render_process_flow_diagram(
+    path: str,
+    title: str = "SAP S/4HANA to MES Production Execution & Quality Clearance",
+    subtitle: Optional[str] = "Sequential order-to-dispatch flow with quality gate and rework loopback",
+    client_name: str = "Enterprise Manufacturing",
+    is_dark: bool = False,
+    steps_data: Optional[List[Dict[str, Any]]] = None
+) -> Dict[str, Any]:
+    """
+    Renders an enterprise process flow with decision diamonds, branching paths,
+    and rework/feedback loops into a presentation slide.
+    
+    Guarantees:
+      - Inter-only typography
+      - Real geometric shapes (not disconnected card boxes)
+      - Explicit MSO_SHAPE.DIAMOND for quality/decision points
+      - Directional connector arrows and branch condition badges
+    """
+    directory = os.path.dirname(path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    prs = Presentation(path) if os.path.exists(path) else Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.500)
+
+    theme = ExecutiveNavyTheme if is_dark else ConsultingSlateTheme
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    slide = prs.slides.add_slide(blank_layout)
+
+    # Background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.500))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = theme.canvas
+    bg.line.fill.background()
+
+    # Header & Footer
+    HeaderPrimitive.render(slide, "PROCESS ARCHITECTURE", title, subtitle, theme)
+    FooterPrimitive.render(slide, len(prs.slides), len(prs.slides), f"{client_name} • Operational Process Architecture", theme)
+
+    # Build or parse nodes
+    if steps_data:
+        nodes = []
+        for s in steps_data:
+            nodes.append(ProcessNode(
+                id=s.get("id", f"node_{len(nodes)}"),
+                label=s.get("label", "Process Step"),
+                role_lane=s.get("role_lane", "Operations"),
+                system_tag=s.get("system_tag"),
+                action_detail=s.get("action_detail"),
+                poka_yoke=s.get("poka_yoke"),
+                is_decision=s.get("is_decision", False)
+            ))
+    else:
+        nodes = [
+            ProcessNode("n1", "Demand & Sales Order", role_lane="Customer Demand", system_tag="SAP SD"),
+            ProcessNode("n2", "Production Order & MRP", role_lane="SAP Core", system_tag="PP Order 100482"),
+            ProcessNode("n3", "MES Dispatch & Setup", role_lane="MES Operations", system_tag="Digital Dispatch"),
+            ProcessNode("n4", "Machine Execution", role_lane="Shop Floor OT", system_tag="CNC Work Center"),
+            ProcessNode("n5", "Quality Gate & SPC", role_lane="Quality Assurance", system_tag="Vision / CMM", is_decision=True),
+            ProcessNode("n6", "Confirmation & Ledger", role_lane="SAP Finance", system_tag="CO11N / 101 GR"),
+            ProcessNode("n7", "Finished Goods Dispatch", role_lane="Logistics", system_tag="Outbound Delivery")
+        ]
+
+    flow_model = ProcessFlowModel(
+        title=title,
+        nodes=nodes,
+        branches=[],
+        subtitle=subtitle
+    )
+
+    ProcessFlowComposer.render_branching_process(
+        slide=slide,
+        left=Margins.left,
+        top=SpacingScale.CONTENT_TOP,
+        width=Margins().usable_width,
+        height=SpacingScale.CONTENT_HEIGHT,
+        flow_model=flow_model,
+        theme=theme
+    )
+
+    prs.save(path)
+    return {
+        "status": "success",
+        "path": path,
+        "slide_index": len(prs.slides) - 1,
+        "nodes_rendered": len(nodes),
+        "visual_type": "PROCESS_FLOW_DIAGRAM"
+    }
+
+
+@mcp.tool
+def render_swimlane_diagram(
+    path: str,
+    title: str = "SAP S/4HANA & MES Cross-Functional Operational Swimlane",
+    subtitle: Optional[str] = "Multi-tier transactional handoffs and Poka-Yoke interlocks across 5 enterprise lanes",
+    client_name: str = "Enterprise Manufacturing",
+    is_dark: bool = False
+) -> Dict[str, Any]:
+    """
+    Renders an enterprise cross-functional swimlane diagram with horizontal lane bands,
+    step placements, and cross-lane handoffs into a presentation slide.
+    
+    Lanes:
+      - CUSTOMER
+      - SAP S/4HANA (ERP Core)
+      - MES (Manufacturing Execution)
+      - SHOP FLOOR / OT (Machine & Operator)
+      - QUALITY ASSURANCE
+    """
+    directory = os.path.dirname(path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    prs = Presentation(path) if os.path.exists(path) else Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.500)
+
+    theme = ExecutiveNavyTheme if is_dark else ConsultingSlateTheme
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    slide = prs.slides.add_slide(blank_layout)
+
+    # Background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.500))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = theme.canvas
+    bg.line.fill.background()
+
+    # Header & Footer
+    HeaderPrimitive.render(slide, "CROSS-FUNCTIONAL SWIMLANE", title, subtitle, theme)
+    FooterPrimitive.render(slide, len(prs.slides), len(prs.slides), f"{client_name} • Operational Swimlane Architecture", theme)
+
+    lanes = [
+        SwimlaneLane("lane_cust", "Customer Demand", "External Partner", 1),
+        SwimlaneLane("lane_sap", "SAP S/4HANA", "System of Record", 2),
+        SwimlaneLane("lane_mes", "MES Operations", "Execution Core", 3),
+        SwimlaneLane("lane_shop", "Shop Floor / OT", "Edge Physical Layer", 4),
+        SwimlaneLane("lane_qm", "Quality Assurance", "Compliance Interlock", 5)
+    ]
+
+    steps = [
+        SwimlaneStep("s1", "lane_cust", "Demand Forecast / EDI", 1, "Sales Demand Signal", system_badge="EDI 850"),
+        SwimlaneStep("s2", "lane_sap", "Sales & Production Order", 2, "MRP Planning Run", system_badge="S/4HANA PP"),
+        SwimlaneStep("s3", "lane_mes", "Dispatch & Work Queue", 3, "Operation Scheduling", system_badge="MES MOM"),
+        SwimlaneStep("s4", "lane_shop", "CNC Machining & Setup", 4, "Physical Execution", system_badge="PLC / OPC UA"),
+        SwimlaneStep("s5", "lane_shop", "Material Consumption", 5, "Batch Component Binding", system_badge="261 Movement"),
+        SwimlaneStep("s6", "lane_qm", "Optical Inspection Gate", 6, "SPC Tolerance Validation", is_decision=True, system_badge="CMM Gauge"),
+        SwimlaneStep("s7", "lane_sap", "Confirmation & Ledger", 7, "CO11N & 101 Goods Receipt", system_badge="ACDOCA Post")
+    ]
+
+    handoffs = [
+        SwimlaneHandoff("s1", "s2", "Sales Order", "B2B EDI"),
+        SwimlaneHandoff("s2", "s3", "Production Order", "BAPI / OData"),
+        SwimlaneHandoff("s3", "s4", "Dispatch Job", "OPC-UA / MQTT"),
+        SwimlaneHandoff("s4", "s5", "As-Built Log", "Unit Traveler"),
+        SwimlaneHandoff("s5", "s6", "Inspection Trigger", "Quality Call"),
+        SwimlaneHandoff("s6", "s7", "Clearance GR", "101 Receipt")
+    ]
+
+    model = SwimlaneDiagramModel(
+        title=title,
+        lanes=lanes,
+        steps=steps,
+        handoffs=handoffs,
+        subtitle=subtitle
+    )
+
+    SwimlaneDiagramComposer.render(
+        slide=slide,
+        left=Margins.left,
+        top=SpacingScale.CONTENT_TOP,
+        width=Margins().usable_width,
+        height=SpacingScale.CONTENT_HEIGHT,
+        model=model,
+        theme=theme
+    )
+
+    prs.save(path)
+    return {
+        "status": "success",
+        "path": path,
+        "slide_index": len(prs.slides) - 1,
+        "lanes_count": len(lanes),
+        "steps_count": len(steps),
+        "visual_type": "SWIMLANE_DIAGRAM"
+    }
+
+
+@mcp.tool
+def render_transformation_bridge(
+    path: str,
+    title: str = "Enterprise Transformation Blueprint: Current State to Target Operating Model",
+    subtitle: Optional[str] = "Bridging legacy operational friction through S/4HANA clean-core and MES execution enablers",
+    client_name: str = "Enterprise Manufacturing",
+    is_dark: bool = False
+) -> Dict[str, Any]:
+    """
+    Renders an enterprise Current State -> Intervention -> Future State transformation bridge
+    with baseline KPIs, strategic enablers, and target business outcomes.
+    """
+    directory = os.path.dirname(path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    prs = Presentation(path) if os.path.exists(path) else Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.500)
+
+    theme = ExecutiveNavyTheme if is_dark else ConsultingSlateTheme
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    slide = prs.slides.add_slide(blank_layout)
+
+    # Background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.500))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = theme.canvas
+    bg.line.fill.background()
+
+    HeaderPrimitive.render(slide, "TRANSFORMATION BLUEPRINT", title, subtitle, theme)
+    FooterPrimitive.render(slide, len(prs.slides), len(prs.slides), f"{client_name} • Transformation Advisory", theme)
+
+    model = TransformationBridgeModel(
+        title=title,
+        current_state=CurrentStateSnapshot(
+            title="CURRENT STATE (Baseline)",
+            pain_points=[
+                "Fragmented master data & BOM mismatches",
+                "Manual paper travelers & dispatch clipboards",
+                "Disconnected quality logs tracked in Excel",
+                "Delayed inventory confirmation (2-3 day lag)"
+            ],
+            baseline_metrics=[
+                ("WIP Latency", "4.8 Days"),
+                ("Scrap Rate", "4.2%"),
+                ("OTIF Delivery", "81.4%")
+            ]
+        ),
+        intervention=TransformationIntervention(
+            title="TRANSFORMATION ENABLERS",
+            initiatives=[
+                "SAP S/4HANA Clean-Core Integration",
+                "MES Digital Dispatch & Real-Time Tracking",
+                "Automated Closed-Loop Quality Interlocks",
+                "Unified Industrial Data Fabric & BTP Mesh"
+            ],
+            enablers=[
+                "Air-gapped edge buffering",
+                "Deterministic PLC connectors",
+                "Zero custom Z-tables in ERP"
+            ]
+        ),
+        future_state=FutureStateVision(
+            title="FUTURE OPERATING MODEL",
+            transformed_capabilities=[
+                "Synchronized MRP-to-machine dispatch",
+                "Full serial & batch genealogy trace",
+                "Predictive quality interlocks at station",
+                "Sub-second financial ledger postings"
+            ],
+            target_outcomes=[
+                ("WIP Latency", "1.2 Days (-75%)"),
+                ("Scrap Rate", "0.8% (-81%)"),
+                ("OTIF Delivery", "97.5% (+16 pts)")
+            ]
+        ),
+        subtitle=subtitle,
+        timeframe="12–18 Month Execution Horizon"
+    )
+
+    TransformationBridgeComposer.render_bridge(
+        slide=slide,
+        left=Margins.left,
+        top=SpacingScale.CONTENT_TOP,
+        width=Margins().usable_width,
+        height=SpacingScale.CONTENT_HEIGHT,
+        model=model,
+        theme=theme
+    )
+
+    prs.save(path)
+    return {
+        "status": "success",
+        "path": path,
+        "slide_index": len(prs.slides) - 1,
+        "visual_type": "TRANSFORMATION_BRIDGE_DIAGRAM"
+    }
+
+
+@mcp.tool
+def render_maturity_assessment(
+    path: str,
+    title: str = "Digital Transformation Maturity Assessment & Gaps",
+    subtitle: Optional[str] = "5-Level capability staircase and prioritized dimension gap scorecard",
+    client_name: str = "Enterprise Manufacturing",
+    overall_current: float = 2.4,
+    overall_target: float = 4.2,
+    is_dark: bool = False
+) -> Dict[str, Any]:
+    """
+    Renders an enterprise 5-level maturity staircase and dimension scorecard:
+    Score -> Gap -> Recommendation consulting layout.
+    """
+    directory = os.path.dirname(path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    prs = Presentation(path) if os.path.exists(path) else Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.500)
+
+    theme = ExecutiveNavyTheme if is_dark else ConsultingSlateTheme
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    slide = prs.slides.add_slide(blank_layout)
+
+    # Background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.500))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = theme.canvas
+    bg.line.fill.background()
+
+    HeaderPrimitive.render(slide, "MATURITY ASSESSMENT", title, subtitle, theme)
+    FooterPrimitive.render(slide, len(prs.slides), len(prs.slides), f"{client_name} • Operational Maturity Audit", theme)
+
+    dimensions = [
+        MaturityDimensionScore("Process & Execution", 2.1, 4.3, "P1", "Paper travel cards & manual dispatch", "Deploy MES automated dispatch & digital traveler"),
+        MaturityDimensionScore("Data & Genealogy", 2.3, 4.5, "P1", "Missing component-to-serial batch linkage", "Automated barcode & OPC-UA genealogy binding"),
+        MaturityDimensionScore("SAP Clean Core", 2.6, 4.2, "P2", "Excess custom Z-tables blocking cloud upgrade", "Migrate custom code to BTP event mesh"),
+        MaturityDimensionScore("Quality & Rework", 2.2, 4.0, "P1", "Delayed defect logging & missing CAPA loops", "Closed-loop digital inspection interlocks"),
+        MaturityDimensionScore("Governance & RACI", 2.8, 4.0, "P2", "Ambiguous IT/OT boundary ownership", "Formalize unified IT/OT operating charter")
+    ]
+
+    model = MaturityAssessmentModel(
+        title=title,
+        overall_current_score=overall_current,
+        overall_target_score=overall_target,
+        dimensions=dimensions,
+        subtitle=subtitle
+    )
+
+    MaturityAssessmentComposer.render_staircase_scorecard(
+        slide=slide,
+        left=Margins.left,
+        top=SpacingScale.CONTENT_TOP,
+        width=Margins().usable_width,
+        height=SpacingScale.CONTENT_HEIGHT,
+        model=model,
+        theme=theme
+    )
+
+    prs.save(path)
+    return {
+        "status": "success",
+        "path": path,
+        "slide_index": len(prs.slides) - 1,
+        "overall_current": overall_current,
+        "overall_target": overall_target,
+        "visual_type": "MATURITY_STAIRCASE_SCORECARD"
+    }
+
+
+@mcp.tool
+def render_closed_loop_manufacturing(
+    path: str,
+    title: str = "Physical-to-Digital Closed-Loop Manufacturing Architecture",
+    subtitle: Optional[str] = "Continuous cyber-physical feedback from machine sensors through S/4HANA intelligence",
+    client_name: str = "Enterprise Manufacturing",
+    is_dark: bool = True
+) -> Dict[str, Any]:
+    """
+    Renders a circular, closed-loop manufacturing architecture:
+    Physical World -> Digital Capture -> Contextualization -> Intelligence -> Decision -> Action -> Physical World.
+    """
+    directory = os.path.dirname(path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    prs = Presentation(path) if os.path.exists(path) else Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.500)
+
+    theme = ExecutiveNavyTheme if is_dark else ConsultingSlateTheme
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    slide = prs.slides.add_slide(blank_layout)
+
+    # Background
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(7.500))
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = theme.canvas
+    bg.line.fill.background()
+
+    HeaderPrimitive.render(slide, "CLOSED-LOOP MANUFACTURING", title, subtitle, theme)
+    FooterPrimitive.render(slide, len(prs.slides), len(prs.slides), f"{client_name} • Cyber-Physical Architecture", theme)
+
+    stages = [
+        ClosedLoopStage(1, "Physical World", ["CNC Machine", "Operator Tooling", "Physical Sensors"], ["Vibration & Current", "Spindle Speed"]),
+        ClosedLoopStage(2, "Digital Capture", ["Edge Industrial Gateway", "OPC UA Collector"], ["Raw Telemetry Stream", "Time-Series Logs"]),
+        ClosedLoopStage(3, "Contextualization", ["MES MOM Engine", "Unit Genealogy Traveler"], ["Order #100482 Context", "Lot & Serial Binding"]),
+        ClosedLoopStage(4, "Enterprise Intelligence", ["SAP S/4HANA", "Predictive AI / SPC"], ["ACDOCA Ledger Postings", "Deviation Anomaly"]),
+        ClosedLoopStage(5, "Decision Engine", ["Autonomous Control Logic", "Supervisor Approval"], ["Tool Offset Adjustment", "Hold/Release Clearance"]),
+        ClosedLoopStage(6, "Directed Action", ["PLC Actuator", "Operator Terminal"], ["Automated Parameter Update", "Closed-Loop Physical Execution"])
+    ]
+
+    model = ClosedLoopManufacturingModel(
+        title=title,
+        stages=stages,
+        loop_closed_summary="Sub-second closed-loop telemetry updates machine tool offsets directly before tolerance drift causes non-conformance.",
+        subtitle=subtitle
+    )
+
+    ProcessFlowComposer.render_closed_loop_manufacturing(
+        slide=slide,
+        left=Margins.left,
+        top=SpacingScale.CONTENT_TOP,
+        width=Margins().usable_width,
+        height=SpacingScale.CONTENT_HEIGHT,
+        model=model,
+        theme=theme
+    )
+
+    prs.save(path)
+    return {
+        "status": "success",
+        "path": path,
+        "slide_index": len(prs.slides) - 1,
+        "stages_count": len(stages),
+        "visual_type": "CLOSED_LOOP_DIAGRAM"
+    }
+
+
 if __name__ == "__main__":
     mcp.run()
+
 
 

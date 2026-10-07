@@ -141,6 +141,30 @@ __all__ = [
     "DomainPayloadSynthesizer",
     "ScenarioDeckResult",
     "ScenarioPresentationEngine",
+    # Transformation & Process Intelligence
+    "TransformationRelationType",
+    "ProcessNodeType",
+    "ProcessNode",
+    "ProcessBranch",
+    "ProcessFlowModel",
+    "SwimlaneLane",
+    "SwimlaneStep",
+    "SwimlaneHandoff",
+    "SwimlaneDiagramModel",
+    "CurrentStateSnapshot",
+    "TransformationIntervention",
+    "FutureStateVision",
+    "TransformationBridgeModel",
+    "MaturityDimensionScore",
+    "MaturityStaircaseLevel",
+    "MaturityAssessmentModel",
+    "ClosedLoopStage",
+    "ClosedLoopManufacturingModel",
+    "TransformationSemanticInferrer",
+    "ProcessFlowComposer",
+    "SwimlaneDiagramComposer",
+    "TransformationBridgeComposer",
+    "MaturityAssessmentComposer",
 ]
 
 from .composition import (
@@ -226,3 +250,30 @@ from .scenario_engine import (
     ScenarioDeckResult,
     ScenarioPresentationEngine,
 )
+
+from .transformation_semantic import (
+    TransformationRelationType,
+    ProcessNodeType,
+    ProcessNode,
+    ProcessBranch,
+    ProcessFlowModel,
+    SwimlaneLane,
+    SwimlaneStep,
+    SwimlaneHandoff,
+    SwimlaneDiagramModel,
+    CurrentStateSnapshot,
+    TransformationIntervention,
+    FutureStateVision,
+    TransformationBridgeModel,
+    MaturityDimensionScore,
+    MaturityStaircaseLevel,
+    MaturityAssessmentModel,
+    ClosedLoopStage,
+    ClosedLoopManufacturingModel,
+    TransformationSemanticInferrer,
+)
+
+from .process_flow_engine import ProcessFlowComposer
+from .swimlane_engine import SwimlaneDiagramComposer
+from .transformation_engine import TransformationBridgeComposer
+from .maturity_engine import MaturityAssessmentComposer

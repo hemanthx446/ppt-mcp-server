@@ -393,27 +393,290 @@ def generate_all_representative_decks():
     ]
     build_deck("representative_governance.pptx", "Enterprise Program Governance", "ABB Robotics", gov_slides)
 
-    # 7. COMPLETE ENTERPRISE SOLUTION PROPOSAL
-    solution_reqs = [
-        "current-state",
-        "structural problem",
-        "target architecture",
-        "integration/data flow",
-        "shop-floor workflow",
-        "genealogy visualization",
-        "KPI strip",
-        "delivery roadmap",
-        "commercial proposal"
-    ]
-    res = ScenarioPresentationEngine.build_scenario_presentation(
-        scenario_id="representative_complete_enterprise_solution",
-        title="Autonomous Manufacturing Execution & Clean-Core ERP Architecture",
-        topic="Enterprise Digital Transformation Proposal",
-        client_name="Global Aerospace & Defense Conglomerate",
-        requirements=solution_reqs,
-        output_path="representative_complete_enterprise_solution.pptx"
+    # 7. TRANSFORMATION NARRATIVE DECK
+    prs_trans = Presentation()
+    prs_trans.slide_width = Inches(CanvasBounds.width)
+    prs_trans.slide_height = Inches(CanvasBounds.height)
+    from design_system.narrative_intelligence import NarrativeFramework, NarrativeIntelligenceEngine
+    NarrativeIntelligenceEngine.render_narrative_deck(
+        prs=prs_trans,
+        framework=NarrativeFramework.TRANSFORMATION_JOURNEY,
+        topic="Autonomous Manufacturing Execution",
+        client_name="Lockheed Martin Aerospace"
     )
-    print(f"[GENERATED] representative_complete_enterprise_solution.pptx: {res.slide_count} slides | Quality Score: {res.quality_report.overall_quality_score}/100 | Status: {res.quality_report.status.name} | Diversity: {res.diversity_score}%")
+    rep_trans = PresentationQualityGate.audit_and_remediate(prs_trans, auto_remediate=True)
+    prs_trans.save("representative_transformation.pptx")
+    print(f"[GENERATED] representative_transformation.pptx: {len(prs_trans.slides)} slides | Quality Score: {rep_trans.overall_quality_score}/100 | Status: {rep_trans.status.name}")
+
+    # 8. PROCESS FLOW DECK
+    from design_system.transformation_semantic import ProcessFlowModel, ProcessNode, ProcessNodeType
+    from design_system.process_flow_engine import ProcessFlowComposer
+    prs_proc = Presentation()
+    prs_proc.slide_width = Inches(CanvasBounds.width)
+    prs_proc.slide_height = Inches(CanvasBounds.height)
+    blank_layout = prs_proc.slide_layouts[6] if len(prs_proc.slide_layouts) > 6 else prs_proc.slide_layouts[0]
+
+    # Slide 1: SAP to MES Branching Process
+    s1 = prs_proc.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s1, "1. PROCESS ARCHITECTURE", "SAP S/4HANA to MES Production Execution & Quality Clearance", "Sequential order dispatch with automated Poka-Yoke decision gate and rework loopback.", ConsultingSlateTheme)
+    FooterPrimitive.render(s1, 1, 2, "Boeing Commercial Airplanes • Process Architecture Advisory", ConsultingSlateTheme)
+    flow_model_1 = ProcessFlowModel(
+        title="Production Execution & Quality Clearance",
+        nodes=[
+            ProcessNode("n1", "Demand & Sales Order", role_lane="Customer Demand", system_tag="SAP SD"),
+            ProcessNode("n2", "Production Order & MRP", role_lane="SAP Core", system_tag="PP Order 100482"),
+            ProcessNode("n3", "MES Dispatch & Setup", role_lane="MES Operations", system_tag="Digital Dispatch"),
+            ProcessNode("n4", "Machine Execution", role_lane="Shop Floor OT", system_tag="CNC Work Center"),
+            ProcessNode("n5", "Quality Gate & SPC", role_lane="Quality Assurance", system_tag="Vision / CMM", is_decision=True),
+            ProcessNode("n6", "Confirmation & Ledger", role_lane="SAP Finance", system_tag="CO11N / 101 GR"),
+            ProcessNode("n7", "Finished Goods Dispatch", role_lane="Logistics", system_tag="Outbound Delivery")
+        ],
+        branches=[]
+    )
+    ProcessFlowComposer.render_branching_process(s1, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, flow_model_1, ConsultingSlateTheme)
+
+    # Slide 2: Frontline Operator Journey
+    s2 = prs_proc.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s2, "2. OPERATOR EXECUTION", "Frontline Operator Workflow with Poka-Yoke Interlocks", "Deterministic digital work instructions eliminate human assembly errors.", ExecutiveNavyTheme)
+    FooterPrimitive.render(s2, 2, 2, "Boeing Commercial Airplanes • Operator Workflow Advisory", ExecutiveNavyTheme)
+    lib.OperationalWorkflowPrimitive.render(
+        slide=s2, left=Margins.left, top=SpacingScale.CONTENT_TOP, width=Margins().usable_width, height=SpacingScale.CONTENT_HEIGHT,
+        stations=[
+            ("10", "Inbound Kit Verification", "Operator scans component traveler barcode against ERP BOM", "Barcode mismatch interlock halts carrier"),
+            ("20", "Robotic Cell Assembly", "Automated cell executes precision torque sequence with telemetry", "Temperature parameter drift triggers alert"),
+            ("30", "Laser Direct Part Marking", "Permanent 2D DataMatrix serial UID etched onto titanium chassis", "High-res optical camera verifies scan contrast"),
+            ("40", "End-of-Line Quality Gate", "Automated electrical resistance and pneumatic leak testing", "Defect failure locks output nest and posts NCR")
+        ],
+        theme=ExecutiveNavyTheme
+    )
+    rep_proc = PresentationQualityGate.audit_and_remediate(prs_proc, auto_remediate=True)
+    prs_proc.save("representative_process_flow.pptx")
+    print(f"[GENERATED] representative_process_flow.pptx: {len(prs_proc.slides)} slides | Quality Score: {rep_proc.overall_quality_score}/100 | Status: {rep_proc.status.name}")
+
+    # 9. SWIMLANE DECK
+    from design_system.transformation_semantic import SwimlaneDiagramModel, SwimlaneLane, SwimlaneStep, SwimlaneHandoff
+    from design_system.swimlane_engine import SwimlaneDiagramComposer
+    prs_swim = Presentation()
+    prs_swim.slide_width = Inches(CanvasBounds.width)
+    prs_swim.slide_height = Inches(CanvasBounds.height)
+
+    s_sw1 = prs_swim.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_sw1, "1. CROSS-FUNCTIONAL SWIMLANE", "End-to-End Enterprise Order-to-Confirmation Swimlane", "Multi-tier transactional handoffs and Poka-Yoke interlocks across 5 enterprise lanes.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_sw1, 1, 1, "Siemens Industrial • Cross-Functional Swimlane Advisory", ConsultingSlateTheme)
+
+    swim_model = SwimlaneDiagramModel(
+        title="Order-to-Confirmation Operational Swimlane",
+        lanes=[
+            SwimlaneLane("l_cust", "Customer Demand", "External Partner", 1),
+            SwimlaneLane("l_sap", "SAP S/4HANA", "System of Record", 2),
+            SwimlaneLane("l_mes", "MES MOM Core", "Execution", 3),
+            SwimlaneLane("l_shop", "Shop Floor / OT", "Edge Physical Layer", 4),
+            SwimlaneLane("l_qm", "Quality Assurance", "Compliance Interlock", 5)
+        ],
+        steps=[
+            SwimlaneStep("s1", "l_cust", "Demand Forecast / EDI", 1, "Sales Demand Signal", system_badge="EDI 850"),
+            SwimlaneStep("s2", "l_sap", "Sales & Production Order", 2, "MRP Planning Run", system_badge="S/4HANA PP"),
+            SwimlaneStep("s3", "l_mes", "Dispatch & Work Queue", 3, "Operation Scheduling", system_badge="MES MOM"),
+            SwimlaneStep("s4", "l_shop", "CNC Machining & Setup", 4, "Physical Execution", system_badge="PLC / OPC UA"),
+            SwimlaneStep("s5", "l_shop", "Material Consumption", 5, "Batch Component Binding", system_badge="261 Movement"),
+            SwimlaneStep("s6", "l_qm", "Optical Inspection Gate", 6, "SPC Tolerance Validation", is_decision=True, system_badge="CMM Gauge"),
+            SwimlaneStep("s7", "l_sap", "Confirmation & Ledger", 7, "CO11N & 101 Goods Receipt", system_badge="ACDOCA Post")
+        ],
+        handoffs=[
+            SwimlaneHandoff("s1", "s2", "Sales Order", "B2B EDI"),
+            SwimlaneHandoff("s2", "s3", "Production Order", "BAPI / OData"),
+            SwimlaneHandoff("s3", "s4", "Dispatch Job", "OPC-UA / MQTT"),
+            SwimlaneHandoff("s4", "s5", "As-Built Log", "Unit Traveler"),
+            SwimlaneHandoff("s5", "s6", "Inspection Trigger", "Quality Call"),
+            SwimlaneHandoff("s6", "s7", "Clearance GR", "101 Receipt")
+        ]
+    )
+    SwimlaneDiagramComposer.render(s_sw1, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, swim_model, ConsultingSlateTheme)
+    rep_swim = PresentationQualityGate.audit_and_remediate(prs_swim, auto_remediate=True)
+    prs_swim.save("representative_swimlane.pptx")
+    print(f"[GENERATED] representative_swimlane.pptx: {len(prs_swim.slides)} slides | Quality Score: {rep_swim.overall_quality_score}/100 | Status: {rep_swim.status.name}")
+
+    # 10. MATURITY ASSESSMENT DECK
+    from design_system.transformation_semantic import MaturityAssessmentModel, MaturityDimensionScore
+    from design_system.maturity_engine import MaturityAssessmentComposer
+    prs_mat = Presentation()
+    prs_mat.slide_width = Inches(CanvasBounds.width)
+    prs_mat.slide_height = Inches(CanvasBounds.height)
+
+    s_m1 = prs_mat.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_m1, "1. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_m1, 1, 1, "Caterpillar Manufacturing • Digital Maturity Audit", ConsultingSlateTheme)
+
+    mat_model = MaturityAssessmentModel(
+        title="Manufacturing Digital Transformation Maturity",
+        overall_current_score=2.4,
+        overall_target_score=4.2,
+        dimensions=[
+            MaturityDimensionScore("Process & Execution", 2.1, 4.3, "P1", "Paper travel cards & manual dispatch", "Deploy MES automated dispatch & digital traveler"),
+            MaturityDimensionScore("Data & Genealogy", 2.3, 4.5, "P1", "Missing component-to-serial batch linkage", "Automated barcode & OPC-UA genealogy binding"),
+            MaturityDimensionScore("SAP Clean Core", 2.6, 4.2, "P2", "Excess custom Z-tables blocking cloud upgrade", "Migrate custom code to BTP event mesh"),
+            MaturityDimensionScore("Quality & Rework", 2.2, 4.0, "P1", "Delayed defect logging & missing CAPA loops", "Closed-loop digital inspection interlocks"),
+            MaturityDimensionScore("Governance & RACI", 2.8, 4.0, "P2", "Ambiguous IT/OT boundary ownership", "Formalize unified IT/OT operating charter")
+        ]
+    )
+    MaturityAssessmentComposer.render_staircase_scorecard(s_m1, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, mat_model, ConsultingSlateTheme)
+    rep_mat = PresentationQualityGate.audit_and_remediate(prs_mat, auto_remediate=True)
+    prs_mat.save("representative_maturity_assessment.pptx")
+    print(f"[GENERATED] representative_maturity_assessment.pptx: {len(prs_mat.slides)} slides | Quality Score: {rep_mat.overall_quality_score}/100 | Status: {rep_mat.status.name}")
+
+    # 11. CLOSED-LOOP MANUFACTURING DECK
+    from design_system.transformation_semantic import ClosedLoopManufacturingModel, ClosedLoopStage
+    prs_cl = Presentation()
+    prs_cl.slide_width = Inches(CanvasBounds.width)
+    prs_cl.slide_height = Inches(CanvasBounds.height)
+
+    s_cl1 = prs_cl.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_cl1, "1. CLOSED-LOOP ARCHITECTURE", "Physical-to-Digital Closed-Loop Cyber-Physical Architecture", "Continuous cyber-physical feedback from machine sensors through S/4HANA intelligence.", ExecutiveNavyTheme)
+    FooterPrimitive.render(s_cl1, 1, 1, "Honeywell Aerospace • Closed-Loop Manufacturing Advisory", ExecutiveNavyTheme)
+
+    cl_model = ClosedLoopManufacturingModel(
+        title="Autonomous Cyber-Physical Production Loop",
+        stages=[
+            ClosedLoopStage(1, "Physical World", ["CNC Machine", "Operator Tooling", "Physical Sensors"], ["Vibration & Current", "Spindle Speed"]),
+            ClosedLoopStage(2, "Digital Capture", ["Edge Industrial Gateway", "OPC UA Collector"], ["Raw Telemetry Stream", "Time-Series Logs"]),
+            ClosedLoopStage(3, "Contextualization", ["MES MOM Engine", "Unit Genealogy Traveler"], ["Order #100482 Context", "Lot & Serial Binding"]),
+            ClosedLoopStage(4, "Enterprise Intelligence", ["SAP S/4HANA", "Predictive AI / SPC"], ["ACDOCA Ledger Postings", "Deviation Anomaly"]),
+            ClosedLoopStage(5, "Decision Engine", ["Autonomous Control Logic", "Supervisor Approval"], ["Tool Offset Adjustment", "Hold/Release Clearance"]),
+            ClosedLoopStage(6, "Directed Action", ["PLC Actuator", "Operator Terminal"], ["Automated Parameter Update", "Closed-Loop Physical Execution"])
+        ],
+        loop_closed_summary="Sub-second closed-loop telemetry updates machine tool offsets directly before tolerance drift causes non-conformance."
+    )
+    ProcessFlowComposer.render_closed_loop_manufacturing(s_cl1, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, cl_model, ExecutiveNavyTheme)
+    rep_cl = PresentationQualityGate.audit_and_remediate(prs_cl, auto_remediate=True)
+    prs_cl.save("representative_closed_loop_manufacturing.pptx")
+    print(f"[GENERATED] representative_closed_loop_manufacturing.pptx: {len(prs_cl.slides)} slides | Quality Score: {rep_cl.overall_quality_score}/100 | Status: {rep_cl.status.name}")
+
+    # 12. SAP + MES TRANSFORMATION DECK
+    from design_system.transformation_semantic import (
+        TransformationBridgeModel, CurrentStateSnapshot, TransformationIntervention, FutureStateVision
+    )
+    from design_system.transformation_engine import TransformationBridgeComposer
+    from design_system.table_engine import EnterpriseTableFactory, EnterpriseTableComposer, TableArchetype
+    from design_system.architecture_engine import ArchitectureBlueprintFactory, EnterpriseArchitectureComposer
+
+    prs_sap_mes = Presentation()
+    prs_sap_mes.slide_width = Inches(CanvasBounds.width)
+    prs_sap_mes.slide_height = Inches(CanvasBounds.height)
+
+    # Slide 1: Clean-Core Architecture Blueprint
+    arch_spec = ArchitectureBlueprintFactory.clean_core_sap_to_shopfloor(client_name="General Electric")
+    arch_spec.category_tag = "1. ENTERPRISE ARCHITECTURE"
+    arch_spec.title = "SAP S/4HANA & MES Clean-Core Decoupled Architecture"
+    arch_spec.subtitle = "Preserving ERP financial ledger integrity via event-driven edge execution."
+    EnterpriseArchitectureComposer.compose_and_render(prs_sap_mes, arch_spec)
+
+    # Slide 2: Cross-Functional Swimlane
+    s_sm2 = prs_sap_mes.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_sm2, "2. OPERATIONAL SWIMLANE", "Cross-Functional SAP, MES & Shop Floor Handoff Architecture", "End-to-end transactional handoffs with Poka-Yoke error-proofing interlocks.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_sm2, 2, 5, "General Electric • Operational Swimlane Advisory", ConsultingSlateTheme)
+    SwimlaneDiagramComposer.render(s_sm2, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, swim_model, ConsultingSlateTheme)
+
+    # Slide 3: Branching Production Execution Flow
+    s_sm3 = prs_sap_mes.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_sm3, "3. PROCESS EXECUTION", "Production Execution, Quality Clearance & Rework Loopback", "Sequential order dispatch with automated Poka-Yoke decision gate and rework loopback.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_sm3, 3, 5, "General Electric • Production Execution Flow", ConsultingSlateTheme)
+    ProcessFlowComposer.render_branching_process(s_sm3, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, flow_model_1, ConsultingSlateTheme)
+
+    # Slide 4: Transformation Intervention Bridge
+    s_sm4 = prs_sap_mes.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_sm4, "4. TRANSFORMATION BLUEPRINT", "Current State to Future Operating Model Transformation Bridge", "Bridging legacy operational friction through S/4HANA clean-core and MES execution enablers.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_sm4, 4, 5, "General Electric • Transformation Bridge", ConsultingSlateTheme)
+    trans_model = TransformationBridgeModel(
+        title="SAP to MES Digital Transformation Blueprint",
+        current_state=CurrentStateSnapshot(
+            title="CURRENT STATE (Baseline)",
+            pain_points=["Fragmented master data & BOM mismatches", "Manual paper travelers & dispatch clipboards", "Disconnected quality logs in Excel", "Delayed inventory confirmation (2-3 day lag)"],
+            baseline_metrics=[("WIP Latency", "4.8 Days"), ("Scrap Rate", "4.2%"), ("OTIF Delivery", "81.4%")]
+        ),
+        intervention=TransformationIntervention(
+            title="TRANSFORMATION ENABLERS",
+            initiatives=["SAP S/4HANA Clean-Core Integration", "MES Digital Dispatch & Real-Time Tracking", "Automated Closed-Loop Quality Interlocks", "Unified Industrial Data Fabric & BTP Mesh"],
+            enablers=["Air-gapped edge buffering", "Deterministic PLC connectors", "Zero custom Z-tables in ERP"]
+        ),
+        future_state=FutureStateVision(
+            title="FUTURE OPERATING MODEL",
+            transformed_capabilities=["Synchronized MRP-to-machine dispatch", "Full serial & batch genealogy trace", "Predictive quality interlocks at station", "Sub-second financial ledger postings"],
+            target_outcomes=[("WIP Latency", "1.2 Days (-75%)"), ("Scrap Rate", "0.8% (-81%)"), ("OTIF Delivery", "97.5% (+16 pts)")]
+        ),
+        timeframe="12–18 Month Execution Horizon"
+    )
+    TransformationBridgeComposer.render_bridge(s_sm4, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, trans_model, ConsultingSlateTheme)
+
+    # Slide 5: Digital Maturity Staircase & Scorecard
+    s_sm5 = prs_sap_mes.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_sm5, "5. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_sm5, 5, 5, "General Electric • Maturity Assessment", ConsultingSlateTheme)
+    MaturityAssessmentComposer.render_staircase_scorecard(s_sm5, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, mat_model, ConsultingSlateTheme)
+
+    rep_sap_mes = PresentationQualityGate.audit_and_remediate(prs_sap_mes, auto_remediate=True)
+    prs_sap_mes.save("representative_sap_mes_transformation.pptx")
+    print(f"[GENERATED] representative_sap_mes_transformation.pptx: {len(prs_sap_mes.slides)} slides | Quality Score: {rep_sap_mes.overall_quality_score}/100 | Status: {rep_sap_mes.status.name}")
+
+    # 13. COMPLETE ENTERPRISE SOLUTION PROPOSAL (Regenerated with genuine process/transformation diagrams)
+    prs_full = Presentation()
+    prs_full.slide_width = Inches(CanvasBounds.width)
+    prs_full.slide_height = Inches(CanvasBounds.height)
+
+    # Slide 1: Executive Opening Tell
+    from design_system.density_intelligence import LowDensitySlideRenderer
+    LowDensitySlideRenderer.render_executive_statement(
+        prs=prs_full,
+        statement="Zero latency between the machine spindle and the balance sheet.",
+        supporting_thesis="Preserving ERP ledger integrity while synchronizing sub-second plant floor execution.",
+        author_or_source="Global Enterprise Solutions Architecture",
+        category_tag="1. EXECUTIVE MANDATE • STRATEGIC THESIS",
+        client_name="Global Aerospace & Defense",
+        is_dark=True
+    )
+
+    # Slide 2: Transformation Bridge
+    s_f2 = prs_full.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_f2, "2. TRANSFORMATION BLUEPRINT", "Current State to Future Operating Model Transformation Bridge", "Bridging legacy operational friction through S/4HANA clean-core and MES execution enablers.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_f2, 2, 7, "Global Aerospace & Defense • Transformation Blueprint", ConsultingSlateTheme)
+    TransformationBridgeComposer.render_bridge(s_f2, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, trans_model, ConsultingSlateTheme)
+
+    # Slide 3: Clean-Core System Architecture
+    arch_spec_full = ArchitectureBlueprintFactory.clean_core_sap_to_shopfloor(client_name="Global Aerospace & Defense")
+    arch_spec_full.category_tag = "3. SYSTEM ARCHITECTURE • CLEAN CORE"
+    EnterpriseArchitectureComposer.compose_and_render(prs_full, arch_spec_full)
+
+    # Slide 4: Cross-Functional Operational Swimlane
+    s_f4 = prs_full.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_f4, "4. OPERATIONAL SWIMLANE", "Cross-Functional SAP, MES & Shop Floor Handoff Architecture", "End-to-end transactional handoffs with Poka-Yoke error-proofing interlocks.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_f4, 4, 7, "Global Aerospace & Defense • Operational Swimlane", ConsultingSlateTheme)
+    SwimlaneDiagramComposer.render(s_f4, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, swim_model, ConsultingSlateTheme)
+
+    # Slide 5: Branching Production Execution Process Flow
+    s_f5 = prs_full.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_f5, "5. PROCESS ARCHITECTURE", "Production Execution, Quality Clearance & Rework Loopback", "Sequential order dispatch with automated Poka-Yoke decision gate and rework loopback.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_f5, 5, 7, "Global Aerospace & Defense • Process Architecture", ConsultingSlateTheme)
+    ProcessFlowComposer.render_branching_process(s_f5, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, flow_model_1, ConsultingSlateTheme)
+
+    # Slide 6: Digital Maturity Staircase
+    s_f6 = prs_full.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_f6, "6. MATURITY ASSESSMENT", "Digital Transformation Maturity Staircase & Gap Scorecard", "5-Level capability staircase and prioritized dimension gap scorecard.", ConsultingSlateTheme)
+    FooterPrimitive.render(s_f6, 6, 7, "Global Aerospace & Defense • Maturity Assessment", ConsultingSlateTheme)
+    MaturityAssessmentComposer.render_staircase_scorecard(s_f6, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, mat_model, ConsultingSlateTheme)
+
+    # Slide 7: Closed-Loop Manufacturing Architecture
+    s_f7 = prs_full.slides.add_slide(blank_layout)
+    HeaderPrimitive.render(s_f7, "7. CLOSED-LOOP ARCHITECTURE", "Physical-to-Digital Closed-Loop Cyber-Physical Architecture", "Continuous cyber-physical feedback from machine sensors through S/4HANA intelligence.", ExecutiveNavyTheme)
+    FooterPrimitive.render(s_f7, 7, 7, "Global Aerospace & Defense • Closed-Loop Architecture", ExecutiveNavyTheme)
+    ProcessFlowComposer.render_closed_loop_manufacturing(s_f7, Margins.left, SpacingScale.CONTENT_TOP, Margins().usable_width, SpacingScale.CONTENT_HEIGHT, cl_model, ExecutiveNavyTheme)
+
+    # Slide 8: Commercial Benefits Table
+    table_spec = EnterpriseTableFactory.get_table_spec(TableArchetype.BUSINESS_BENEFITS, client_name="Global Aerospace & Defense")
+    table_spec.category_tag = "8. VALUE REALIZATION • AUDITED ROI"
+    EnterpriseTableComposer.compose_and_render(prs_full, table_spec)
+
+    rep_full = PresentationQualityGate.audit_and_remediate(prs_full, auto_remediate=True)
+    prs_full.save("representative_complete_enterprise_solution.pptx")
+    print(f"[GENERATED] representative_complete_enterprise_solution.pptx: {len(prs_full.slides)} slides | Quality Score: {rep_full.overall_quality_score}/100 | Status: {rep_full.status.name}")
 
 
 if __name__ == "__main__":

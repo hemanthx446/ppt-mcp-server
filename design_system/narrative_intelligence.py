@@ -31,7 +31,7 @@ from pptx.util import Inches
 
 from .typography import TypographySystem
 from .color import Theme, ExecutiveNavyTheme, ConsultingSlateTheme
-from .spacing import CanvasBounds, Margins
+from .spacing import CanvasBounds, Margins, SpacingScale
 from .density_intelligence import (
     VisualDensity,
     VisualDensityClassifier,
@@ -51,6 +51,24 @@ from .table_engine import (
     EnterpriseTableComposer,
     TableArchetype
 )
+from .transformation_semantic import (
+    TransformationBridgeModel,
+    CurrentStateSnapshot,
+    TransformationIntervention,
+    FutureStateVision,
+    MaturityAssessmentModel,
+    MaturityDimensionScore,
+    ProcessFlowModel,
+    ProcessNode,
+    SwimlaneDiagramModel,
+    SwimlaneLane,
+    SwimlaneStep,
+    SwimlaneHandoff
+)
+from .transformation_engine import TransformationBridgeComposer
+from .maturity_engine import MaturityAssessmentComposer
+from .process_flow_engine import ProcessFlowComposer
+from .swimlane_engine import SwimlaneDiagramComposer
 import design_system.library as lib
 
 
@@ -63,6 +81,7 @@ class NarrativeFramework(Enum):
     PRIDE_PURPOSE_DESTINATION = auto()    # 6 slides: Purpose -> Reality -> Opportunity -> Journey -> Changes -> Destination
     WHY_WHAT_HOW_VALUE = auto()           # 4 slides: Why -> What -> How -> Business Value
     EXECUTIVE_DEMONSTRATION = auto()      # 6 slides: Opening -> Outcomes -> Challenges -> Opportunities -> Demo -> Close
+    TRANSFORMATION_JOURNEY = auto()       # 11 slides: Complete Transformation & Process Intelligence narrative
 
 
 @dataclass
@@ -346,7 +365,7 @@ class NarrativeIntelligenceEngine:
         # ---------------------------------------------------------------------
         # FRAMEWORK 4: EXECUTIVE DEMONSTRATION
         # ---------------------------------------------------------------------
-        else: # EXECUTIVE_DEMONSTRATION
+        elif framework == NarrativeFramework.EXECUTIVE_DEMONSTRATION:
             return [
                 NarrativeSlideIntent(
                     stage_id="OPENING",
@@ -446,6 +465,228 @@ class NarrativeIntelligenceEngine:
                 )
             ]
 
+        # ---------------------------------------------------------------------
+        # FRAMEWORK 5: TRANSFORMATION JOURNEY (11 Canonical Stages)
+        # ---------------------------------------------------------------------
+        elif framework == NarrativeFramework.TRANSFORMATION_JOURNEY:
+            return [
+                NarrativeSlideIntent(
+                    stage_id="PRIDE_PURPOSE",
+                    slide_title=cdata.get("pride_title", f"World-Class Manufacturing Excellence: The Mandate for {topic}"),
+                    slide_subtitle="Operational precision is the primary competitive moat of modern manufacturing.",
+                    category_tag="1. PRIDE & PURPOSE • STRATEGIC MANDATE",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The standard of excellence the enterprise is capable of reaching.",
+                        believe="World-class manufacturing capability is within reach through disciplined transformation.",
+                        decide="Commit executive leadership to transformative change.",
+                        do="Establish operational excellence charter."
+                    ),
+                    recommended_density=VisualDensity.LOW_DENSITY,
+                    recommended_primitive="executive_statement",
+                    is_dark=True,
+                    data_payload={"statement": "Zero defect tolerance, sub-second latency, unified truth.", "thesis": "Unifying ERP planning with plant floor execution elevates plant competitiveness."}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="CURRENT_REALITY",
+                    slide_title="Current Operational Reality: Fragile & Disconnected",
+                    slide_subtitle="Manual workarounds and siloed data create delivery risk and opaque inventory.",
+                    category_tag="2. CURRENT REALITY • BASELINE ASSESSMENT",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The operational friction preventing plants from achieving promised delivery.",
+                        believe="Current manual workarounds are masking severe structural fragility.",
+                        decide="Confront baseline operational reality transparently.",
+                        do="Authorize deep-dive baseline diagnostic."
+                    ),
+                    recommended_density=VisualDensity.LOW_DENSITY,
+                    recommended_primitive="hero_kpi",
+                    is_dark=False,
+                    data_payload={"metric_value": "4.8 Days", "metric_label": "Average WIP Buffer Latency Across 3 Core Plants", "conclusion": "Excess buffer stock masks machine dispatch bottlenecks and paper tracking."}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="OPERATIONAL_PAIN",
+                    slide_title="Operational & Financial Pain: Compounding Friction",
+                    slide_subtitle="Trapped working capital and scrap penalties erode $4.2M in annual EBITDA.",
+                    category_tag="3. OPERATIONAL PAIN • COST OF FRICTION",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The exact dollar impact of production friction on the enterprise balance sheet.",
+                        believe="Inaction compounds financial losses month-over-month.",
+                        decide="Declare operational friction a top-tier executive priority.",
+                        do="Approve funding for structural intervention."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="dashboard",
+                    is_dark=False,
+                    data_payload={"question": "Where is working capital trapped?"}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="MATURITY_GAP",
+                    slide_title="Transformation Maturity Assessment & Structural Gaps",
+                    slide_subtitle="Current maturity scored at 2.4/5.0; execution and data layers require priority uplift.",
+                    category_tag="4. MATURITY / GAP • BENCHMARK AUDIT",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="Where the plant sits on the 5-level maturity staircase and where gaps exist.",
+                        believe="The path to Level 4 Intelligent Operations requires a structured sequence.",
+                        decide="Target Level 4.2 maturity within 18 months.",
+                        do="Approve transformation roadmap targets."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="maturity_assessment",
+                    is_dark=False,
+                    data_payload={
+                        "overall_current": 2.4,
+                        "overall_target": 4.2,
+                        "dimensions": [
+                            MaturityDimensionScore("Process & Execution", 2.1, 4.3, "P1", "Paper travel cards & manual dispatch", "Deploy MES automated dispatch & digital traveler"),
+                            MaturityDimensionScore("Data & Genealogy", 2.3, 4.5, "P1", "Missing component-to-serial batch linkage", "Automated barcode & OPC-UA genealogy binding"),
+                            MaturityDimensionScore("SAP Clean Core", 2.6, 4.2, "P2", "Excess custom Z-tables blocking cloud upgrade", "Migrate custom code to BTP event mesh"),
+                            MaturityDimensionScore("Quality & Rework", 2.2, 4.0, "P1", "Delayed defect logging & missing CAPA loops", "Closed-loop digital inspection interlocks"),
+                            MaturityDimensionScore("Governance & RACI", 2.8, 4.0, "P2", "Ambiguous IT/OT boundary ownership", "Formalize unified IT/OT operating charter")
+                        ]
+                    }
+                ),
+                NarrativeSlideIntent(
+                    stage_id="OPPORTUNITY",
+                    slide_title="The Transformation Opportunity: The Connected Enterprise",
+                    slide_subtitle="Eliminating latency between shopfloor execution and SAP financial truth.",
+                    category_tag="5. OPPORTUNITY • STRATEGIC VISION",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The scale of competitive advantage unlocked by seamless integration.",
+                        believe="Connecting SAP S/4HANA to edge execution creates lasting operational resilience.",
+                        decide="Formally sponsor the digital transformation initiative.",
+                        do="Empower the transformation program office."
+                    ),
+                    recommended_density=VisualDensity.LOW_DENSITY,
+                    recommended_primitive="executive_statement",
+                    is_dark=True,
+                    data_payload={"statement": "From reactive firefighting to autonomous closed-loop execution.", "thesis": "When every machine operation updates the enterprise ledger in real time, predictability becomes standard."}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="TRANSFORMATION_DESIGN",
+                    slide_title="Enterprise Transformation Blueprint: Current to Target",
+                    slide_subtitle="A disciplined intervention bridge modernizing operations across 12–18 months.",
+                    category_tag="6. TRANSFORMATION DESIGN • THE BRIDGE",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="How strategic interventions bridge baseline friction to future state capability.",
+                        believe="The intervention plan addresses root causes rather than symptoms.",
+                        decide="Approve the transformation architecture blueprint.",
+                        do="Authorize resource allocation for Phase 1 enablers."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="transformation_bridge",
+                    is_dark=False,
+                    data_payload={
+                        "current": CurrentStateSnapshot(
+                            title="CURRENT STATE (Baseline)",
+                            pain_points=["Fragmented master data & BOM mismatches", "Manual paper travelers & dispatch clipboards", "Disconnected quality logs in Excel", "Delayed inventory confirmation (2-3 day lag)"],
+                            baseline_metrics=[("WIP Latency", "4.8 Days"), ("Scrap Rate", "4.2%"), ("OTIF Delivery", "81.4%")]
+                        ),
+                        "intervention": TransformationIntervention(
+                            title="TRANSFORMATION ENABLERS",
+                            initiatives=["SAP S/4HANA Clean-Core Integration", "MES Digital Dispatch & Real-Time Tracking", "Automated Closed-Loop Quality Interlocks", "Unified Industrial Data Fabric & BTP Mesh"],
+                            enablers=["Air-gapped edge buffering", "Deterministic PLC connectors", "Zero custom Z-tables in ERP"]
+                        ),
+                        "future": FutureStateVision(
+                            title="FUTURE OPERATING MODEL",
+                            transformed_capabilities=["Synchronized MRP-to-machine dispatch", "Full serial & batch genealogy trace", "Predictive quality interlocks at station", "Sub-second financial ledger postings"],
+                            target_outcomes=[("WIP Latency", "1.2 Days (-75%)"), ("Scrap Rate", "0.8% (-81%)"), ("OTIF Delivery", "97.5% (+16 pts)")]
+                        )
+                    }
+                ),
+                NarrativeSlideIntent(
+                    stage_id="PROCESS_CHANGE",
+                    slide_title="Process Execution Architecture & Closed-Loop Quality",
+                    slide_subtitle="Order-to-confirmation digital execution with automated rework and clearance loops.",
+                    category_tag="7. PROCESS CHANGE • OPERATIONAL WORKFLOW",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The end-to-end flow of orders, execution, quality branching, and clearance.",
+                        believe="The digital process safeguards against human error and defective shipments.",
+                        decide="Validate the operational workflow and interlock gates.",
+                        do="Adopt standard digital standard operating procedures (SOPs)."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="process_flow",
+                    is_dark=False,
+                    data_payload={
+                        "title": "SAP S/4HANA to MES Production Execution & Quality Clearance",
+                        "nodes": [
+                            ProcessNode("n1", "Demand & Sales Order", role_lane="Customer / SAP", system_tag="S/4HANA SD"),
+                            ProcessNode("n2", "Production Order & MRP", role_lane="SAP Core", system_tag="PP Order 100482"),
+                            ProcessNode("n3", "MES Dispatch & Setup", role_lane="MES Operations", system_tag="Digital Dispatch"),
+                            ProcessNode("n4", "Machine Execution", role_lane="Shop Floor OT", system_tag="CNC Work Center"),
+                            ProcessNode("n5", "Quality Gate & SPC", role_lane="Quality Assurance", system_tag="Vision / CMM", is_decision=True),
+                            ProcessNode("n6", "Confirmation & Ledger", role_lane="SAP Finance", system_tag="CO11N / 101 GR"),
+                            ProcessNode("n7", "Finished Goods Dispatch", role_lane="Logistics", system_tag="Outbound Delivery")
+                        ]
+                    }
+                ),
+                NarrativeSlideIntent(
+                    stage_id="TECHNOLOGY_ARCHITECTURE",
+                    slide_title="Decoupled Clean-Core Integration & Edge Topology",
+                    slide_subtitle="Preserving ERP ledger integrity via BTP event mesh and edge execution nodes.",
+                    category_tag="8. TECHNOLOGY • ARCHITECTURE BLUEPRINT",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The technical layers, communication protocols, and boundary guarantees.",
+                        believe="The multi-tier architecture guarantees uptime even during WAN disconnects.",
+                        decide="Approve the technical architecture specification.",
+                        do="Commission infrastructure provisioning."
+                    ),
+                    recommended_density=VisualDensity.MEDIUM_DENSITY,
+                    recommended_primitive="architecture_diagram",
+                    is_dark=True,
+                    data_payload={"template_id": "CLEAN_CORE_SAP_TO_SHOPFLOOR"}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="IMPLEMENTATION_JOURNEY",
+                    slide_title="18-Month Phased Rollout & Migration Roadmap",
+                    slide_subtitle="Low-risk, phased cutover delivering production capability pilot by Month 4.",
+                    category_tag="9. IMPLEMENTATION • PHASED ROADMAP",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The delivery schedule, workstreams, dependencies, and cutover milestones.",
+                        believe="The delivery plan is achievable with clear stage-gates and rollback plans.",
+                        decide="Approve the 18-month program schedule.",
+                        do="Charter project sprint teams."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="table",
+                    is_dark=False,
+                    data_payload={"table_archetype": TableArchetype.IMPLEMENTATION_SCOPE}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="NEW_OPERATING_MODEL",
+                    slide_title="Transformed Operating Model & RACI Governance",
+                    slide_subtitle="Unified IT/OT accountability across plant operations, corporate IT, and vendors.",
+                    category_tag="10. OPERATING MODEL • GOVERNANCE RACI",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="Who owns system operations, support SLAs, and data stewardship.",
+                        believe="Clear governance prevents cross-departmental finger-pointing.",
+                        decide="Ratify the cross-functional RACI framework.",
+                        do="Form the joint IT/OT Steering Committee."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="table",
+                    is_dark=False,
+                    data_payload={"table_archetype": TableArchetype.RESPONSIBILITY_MATRIX}
+                ),
+                NarrativeSlideIntent(
+                    stage_id="MEASURABLE_OUTCOME",
+                    slide_title="Audited Value Realization & Commercial Payback",
+                    slide_subtitle="$3.11M annualized recurring EBITDA gain delivering payback in 3.3 months.",
+                    category_tag="11. MEASURABLE OUTCOME • VALUE SCORECARD",
+                    cognitive_objective=AudienceCognitiveObjective(
+                        understand="The audited financial returns and operational productivity gains.",
+                        believe="The business case provides compelling, de-risked return on capital.",
+                        decide="Approve full program investment.",
+                        do="Sign master transformation agreement."
+                    ),
+                    recommended_density=VisualDensity.HIGH_DENSITY,
+                    recommended_primitive="table",
+                    is_dark=False,
+                    data_payload={"table_archetype": TableArchetype.BUSINESS_BENEFITS}
+                )
+            ]
+        else:
+            return []
+
     # =========================================================================
     # 3. Slide Rendering Dispatcher
     # =========================================================================
@@ -536,6 +777,112 @@ class NarrativeIntelligenceEngine:
                 tspec.category_tag = intent.category_tag
                 tspec.is_dark = intent.is_dark
                 EnterpriseTableComposer.compose_and_render(prs, tspec)
+
+            # 7. Transformation Bridge (High Density)
+            elif prim == "transformation_bridge":
+                from .transformation_semantic import TransformationBridgeModel, CurrentStateSnapshot, TransformationIntervention, FutureStateVision
+                theme = ExecutiveNavyTheme if intent.is_dark else ConsultingSlateTheme
+                blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+                slide = prs.slides.add_slide(blank_layout)
+                
+                # Header & Footer
+                from .primitives import HeaderPrimitive, FooterPrimitive
+                HeaderPrimitive.render(slide, intent.category_tag, intent.slide_title, intent.slide_subtitle, theme)
+                FooterPrimitive.render(slide, len(prs.slides), len(intents), f"{client_name} • Enterprise Transformation", theme)
+                
+                model = TransformationBridgeModel(
+                    title=intent.slide_title,
+                    current_state=payload.get("current", CurrentStateSnapshot()),
+                    intervention=payload.get("intervention", TransformationIntervention()),
+                    future_state=payload.get("future", FutureStateVision()),
+                    subtitle=intent.slide_subtitle
+                )
+                TransformationBridgeComposer.render_bridge(
+                    slide=slide,
+                    left=Margins.left,
+                    top=SpacingScale.CONTENT_TOP,
+                    width=Margins().usable_width,
+                    height=SpacingScale.CONTENT_HEIGHT,
+                    model=model,
+                    theme=theme
+                )
+
+            # 8. Maturity Assessment (High Density)
+            elif prim == "maturity_assessment":
+                from .transformation_semantic import MaturityAssessmentModel
+                theme = ExecutiveNavyTheme if intent.is_dark else ConsultingSlateTheme
+                blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+                slide = prs.slides.add_slide(blank_layout)
+
+                from .primitives import HeaderPrimitive, FooterPrimitive
+                HeaderPrimitive.render(slide, intent.category_tag, intent.slide_title, intent.slide_subtitle, theme)
+                FooterPrimitive.render(slide, len(prs.slides), len(intents), f"{client_name} • Maturity Assessment", theme)
+
+                model = MaturityAssessmentModel(
+                    title=intent.slide_title,
+                    overall_current_score=payload.get("overall_current", 2.4),
+                    overall_target_score=payload.get("overall_target", 4.2),
+                    dimensions=payload.get("dimensions", []),
+                    subtitle=intent.slide_subtitle
+                )
+                MaturityAssessmentComposer.render_staircase_scorecard(
+                    slide=slide,
+                    left=Margins.left,
+                    top=SpacingScale.CONTENT_TOP,
+                    width=Margins().usable_width,
+                    height=SpacingScale.CONTENT_HEIGHT,
+                    model=model,
+                    theme=theme
+                )
+
+            # 9. Process Flow (High Density)
+            elif prim == "process_flow":
+                from .transformation_semantic import ProcessFlowModel
+                theme = ExecutiveNavyTheme if intent.is_dark else ConsultingSlateTheme
+                blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+                slide = prs.slides.add_slide(blank_layout)
+
+                from .primitives import HeaderPrimitive, FooterPrimitive
+                HeaderPrimitive.render(slide, intent.category_tag, intent.slide_title, intent.slide_subtitle, theme)
+                FooterPrimitive.render(slide, len(prs.slides), len(intents), f"{client_name} • Operational Workflow", theme)
+
+                model = ProcessFlowModel(
+                    title=payload.get("title", intent.slide_title),
+                    nodes=payload.get("nodes", []),
+                    branches=payload.get("branches", []),
+                    subtitle=intent.slide_subtitle
+                )
+                ProcessFlowComposer.render_branching_process(
+                    slide=slide,
+                    left=Margins.left,
+                    top=SpacingScale.CONTENT_TOP,
+                    width=Margins().usable_width,
+                    height=SpacingScale.CONTENT_HEIGHT,
+                    flow_model=model,
+                    theme=theme
+                )
+
+            # 10. Swimlane (High Density)
+            elif prim == "swimlane":
+                theme = ExecutiveNavyTheme if intent.is_dark else ConsultingSlateTheme
+                blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+                slide = prs.slides.add_slide(blank_layout)
+
+                from .primitives import HeaderPrimitive, FooterPrimitive
+                HeaderPrimitive.render(slide, intent.category_tag, intent.slide_title, intent.slide_subtitle, theme)
+                FooterPrimitive.render(slide, len(prs.slides), len(intents), f"{client_name} • Cross-Functional Swimlane", theme)
+
+                model = payload.get("swimlane_model")
+                if model:
+                    SwimlaneDiagramComposer.render(
+                        slide=slide,
+                        left=Margins.left,
+                        top=SpacingScale.CONTENT_TOP,
+                        width=Margins().usable_width,
+                        height=SpacingScale.CONTENT_HEIGHT,
+                        model=model,
+                        theme=theme
+                    )
 
             # Fallback
             else:

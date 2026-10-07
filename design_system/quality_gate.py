@@ -442,6 +442,76 @@ class PresentationQualityGate:
             p.font.bold = True
             p.font.color.rgb = RGBColor(255, 255, 255)
 
+    @classmethod
+    def detect_anti_patterns_on_slide(cls, slide) -> List[str]:
+        """
+        Detects transformation and presentation anti-patterns on a slide:
+        - card_wall: 4+ content cards without directional connectors
+        - equal_container_grid: 4+ identical grid containers
+        - architecture_as_cards: architecture rendered only as isolated cards
+        - process_as_cards: process rendered only as cards without connecting flow
+        - dashboard_as_cards: dashboard with only KPI number tiles
+        - roadmap_as_cards: roadmap rendered as disconnected cards
+        - table_as_cards: comparison matrix rendered as card grid
+        - decorative_container_overuse: excessive low-content decorative containers
+        """
+        detected: List[str] = []
+        title = cls._get_slide_title(slide).lower()
+        has_table = any(s.has_table for s in slide.shapes)
+        has_chart = any(s.has_chart for s in slide.shapes)
+        has_diagram_arrows = any(
+            cls._safe_shape_type(s) in (
+                MSO_SHAPE.DOWN_ARROW, MSO_SHAPE.UP_DOWN_ARROW, MSO_SHAPE.RIGHT_ARROW,
+                MSO_SHAPE.CHEVRON, MSO_SHAPE.LEFT_ARROW, MSO_SHAPE.UP_ARROW, MSO_SHAPE.DIAMOND
+            ) for s in slide.shapes
+        )
+
+        content_cards = [s for s in slide.shapes if s.has_text_frame and s.top > Inches(1.8)]
+        num_cards = len(content_cards)
+
+        # 1. card_wall
+        if num_cards >= 4 and not has_diagram_arrows and not has_table and not has_chart:
+            detected.append("card_wall")
+
+        # 2. equal_container_grid
+        if num_cards >= 4 and not has_diagram_arrows and not has_table and not has_chart:
+            widths = [round(s.width, -4) for s in content_cards]
+            if len(set(widths)) <= 2:
+                detected.append("equal_container_grid")
+
+        # 3. architecture_as_cards
+        if any(k in title for k in cls.ARCH_KEYWORDS) or "architecture" in title:
+            if num_cards >= 3 and not has_diagram_arrows and not has_table and not has_chart:
+                detected.append("architecture_as_cards")
+
+        # 4. process_as_cards
+        if any(k in title for k in cls.PROCESS_KEYWORDS) or "process" in title:
+            if num_cards >= 3 and not has_diagram_arrows and not has_chart:
+                detected.append("process_as_cards")
+
+        # 5. dashboard_as_cards
+        if any(k in title for k in cls.DASHBOARD_KEYWORDS) or "dashboard" in title:
+            if not has_chart and not has_table:
+                detected.append("dashboard_as_cards")
+
+        # 6. roadmap_as_cards
+        if ("roadmap" in title or "phased" in title) and not has_diagram_arrows and not has_table:
+            if num_cards >= 3:
+                detected.append("roadmap_as_cards")
+
+        # 7. table_as_cards
+        if any(k in title for k in cls.TABULAR_KEYWORDS) and not has_table:
+            if num_cards >= 3:
+                detected.append("table_as_cards")
+
+        # 8. decorative_container_overuse
+        if not has_diagram_arrows and not has_table and not has_chart:
+            near_empty = [s for s in content_cards if len(s.text_frame.text.split()) < 4]
+            if len(near_empty) >= 6:
+                detected.append("decorative_container_overuse")
+
+        return detected
+
     # -------------------------------------------------------------------------
     # Main Audit & Auto-Remediation Method
     # -------------------------------------------------------------------------
