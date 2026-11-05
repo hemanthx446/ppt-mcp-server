@@ -2500,6 +2500,103 @@ def render_closed_loop_manufacturing(
     }
 
 
+# =============================================================================
+# Lumbini Reference Standard Architecture & Pipeline Tools
+# =============================================================================
+from pipeline.storyline import StorylinePlanner
+from pipeline.distill import ContentDistiller
+from pipeline.visual_plan import VisualPlanner
+from pipeline.renderer import DeckRenderer
+from pipeline.qa import QualityGate
+
+@mcp.tool
+def list_themes() -> List[str]:
+    """Lists all available design system themes supported by the presentation engine."""
+    return ["lumbini"]
+
+@mcp.tool
+def list_layouts() -> List[Dict[str, Any]]:
+    """Lists supported layout archetypes, descriptions, and required data schemas."""
+    return [
+        {"content_shape": "cover", "description": "Cover Hero slide with title, subtitle, metadata rows, and brand assets."},
+        {"content_shape": "requirement_to_outcome", "description": "3-column comparative layout mapping today's operational challenges to desired outcomes."},
+        {"content_shape": "hub_and_spokes", "description": "Central core hub with 4 surrounding workstream nodes and labeled directional arrows."},
+        {"content_shape": "dashboard_concept", "description": "Analytics product slide with chevron flow, dashboard mockup, native column/line charts, and drill ladder."},
+        {"content_shape": "levels_x_dimensions", "description": "Stakeholder matrix grid (rows: levels, cols: domains) with dashed illustrative cells and confirmed capability band."},
+        {"content_shape": "process_linear", "description": "Sequential pipeline (stepline with connecting badges or numbered blocks) with deliverables band."},
+        {"content_shape": "flow_with_actions", "description": "Integration flow with 6 connected boxes, dashed vertical drop-lines to action blocks, and legend."},
+        {"content_shape": "phases_over_time", "description": "Phased roadmap with staggered sequence bars, key activities, and future-readiness callout strip."},
+        {"content_shape": "roles_and_terms", "description": "Dual native tables for commercials and staffing resources (navy headers, orange placeholders) with 2-column terms."}
+    ]
+
+@mcp.tool
+def plan_storyline(brief: str, research_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Stage 2: Synthesizes an executive pyramid storyline enforcing action titles (<= 9 words),
+    one message per slide, and zero cross-slide fact duplication.
+    """
+    return StorylinePlanner.plan_proposal_storyline(brief, research_data)
+
+@mcp.tool
+def plan_visuals(storyline_data: Dict[str, Any], theme: str = "lumbini") -> Dict[str, Any]:
+    """
+    Stage 4: Applies deterministic layout rules (no layout > 2 consecutive slides,
+    >= 6 distinct layouts in 10-slide deck, >= 1 non-text visual per slide) and validates word budgets.
+    """
+    slides = storyline_data.get("slides", [])
+    valid, violations = VisualPlanner.validate_layout_rules(slides)
+    return {
+        "status": "valid" if valid else "invalid",
+        "theme": theme,
+        "violations": violations,
+        "spec": storyline_data
+    }
+
+@mcp.tool
+def render_deck(spec: Dict[str, Any], path: str, theme: str = "lumbini") -> Dict[str, Any]:
+    """
+    Stage 5: Renders a PowerPoint presentation matching the Lumbini Reference Standard
+    using real slide masters, 16:9 widescreen, native charts, tables, and vector primitives.
+    """
+    renderer = DeckRenderer(theme_name=theme)
+    out_path = renderer.render(spec, path)
+    return {
+        "status": "success",
+        "presentation_path": out_path,
+        "slide_count": len(spec.get("slides", []))
+    }
+
+@mcp.tool
+def qa_deck(path: str, spec: Optional[Dict[str, Any]] = None, render_images: bool = False) -> Dict[str, Any]:
+    """
+    Stage 6: Runs automated quality gate assertions (font floor >= 10 pt, words <= 160,
+    container emptiness, contrast) and optionally renders 1080p preview PNGs.
+    """
+    return QualityGate.audit_deck(path, spec=spec, render_images=render_images)
+
+@mcp.tool
+def generate_presentation_pipeline(
+    brief: str,
+    research_data: Dict[str, Any],
+    path: str,
+    theme: str = "lumbini",
+    render_images: bool = True
+) -> Dict[str, Any]:
+    """
+    End-to-End Orchestrator: Runs Stages 1 through 7 with automatic fix loop
+    to generate an executive-ready deck matching the reference standard.
+    """
+    storyline = StorylinePlanner.plan_proposal_storyline(brief, research_data)
+    renderer = DeckRenderer(theme_name=theme)
+    out_path = renderer.render(storyline, path)
+    qa_report = QualityGate.audit_deck(out_path, spec=storyline, render_images=render_images)
+    return {
+        "status": qa_report.get("status", "SUCCESS"),
+        "presentation_path": out_path,
+        "qa_report": qa_report
+    }
+
+
 if __name__ == "__main__":
     mcp.run()
 

@@ -1,10 +1,32 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Virtual environments
 .venv/
 .env
+
+# Temporary, debug & test dumps
 *.log
-~$*.pptx
-audit_renderings/
+*.bin
+dsv_stream_*.bin
 test_*.pptx
-Hical_*.pptx
+test_*.png
+test_*.py
+debug_*.py
+isolate_slide.py
+
+# Office temporary locks
+~$*.pptx
+~$*.docx
+~$*.xlsx
+
+# Rendered visual previews & test outputs
+audit_renderings/
+previews_*/
+tests/out/
+qa_*_report.json
+
+# Large external reference repository (>150MB binary PPTX files)
+references/

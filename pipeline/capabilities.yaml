@@ -1,0 +1,117 @@
+# Capability Registry for ELITIA BI and ERP Enhancement Workstreams
+# Each entry defines:
+#   id: unique identifier
+#   name: human-readable name
+#   domain: functional area
+#   status: confirmed | proposed | illustrative
+#   source: document or reference providing justification
+#   caveat: optional condition or validation notice
+
+capabilities:
+  # Confirmed ELITIA BI Platform Capabilities
+  - id: elitia_single_semantic_layer
+    name: Single Governed Semantic Layer
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §1.2
+    caveat: PostgreSQL-backed star schema with Zod-validated SQL queries.
+
+  - id: elitia_kpi_cards_vs_plan
+    name: KPI Cards vs Plan & Prior Year
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §3.1
+    caveat: Native comparative tiles with directional deltas (▲/▼).
+
+  - id: elitia_dimension_decomposition
+    name: Dimension Decomposition & Filtering
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §3.2
+    caveat: Filter by Business Unit, Department, Vendor, Cost Center.
+
+  - id: elitia_drill_to_records
+    name: Multi-Level Drill-Down to Source Records
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §3.3
+    caveat: Transaction ledger and document line-level traceability with CSV export.
+
+  - id: elitia_explain_change
+    name: Explain Change Variance Decomposition
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §3.4
+    caveat: Deterministic mathematical factor contribution analysis.
+
+  - id: elitia_role_based_access
+    name: Role-Based Persona Access & Row-Level Security
+    domain: governance
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §5.1
+    caveat: Controlled visibility across C-Suite, GMs, and operational supervisors.
+
+  - id: elitia_shareable_views
+    name: Shareable Views & Direct Export
+    domain: collaboration
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §4.2
+    caveat: Parameterized URL state and filtered Excel/CSV exports.
+
+  - id: elitia_ai_analyst
+    name: AI Natural Language Analyst with Audit Trail
+    domain: analytics
+    status: confirmed
+    source: Elitia_BI_Functional_Specification.md §4.4
+    caveat: Includes "How I computed this" SQL/formula transparency.
+
+  # Proposed Activities (Subject to Discovery & Technical Validation)
+  - id: sgg_odoo_bi_integration
+    name: Odoo Core Read-Replica Integration
+    domain: integration
+    status: proposed
+    source: SGG Project Brief §3.3
+    caveat: Connection to SGG Odoo database is subject to technical validation during Discovery.
+
+  - id: sgg_odoo_health_check
+    name: Odoo ERP Health Check & UI/UX Audit
+    domain: erp_optimization
+    status: proposed
+    source: SGG Project Brief §3.5
+    caveat: Assessment first; no specific configuration or code changes committed prior to audit findings.
+
+  - id: sgg_resort_data_migration
+    name: Resort ERP Data Migration to Odoo
+    domain: data_migration
+    status: proposed
+    source: SGG Project Brief §3.6
+    caveat: Scope, depth and volume depend on client-provided historical Excel extracts and trial balance sign-off.
+
+  - id: sgg_biometric_payroll_integration
+    name: Biometric Attendance & Timesheet Synchronization
+    domain: hr_automation
+    status: proposed
+    source: SGG Project Brief §3.7
+    caveat: Depends on biometric terminal API/SDK compatibility and SGG shift rule validation.
+
+  - id: sgg_wps_file_generation
+    name: WPS Compliant Bank Salary File Generation
+    domain: compliance
+    status: proposed
+    source: SGG Project Brief §3.8
+    caveat: Subject to formal technical validation against SGG corporate bank WPS specifications.
+
+  - id: sgg_odoo_v20_forward_readiness
+    name: Odoo v20 Upgrade Architecture Readiness (2027)
+    domain: architecture
+    status: proposed
+    source: SGG Project Brief §3.4
+    caveat: Decoupled side-by-side architecture ensures clean-core maintainability; automatic compatibility is not guaranteed ahead of official Odoo release notes.
+
+  # Illustrative Mockup Elements
+  - id: illustrative_dashboard_metrics
+    name: Indicative Mockup Metrics (Revenue, DSO, Attendance)
+    domain: visualization
+    status: illustrative
+    source: SGG Reference Deck Slide 4
+    caveat: Illustrative visual layout only; not client data.
