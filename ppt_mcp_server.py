@@ -26,6 +26,15 @@ You are an expert Enterprise Solutions Architect and Presentation Designer. When
 
 5. TYPOGRAPHY & EMPHASIS:
    - Dynamically increase font sizing for key metrics (ROI figures, timeline days, percentages) while keeping body text clean and readable (14pt-16pt range).
+
+6. PROJECT PLANS & SOW REVENUE PROTECTION (CONCURRENT PHASE-WISE DELIVERY):
+   - Never segregate products into isolated sequential month-on-month blocks or push core scope items into vague later phases. This stresses customers and prompts them to descope products from the SOW, sacrificing deal revenue.
+   - Justify the full project duration (e.g. 3 months to Go-Live + 1 month hypercare) using a CONCURRENT, PHASE-WISE DELIVERY PLAN:
+     * Bundle all SOW products into overlapping execution phases (e.g., Phase 1: Core Foundation/MES + DMS, Phase 2: ERP Integration, Phase 3: Track & Trace).
+     * Show explicit week-by-week activities for each phase covering the 4 lifecycle stages: Onsite Requirements Gathering -> Configuration / Interface Development -> UAT -> Go-Live.
+     * Overlap phases intentionally (e.g. Phase 2 requirements start during Phase 1 configuration).
+     * Include a dedicated post-Go-Live Hypercare period (e.g. Weeks 16+ / 1 Month Hypercare Support).
+     * This transparently proves why the full timeline is necessary, realistic, and efficient, ensuring the customer retains every product in the SOW.
 """
 
 # Enterprise Architecture & Systems-Thinking Guardrails for MCP Server
@@ -49,6 +58,9 @@ When generating presentation decks or solution designs through this MCP server, 
 4. LAYOUT & NARRATIVE RHYTHM:
    - Use narrative, conversational subheaders (e.g., "HOW IT WORKS: The maths happens where the data already lives").
    - Balance clean multi-column comparison layouts with deep architectural breakdown tables, sequence flows, and quantitative impact metrics. Avoid text clutter.
+
+5. PROJECT DELIVERY & SOW SCOPE PROTECTION:
+   - When presenting implementation roadmaps, structure workstreams concurrently across all in-scope products. Demonstrate that multi-product value realization requires concurrent progression through Requirements, Configuration, UAT, and Go-Live. Justify every week of the project lifecycle so the client sees the integrated necessity of all products in the SOW without cutting scope.
 """
 
 COMBINED_MCP_SYSTEM_PROMPT = f"{MCP_PPT_SYSTEM_PROMPT}\n\n{EXENTRIC_ARCHITECT_SYSTEM_PROMPT}"
@@ -1941,7 +1953,8 @@ def audit_presentation_quality(path: str) -> Dict[str, Any]:
 def export_presentation_with_quality_gate(
     path: str,
     output_path: Optional[str] = None,
-    auto_remediate: bool = True
+    auto_remediate: bool = True,
+    enforce_scrutiny: bool = False
 ) -> Dict[str, Any]:
     """
     Audits and automatically remediates presentation quality defects before final export.
@@ -1955,12 +1968,29 @@ def export_presentation_with_quality_gate(
       path: Path to source presentation file.
       output_path: Optional target path to save the remediated presentation (defaults to path).
       auto_remediate: If True, automatically fixes detected defects before saving.
+      enforce_scrutiny: If True, locks delivery until all 14 scrutiny lenses have passed with zero blockers.
     """
     if not os.path.exists(path):
         return {"status": "error", "message": f"Presentation file not found at: {path}"}
 
     prs = Presentation(path)
     report = PresentationQualityGate.audit_and_remediate(prs, auto_remediate=auto_remediate)
+
+    # Scrutiny Delivery Gate Check
+    from design_system.scrutiny import is_delivery_allowed, get_scrutiny_status
+    scrutiny_info = get_scrutiny_status(path)
+    allowed, gate_msg = is_delivery_allowed(path)
+
+    if enforce_scrutiny and not allowed:
+        return {
+            "status": "scrutiny_gate_locked",
+            "exported_path": None,
+            "gate_status": "LOCKED",
+            "scrutiny_gate": scrutiny_info.get("delivery_gate", "LOCKED"),
+            "scrutiny_reason": scrutiny_info.get("gate_reason", ""),
+            "is_export_authorized": False,
+            "message": gate_msg
+        }
 
     dest_path = output_path or path
     if report.is_export_authorized or auto_remediate:
@@ -1971,6 +2001,8 @@ def export_presentation_with_quality_gate(
         "exported_path": dest_path,
         "overall_quality_score": report.overall_quality_score,
         "gate_status": report.status.name,
+        "scrutiny_gate": scrutiny_info.get("delivery_gate", "LOCKED"),
+        "scrutiny_reason": scrutiny_info.get("gate_reason", ""),
         "is_export_authorized": report.is_export_authorized,
         "typography_compliance": f"{report.typography_compliance_percent}%",
         "card_usage_ratio": f"{int(report.card_usage_ratio * 100)}%",
@@ -2526,6 +2558,7 @@ def list_layouts() -> List[Dict[str, Any]]:
         {"content_shape": "process_linear", "description": "Sequential pipeline (stepline with connecting badges or numbered blocks) with deliverables band."},
         {"content_shape": "flow_with_actions", "description": "Integration flow with 6 connected boxes, dashed vertical drop-lines to action blocks, and legend."},
         {"content_shape": "phases_over_time", "description": "Phased roadmap with staggered sequence bars, key activities, and future-readiness callout strip."},
+        {"content_shape": "phase_wise_delivery_plan", "description": "Structured table grouping SOW products into concurrent delivery phases with week-by-week activities (Requirements, Config, UAT, Go-Live) and hypercare, protecting full scope revenue."},
         {"content_shape": "roles_and_terms", "description": "Dual native tables for commercials and staffing resources (navy headers, orange placeholders) with 2-column terms."}
     ]
 
@@ -2595,6 +2628,115 @@ def generate_presentation_pipeline(
         "presentation_path": out_path,
         "qa_report": qa_report
     }
+
+
+@mcp.tool
+def render_phase_wise_delivery_plan(
+    path: str,
+    slide_idx: int,
+    header_title: str = "PHASE WISE DELIVERY PLAN",
+    phases: Optional[List[Dict[str, Any]]] = None,
+    left_in: float = 0.65,
+    top_in: float = 1.76,
+    width_in: float = 7.80,
+    height_in: float = 5.04,
+    border_hex: str = "0070C0"
+) -> str:
+    """
+    Renders an executive Phase-Wise Concurrent Delivery Plan table onto the specified slide.
+    Protects SOW scope and revenue by demonstrating concurrent, overlapping execution across all products.
+    """
+    prs = load_prs(path)
+    if slide_idx < 0 or slide_idx >= len(prs.slides):
+        return f"Error: Slide index {slide_idx} out of range (total {len(prs.slides)})."
+    slide = prs.slides[slide_idx]
+    
+    from design_system.lumbini.tokens import LumbiniTheme
+    from design_system.lumbini.primitives import LumbiniPrimitives
+    
+    theme = LumbiniTheme()
+    prims = LumbiniPrimitives(theme)
+    prims.render_phase_wise_delivery_table(
+        slide=slide,
+        left=left_in,
+        top=top_in,
+        width=width_in,
+        height=height_in,
+        header_title=header_title,
+        phases=phases,
+        border_hex=border_hex
+    )
+    save_prs(prs, path)
+    return f"Successfully rendered phase-wise delivery plan table on slide {slide_idx}."
+
+
+# =============================================================================
+# SCRUTINY PERSPECTIVE TOOLS (Human-Judgment Layer)
+# =============================================================================
+from design_system.scrutiny import (
+    list_all_perspectives,
+    get_perspective_brief,
+    apply_perspective_to_deck,
+    record_perspective_review_data,
+    get_scrutiny_status
+)
+
+
+@mcp.tool
+def list_perspectives() -> List[Dict[str, Any]]:
+    """
+    Lists the 14 expert scrutiny perspectives in strict sequential order,
+    including domain, scholar, and implementation status.
+    """
+    return list_all_perspectives()
+
+
+@mcp.tool
+def get_perspective(name: str) -> Dict[str, Any]:
+    """
+    Returns the brief and full guidelines for the requested scrutiny lens.
+    """
+    return get_perspective_brief(name)
+
+
+@mcp.tool
+def apply_perspective(deck: str, name: str) -> Dict[str, Any]:
+    """
+    Applies the specified scrutiny lens to a deck.
+    Enforces sequential execution: Lens N is allowed only after Lens N-1 is recorded
+    and has zero unaddressed P1 findings.
+    Returns the lens brief, narrative, and rendered slide images for evaluation.
+    """
+    return apply_perspective_to_deck(deck, name)
+
+
+@mcp.tool
+def record_perspective_review(deck: str, name: str, findings: str) -> str:
+    """
+    Validates review format and records the scrutiny findings under reviews/ (or calibration/).
+    Requires Honest Framing, required structural sections, and valid severity tags (P1/P2/P3).
+    """
+    res = record_perspective_review_data(deck, name, findings)
+    if "error" in res:
+        return f"Error recording review: {res['error']}"
+    return res.get("message", "Review recorded successfully.")
+
+
+@mcp.tool
+def scrutiny_status(deck: str) -> Dict[str, Any]:
+    """
+    Returns the current scrutiny status across all 14 lenses for the specified deck,
+    including open P1/P2/P3 counts and delivery gate lock state.
+    """
+    return get_scrutiny_status(deck)
+
+
+@mcp.tool
+def run_scrutiny(deck: str) -> Dict[str, Any]:
+    """
+    Reports the overall scrutiny progression status, identifying the next sequential lens to run.
+    """
+    return get_scrutiny_status(deck)
 
 
 if __name__ == "__main__":
