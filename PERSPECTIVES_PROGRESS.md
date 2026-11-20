@@ -7,8 +7,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 | # | Name | Scholar / Lens | Domain | Verified Sources | Skill Written | Registered in Server | Calibration Findings | Distinct Finding | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | 01 | `jeanne-ross` | Dr. Jeanne W. Ross | Enterprise Operating Model & Digital Platforms | Yes | Yes (`01-jeanne-ross.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | System of Record Ambiguity / Shadow Master Store (ROSS-001) | Completed |
-| 02 | `john-zachman` | John A. Zachman | Enterprise Ontology & Architecture Perspectives | Pending | Pending | Registered | Pending | Pending | Pending |
-| 03 | `ivar-jacobson` | Dr. Ivar Jacobson | Architectural Intent & Use Case Engineering | Pending | Pending | Registered | Pending | Pending | Pending |
+| 02 | `john-zachman` | John A. Zachman | Enterprise Ontology & Architecture Perspectives | Yes | Yes (`02-john-zachman.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Missing Temporal State Machine / Network Topology (ZACH-001) | Completed |
+| 03 | `ivar-jacobson` | Dr. Ivar Jacobson | Architectural Intent & Use Case Engineering | Pending | In Progress | Registered | Pending | Pending | In Progress |
 | 04 | `dennis-brandl` | Dennis Brandl | ISA-95 Manufacturing Operations & Hierarchy | Pending | Pending | Registered | Pending | Pending | Pending |
 | 05 | `michael-mcclellan` | Michael McClellan | MES Architecture & Real-Time Production Flow | Pending | Pending | Registered | Pending | Pending | Pending |
 | 06 | `peter-senge` | Dr. Peter Senge | Systems Thinking & Organizational Learning | Pending | Pending | Registered | Pending | Pending | Pending |
@@ -23,8 +23,9 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 
 ## Gate Milestones
 - [x] Layer 1 Implementation: Jeanne Ross lens written, server tools exposed, smoke-test deck calibrated (6 findings).
-- [ ] Layer 1 Gate: Review 10-line summary with user and receive explicit "continue" confirmation.
-- [ ] Layers 2-14 Sequential Implementation.
+- [x] Layer 1 Gate: User authorized "continue all".
+- [x] Layer 2 Implementation: John Zachman lens written, calibrated (6 findings), tests passed.
+- [ ] Layers 3-14 Sequential Implementation.
 - [ ] 3-Round "Withstands Scrutiny" Loop executed on Smoke-Test Deck.
 - [ ] Final Secret Scan & Comprehensive Unit Tests.
 - [ ] Release Tag & Push to GitHub.
