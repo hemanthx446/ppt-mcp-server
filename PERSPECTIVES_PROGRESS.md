@@ -14,8 +14,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 | 06 | `peter-senge` | Dr. Peter Senge | Systems Thinking & Organizational Learning | Yes | Yes (`06-peter-senge.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Severe Fixes-that-Fail Escalation Dynamic (SENG-001) | Completed |
 | 07 | `russell-ackoff` | Dr. Russell L. Ackoff | Interactive Design & Systems Purpose | Yes | Yes (`07-russell-ackoff.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Doing the Wrong Thing Righter & Stakeholder Exclusion (ACKF-001) | Completed |
 | 08 | `donella-meadows` | Dr. Donella Meadows | Leverage Points & System Feedback Loops | Yes | Yes (`08-donella-meadows.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Fatal Delay Mismatch & Parameter Obsession (MDWS-001) | Completed |
-| 09 | `w-edwards-deming` | Dr. W. Edwards Deming | Statistical Quality & Management Philosophy | Pending | In Progress | Registered | Pending | Pending | In Progress |
-| 10 | `eliyahu-goldratt` | Dr. Eliyahu M. Goldratt | Theory of Constraints & Throughput Economics | Pending | Pending | Registered | Pending | Pending | Pending |
+| 09 | `w-edwards-deming` | Dr. W. Edwards Deming | Statistical Quality & Management Philosophy | Yes | Yes (`09-w-edwards-deming.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Textbook Tampering Trap & Inspection Dependence (DEM-001) | Completed |
+| 10 | `eliyahu-goldratt` | Dr. Eliyahu M. Goldratt | Theory of Constraints & Throughput Economics | Pending | In Progress | Registered | Pending | Pending | In Progress |
 | 11 | `george-westerman` | Dr. George Westerman | Digital Transformation Leadership & Value | Pending | Pending | Registered | Pending | Pending | Pending |
 | 12 | `andrew-mcafee` | Dr. Andrew McAfee | Digital Enterprise & Technology Impact | Pending | Pending | Registered | Pending | Pending | Pending |
 | 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Pending | Pending | Registered | Pending | Pending | Pending |
@@ -31,7 +31,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 - [x] Layer 6 Implementation: Peter Senge lens written, calibrated (6 findings), tests passed.
 - [x] Layer 7 Implementation: Russell Ackoff lens written, calibrated (6 findings), tests passed.
 - [x] Layer 8 Implementation: Donella Meadows lens written, calibrated (6 findings), tests passed.
-- [ ] Layers 9-14 Sequential Implementation.
+- [x] Layer 9 Implementation: W. Edwards Deming lens written, calibrated (6 findings), tests passed.
+- [ ] Layers 10-14 Sequential Implementation.
 - [ ] 3-Round "Withstands Scrutiny" Loop executed on Smoke-Test Deck.
 - [ ] Final Secret Scan & Comprehensive Unit Tests.
 - [ ] Release Tag & Push to GitHub.
