@@ -19,7 +19,7 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 | 11 | `george-westerman` | Dr. George Westerman | Digital Transformation Leadership & Value | Yes | Yes (`11-george-westerman.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | The Fashionista Pilot Trap & Paper-to-Glass Substitution (WST-001) | Completed |
 | 12 | `andrew-mcafee` | Dr. Andrew McAfee | Digital Enterprise & Technology Impact | Yes | Yes (`12-andrew-mcafee.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Closed Core Silo & Carrier Driver Exclusion (MCAF-001) | Completed |
 | 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Yes | Yes (`13-erik-brynjolfsson.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Naive Day-One ROI Fantasy & J-Curve Ignorance (BRYN-001) | Completed |
-| 14 | `human-dimension` | Human Dimension | Frontline Dignity, Craft & Human Judgment | Yes | In Progress | Registered | Pending | Pending | In Progress |
+| 14 | `human-dimension` | Human Dimension | Frontline Dignity, Craft & Human Judgment | Yes | Yes (`14-human-dimension.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Surveillance Creep, Frontline Deskilling & Driver Indifference (HUM-001/HUM-002) | Completed |
 
 ## Gate Milestones
 - [x] Layer 1 Implementation: Jeanne Ross lens written, server tools exposed, smoke-test deck calibrated (6 findings).
@@ -36,7 +36,7 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 - [x] Layer 11 Implementation: George Westerman lens written, calibrated (6 findings), tests passed.
 - [x] Layer 12 Implementation: Andrew McAfee lens written, calibrated (6 findings), tests passed.
 - [x] Layer 13 Implementation: Erik Brynjolfsson lens written, calibrated (6 findings), tests passed.
-- [ ] Layer 14 Implementation: The Human Dimension.
+- [x] Layer 14 Implementation: The Human Dimension written, calibrated (6 findings), tests passed.
 - [ ] 3-Round "Withstands Scrutiny" Loop executed on Smoke-Test Deck.
 - [ ] Final Secret Scan & Comprehensive Unit Tests.
 - [ ] Release Tag & Push to GitHub.
