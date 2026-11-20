@@ -17,8 +17,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 | 09 | `w-edwards-deming` | Dr. W. Edwards Deming | Statistical Quality & Management Philosophy | Yes | Yes (`09-w-edwards-deming.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Textbook Tampering Trap & Inspection Dependence (DEM-001) | Completed |
 | 10 | `eliyahu-goldratt` | Dr. Eliyahu M. Goldratt | Theory of Constraints & Throughput Economics | Yes | Yes (`10-eliyahu-goldratt.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | The Equality Fallacy & Missing Constraint Subordination (TOC-001) | Completed |
 | 11 | `george-westerman` | Dr. George Westerman | Digital Transformation Leadership & Value | Yes | Yes (`11-george-westerman.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | The Fashionista Pilot Trap & Paper-to-Glass Substitution (WST-001) | Completed |
-| 12 | `andrew-mcafee` | Dr. Andrew McAfee | Digital Enterprise & Technology Impact | Pending | In Progress | Registered | Pending | Pending | In Progress |
-| 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Pending | Pending | Registered | Pending | Pending | Pending |
+| 12 | `andrew-mcafee` | Dr. Andrew McAfee | Digital Enterprise & Technology Impact | Yes | Yes (`12-andrew-mcafee.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Closed Core Silo & Carrier Driver Exclusion (MCAF-001) | Completed |
+| 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Pending | In Progress | Registered | Pending | Pending | In Progress |
 | 14 | `human-dimension` | Human Dimension | Frontline Dignity, Craft & Human Judgment | Yes | Pending | Registered | Pending | Pending | Pending |
 
 ## Gate Milestones
@@ -34,7 +34,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 - [x] Layer 9 Implementation: W. Edwards Deming lens written, calibrated (6 findings), tests passed.
 - [x] Layer 10 Implementation: Eliyahu Goldratt lens written, calibrated (6 findings), tests passed.
 - [x] Layer 11 Implementation: George Westerman lens written, calibrated (6 findings), tests passed.
-- [ ] Layers 12-14 Sequential Implementation.
+- [x] Layer 12 Implementation: Andrew McAfee lens written, calibrated (6 findings), tests passed.
+- [ ] Layers 13-14 Sequential Implementation.
 - [ ] 3-Round "Withstands Scrutiny" Loop executed on Smoke-Test Deck.
 - [ ] Final Secret Scan & Comprehensive Unit Tests.
 - [ ] Release Tag & Push to GitHub.
