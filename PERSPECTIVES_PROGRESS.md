@@ -18,8 +18,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 | 10 | `eliyahu-goldratt` | Dr. Eliyahu M. Goldratt | Theory of Constraints & Throughput Economics | Yes | Yes (`10-eliyahu-goldratt.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | The Equality Fallacy & Missing Constraint Subordination (TOC-001) | Completed |
 | 11 | `george-westerman` | Dr. George Westerman | Digital Transformation Leadership & Value | Yes | Yes (`11-george-westerman.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | The Fashionista Pilot Trap & Paper-to-Glass Substitution (WST-001) | Completed |
 | 12 | `andrew-mcafee` | Dr. Andrew McAfee | Digital Enterprise & Technology Impact | Yes | Yes (`12-andrew-mcafee.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Closed Core Silo & Carrier Driver Exclusion (MCAF-001) | Completed |
-| 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Pending | In Progress | Registered | Pending | Pending | In Progress |
-| 14 | `human-dimension` | Human Dimension | Frontline Dignity, Craft & Human Judgment | Yes | Pending | Registered | Pending | Pending | Pending |
+| 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | AI-Driven Business & Productivity Economics | Yes | Yes (`13-erik-brynjolfsson.md`) | Yes | 6 (2 P1, 3 P2, 1 P3) | Naive Day-One ROI Fantasy & J-Curve Ignorance (BRYN-001) | Completed |
+| 14 | `human-dimension` | Human Dimension | Frontline Dignity, Craft & Human Judgment | Yes | In Progress | Registered | Pending | Pending | In Progress |
 
 ## Gate Milestones
 - [x] Layer 1 Implementation: Jeanne Ross lens written, server tools exposed, smoke-test deck calibrated (6 findings).
@@ -35,7 +35,8 @@ Tracking the 14 expert scrutiny perspectives for the PowerPoint MCP Server.
 - [x] Layer 10 Implementation: Eliyahu Goldratt lens written, calibrated (6 findings), tests passed.
 - [x] Layer 11 Implementation: George Westerman lens written, calibrated (6 findings), tests passed.
 - [x] Layer 12 Implementation: Andrew McAfee lens written, calibrated (6 findings), tests passed.
-- [ ] Layers 13-14 Sequential Implementation.
+- [x] Layer 13 Implementation: Erik Brynjolfsson lens written, calibrated (6 findings), tests passed.
+- [ ] Layer 14 Implementation: The Human Dimension.
 - [ ] 3-Round "Withstands Scrutiny" Loop executed on Smoke-Test Deck.
 - [ ] Final Secret Scan & Comprehensive Unit Tests.
 - [ ] Release Tag & Push to GitHub.
