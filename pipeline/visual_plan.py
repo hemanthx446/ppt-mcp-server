@@ -17,6 +17,7 @@ class VisualPlanner:
         "step_line",
         "flow_with_actions",
         "phases_over_time",
+        "phase_wise_delivery_plan",
         "roles_and_terms",
         "benchmark_table",
         # New v2 relationship grammars:

@@ -175,6 +175,19 @@ class DeckRenderer:
                         future_readiness_desc=s_spec.get("future_readiness_desc", "")
                     )
 
+                elif c_shape == "phase_wise_delivery_plan":
+                    self.primitives.render_phase_wise_delivery_table(
+                        slide=slide,
+                        left=s_spec.get("left", 0.65),
+                        top=s_spec.get("top", 1.76),
+                        width=s_spec.get("width", 7.80),
+                        height=s_spec.get("height", 5.04),
+                        header_title=s_spec.get("header_title", "PHASE WISE DELIVERY PLAN"),
+                        phases=s_spec.get("phases", None),
+                        col_widths=s_spec.get("col_widths", None),
+                        border_hex=s_spec.get("border_hex", "0070C0")
+                    )
+
                 elif c_shape == "roles_and_terms":
                     self.primitives.render_roles_and_terms(
                         slide=slide,

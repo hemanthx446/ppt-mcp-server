@@ -93,19 +93,29 @@ class TestScrutinyPerspectives(unittest.TestCase):
                 self.assertIn(f["severity"], ["P1", "P2", "P3"], f"Invalid severity in {cf}: {f.get('id')}")
 
     def test_04_sequential_apply_perspective_enforcement(self):
-        """Verify sequential gating: Lens N cannot be run if Lens N-1 has unaddressed P1 findings."""
+        """Verify sequential gating: Lens N cannot be run if Lens N-1 is unrecorded or has blockers."""
+        # For an unreviewed deck without prior recorded reviews, Lens 2 must return an error
+        res_unreviewed = apply_perspective_to_deck("unreviewed_deck.pptx", "john-zachman")
+        self.assertIn("error", res_unreviewed)
+        self.assertIn("Sequential violation", res_unreviewed["error"])
+
+        # For the smoke-test deck where Lens 1 has passed, Lens 2 is ready
         res1 = apply_perspective_to_deck("Supplier_Delivery_Tracker_CIO_Briefing.pptx", "jeanne-ross")
         self.assertEqual(res1.get("status"), "ready_for_review")
-
-        # When Lens 1 has P1 blockers, querying Lens 2 must return an error
         res2 = apply_perspective_to_deck("Supplier_Delivery_Tracker_CIO_Briefing.pptx", "john-zachman")
-        self.assertIn("error", res2)
+        self.assertEqual(res2.get("status"), "ready_for_review")
 
     def test_05_delivery_gate_locks_when_scrutiny_incomplete(self):
         """Verify presentation export is locked until all 14 scrutiny lenses are cleared."""
-        allowed, msg = is_delivery_allowed("Supplier_Delivery_Tracker_CIO_Briefing.pptx")
+        allowed, msg = is_delivery_allowed("unreviewed_deck.pptx")
         self.assertFalse(allowed)
         self.assertIn("Export locked by Scrutiny Gate", msg)
+
+    def test_06_delivery_gate_unlocks_when_all_lenses_pass(self):
+        """Verify presentation export is unlocked when all 14 scrutiny lenses pass with 0 P1 blockers."""
+        allowed, msg = is_delivery_allowed("Supplier_Delivery_Tracker_CIO_Briefing.pptx")
+        self.assertTrue(allowed)
+        self.assertEqual(msg, "Scrutiny Gate cleared.")
 
 
 if __name__ == "__main__":

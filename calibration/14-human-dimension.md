@@ -1,6 +1,6 @@
 # Scrutiny Review: Lens 14 — The Human Dimension (The Integrating Lens)
 
-> **Honest Framing**: *Lens modelled from published work and the foundational philosophy of the practice. It is not an invented statement.*  
+> **Honest Framing**: *Lens modelled from published work. It is not the person's own statement.*  
 > This scrutiny review evaluates the "Supplier Delivery Tracker: CIO Briefing" deck and NARRATIVE.md through the Human Dimension philosophy of solution architecture, examining frontline dignity, worker experience, empathy, and intuitive human judgment.
 
 ---

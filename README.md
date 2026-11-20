@@ -64,6 +64,46 @@ ppt-mcp-server/
 ### 3. Native PPTX Primitives
 - **`create_presentation`**, **`add_slide`**, **`add_text`**, **`add_bullet_points`**, **`add_shape`**, **`add_picture`**, **`add_table`**, **`get_presentation_info`**, **`search_replace_text`**, **`delete_slide`**.
 
+### 4. 14-Perspective Human-Judgment Scrutiny Suite
+- **`list_perspectives()`**: Enumerates all 14 ordered lenses and implementation states.
+- **`get_perspective(name)`**: Retrieves perspective brief, 10 signature questions, and rubric.
+- **`apply_perspective(deck_path, name)`**: Loads narrative, slide images, and enforces sequential order.
+- **`record_perspective_review(deck_path, name, review_markdown)`**: Records validated findings table into `reviews/`.
+- **`scrutiny_status(deck_path)`**: Evaluates delivery lock state (requires all 14 lenses complete with 0 P1 blockers).
+- **`run_scrutiny(deck_path, max_rounds)`**: End-to-end multi-round scrutiny orchestrator.
+
+---
+
+## The 14 Scrutiny Perspectives
+
+Every executive presentation is evaluated through 14 sequential perspectives (13 scholars + 1 Human Dimension lens) before delivery:
+
+| # | Perspective | Scholar / Originator | Focus & Analytical Scope |
+|---|---|---|---|
+| 01 | `jeanne-ross` | Dr. Jeanne W. Ross | Operating models, standardized operational backbone, and avoiding shadow data stores. |
+| 02 | `john-zachman` | John A. Zachman | Enterprise ontology completeness (What, How, Where, Who, When, Why) and state lifecycles. |
+| 03 | `ivar-jacobson` | Dr. Ivar Jacobson | Architectural intent, vertical use-case slices, and explicit exception flows. |
+| 04 | `dennis-brandl` | Dennis Brandl | ANSI/ISA-95 Level 3 vs Level 4 boundary decoupling and material lot/batch traceability. |
+| 05 | `michael-mcclellan` | Michael McClellan | MES architecture, shopfloor real-time flow, and closed-loop plan-to-plant feedback. |
+| 06 | `peter-senge` | Dr. Peter Senge | Systems thinking, mental models, and dismantling "Fixes that Fail" bullwhip loops. |
+| 07 | `russell-ackoff` | Dr. Russell L. Ackoff | Interactive design, problem dissolution via VMI, and frontline worker co-design. |
+| 08 | `donella-meadows` | Dr. Donella Meadows | Leverage points (#6 information flows vs #12 parameters) and feedback delay alignment. |
+| 09 | `w-edwards-deming` | Dr. W. Edwards Deming | Shewhart SPC charts, eliminating management tampering on common-cause noise, and PDCA. |
+| 10 | `eliyahu-goldratt` | Dr. Eliyahu M. Goldratt | Theory of Constraints (TOC), Drum-Buffer-Rope, and Throughput Accounting ROI. |
+| 11 | `george-westerman` | Dr. George Westerman | Digital mastery, transformation steering governance, and avoiding the "Fashionista" trap. |
+| 12 | `andrew-mcafee` | Dr. Andrew McAfee | Open platform APIs, carrier self-service, cognitive augmentation, and The Geek Way. |
+| 13 | `erik-brynjolfsson` | Dr. Erik Brynjolfsson | The Productivity J-Curve transition dip, Turing Trap avoidance, and 40%+ intangible capital. |
+| 14 | `human-dimension` | Human Dimension | Frontline worker dignity, situational judgment over surveillance, and driver hospitality. |
+
+---
+
+## Delivery Gate Policy
+
+Presentations cannot be exported for final client delivery until the **Scrutiny Gate** is unlocked:
+1. All 14 perspectives must be applied in strict sequential order.
+2. Zero (0) P1 blocking findings may remain open.
+3. Open P2 recommendations must have documented rationale and trade-offs in `TRADEOFFS.md`.
+
 ---
 
 ## Installation & Setup

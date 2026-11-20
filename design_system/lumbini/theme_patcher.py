@@ -60,6 +60,21 @@ def patch_presentation_xml(xml_content: str) -> str:
     # Replace sldSz to 16:9 widescreen without type="screen4x3"
     widescreen_sz = '<p:sldSz cx="12192000" cy="6858000"/>'
     out = re.sub(r'<p:sldSz\b[^>]*?\/>', widescreen_sz, xml_content)
+    
+    # Enforce strict ECMA-376 schema sequence: notesMasterIdLst MUST precede sldIdLst
+    # Schema: sldMasterIdLst -> notesMasterIdLst -> handoutMasterIdLst -> sldIdLst -> sldSz ...
+    if '<p:notesMasterIdLst' in out and '<p:sldIdLst' in out:
+        notes_m = re.search(r'<p:notesMasterIdLst\b[\s\S]*?<\/p:notesMasterIdLst>', out)
+        sld_m = re.search(r'<p:sldIdLst\b[\s\S]*?<\/p:sldIdLst>|<p:sldIdLst\s*\/>', out)
+        if notes_m and sld_m and notes_m.start() > sld_m.start():
+            notes_str = notes_m.group(0)
+            # Remove notesMasterIdLst from its current position
+            out = out[:notes_m.start()] + out[notes_m.end():]
+            # Find sldIdLst again in the updated string
+            sld_m2 = re.search(r'<p:sldIdLst\b[\s\S]*?<\/p:sldIdLst>|<p:sldIdLst\s*\/>', out)
+            if sld_m2:
+                # Insert notesMasterIdLst before sldIdLst
+                out = out[:sld_m2.start()] + notes_str + out[sld_m2.start():]
     return out
 
 def apply_lumbini_theme_to_pptx(deck_path: str, out_path: str = None) -> str:

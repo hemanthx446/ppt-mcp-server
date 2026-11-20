@@ -993,6 +993,198 @@ class LumbiniPrimitives:
         set_text(tb_fd, future_readiness_desc, face="Inter", weight="regular", pt=10.5, color="4F6F8F", align="left", anchor="middle", pad_in=0.0)
 
     # =========================================================================
+    # COMPOSITION 9B: PHASE-WISE CONCURRENT DELIVERY TABLE (SOW PROTECTION)
+    # =========================================================================
+    def render_phase_wise_delivery_table(
+        self,
+        slide,
+        left: float = 0.65,
+        top: float = 1.76,
+        width: float = 7.80,
+        height: float = 5.04,
+        header_title: str = "PHASE WISE DELIVERY PLAN",
+        phases: Optional[List[Dict[str, Any]]] = None,
+        col_widths: Optional[List[float]] = None,
+        border_hex: str = "0070C0"
+    ):
+        """
+        Renders a native executive Phase-Wise Concurrent Delivery Plan table.
+        Protects SOW scope and revenue by proving why the multi-month duration is justified
+        through overlapping, concurrent delivery across all scoped products rather than sequential silos.
+        """
+        if phases is None:
+            phases = [
+                {
+                    "phase_name": "Phase 1",
+                    "product_scope": "MES + DMS",
+                    "activities": [
+                        ("Weeks 1-2", "Onsite Requirement Gathering"),
+                        ("Weeks 2-6", "System Configuration"),
+                        ("Weeks 7-8", "UAT"),
+                        ("Weeks 9", "Go Live"),
+                    ]
+                },
+                {
+                    "phase_name": "Phase 2",
+                    "product_scope": "SAP Integrations",
+                    "activities": [
+                        ("Weeks 3-4", "Onsite Requirement Gathering"),
+                        ("Weeks 4-8", "Interface Developments"),
+                        ("Weeks 9-10", "UAT"),
+                        ("Weeks 11", "Go Live"),
+                    ]
+                },
+                {
+                    "phase_name": "Phase 3",
+                    "product_scope": "Track & Trace",
+                    "activities": [
+                        ("Weeks 12-13", "Track & Trace Setup / Alignment"),
+                        ("Weeks 13-14", "System Configuration"),
+                        ("Weeks 14-15", "UAT + Go Live"),
+                        ("Weeks 16 onwards", "1 Month Hypercare Support"),
+                    ]
+                }
+            ]
+
+        total_act_rows = sum(len(p.get("activities", [])) for p in phases)
+        n_rows = total_act_rows + 1  # +1 for header
+        n_cols = 4
+
+        table_shape = slide.shapes.add_table(n_rows, n_cols, Inches(left), Inches(top), Inches(width), Inches(height))
+        table = table_shape.table
+
+        # Default column width ratios
+        if col_widths and len(col_widths) == n_cols:
+            for c_idx, cw in enumerate(col_widths):
+                table.columns[c_idx].width = Inches(cw)
+        else:
+            w_ratios = [0.165, 0.235, 0.22, 0.38]
+            for c_idx, r in enumerate(w_ratios):
+                table.columns[c_idx].width = Inches(width * r)
+
+        # Header row merged across all 4 cols
+        table.cell(0, 0).merge(table.cell(0, 3))
+        h_cell = table.cell(0, 0)
+        h_cell.fill.solid()
+        h_cell.fill.fore_color.rgb = self.theme.C_WHITE
+        h_cell.vertical_anchor = MSO_ANCHOR.MIDDLE
+        tf_h = h_cell.text_frame
+        tf_h.word_wrap = True
+        p_h = tf_h.paragraphs[0]
+        p_h.text = header_title
+        p_h.font.name = self.theme.FONT_HEADING
+        p_h.font.size = Pt(11)
+        p_h.font.bold = True
+        p_h.font.color.rgb = self.theme.C_NAVY
+        p_h.alignment = PP_ALIGN.CENTER
+
+        from pptx.oxml import parse_xml
+        def apply_border(c, col_hex):
+            tcPr = c._tc.get_or_add_tcPr()
+            for b_name in ["lnL", "lnR", "lnT", "lnB"]:
+                xml = f'<a:{b_name} xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" w="12700"><a:solidFill><a:srgbClr val="{col_hex}"/></a:solidFill></a:{b_name}>'
+                tcPr.append(parse_xml(xml))
+
+        apply_border(h_cell, border_hex)
+
+        curr_r = 1
+        for p_idx, phase in enumerate(phases):
+            acts = phase.get("activities", [])
+            p_len = len(acts)
+            if p_len == 0:
+                continue
+            start_r = curr_r
+            end_r = curr_r + p_len - 1
+
+            # Populate activity rows first
+            for act_idx, (wks, act_desc) in enumerate(acts):
+                row_num = curr_r + act_idx
+                # Col 2 (Timeline/Weeks)
+                c_w = table.cell(row_num, 2)
+                c_w.fill.solid()
+                c_w.fill.fore_color.rgb = self.theme.C_SURFACE
+                c_w.vertical_anchor = MSO_ANCHOR.MIDDLE
+                tf_w = c_w.text_frame
+                tf_w.word_wrap = True
+                tf_w.margin_left = tf_w.margin_right = Inches(0.08)
+                p_w = tf_w.paragraphs[0]
+                p_w.text = wks
+                p_w.font.name = self.theme.FONT_HEADING
+                p_w.font.size = Pt(9.5)
+                p_w.font.bold = True
+                p_w.font.color.rgb = self.theme.C_NAVY
+                p_w.alignment = PP_ALIGN.CENTER
+                apply_border(c_w, border_hex)
+
+                # Col 3 (Activity/Deliverable)
+                c_a = table.cell(row_num, 3)
+                c_a.fill.solid()
+                c_a.fill.fore_color.rgb = self.theme.C_WHITE
+                c_a.vertical_anchor = MSO_ANCHOR.MIDDLE
+                tf_a = c_a.text_frame
+                tf_a.word_wrap = True
+                tf_a.margin_left = tf_a.margin_right = Inches(0.12)
+                p_a = tf_a.paragraphs[0]
+                p_a.text = act_desc
+                p_a.font.name = self.theme.FONT_BODY
+                p_a.font.size = Pt(9.5)
+                is_milestone = "Go Live" in act_desc or "Hypercare" in act_desc
+                p_a.font.bold = is_milestone
+                p_a.font.color.rgb = self.theme.C_PRIMARY if is_milestone else self.theme.C_TEXT
+                p_a.alignment = PP_ALIGN.LEFT
+                apply_border(c_a, border_hex)
+
+            # Merge Phase col
+            if p_len > 1:
+                table.cell(start_r, 0).merge(table.cell(end_r, 0))
+            c_p = table.cell(start_r, 0)
+            c_p.fill.solid()
+            c_p.fill.fore_color.rgb = self.theme.C_NAVY
+            c_p.vertical_anchor = MSO_ANCHOR.MIDDLE
+            tf_p = c_p.text_frame
+            tf_p.word_wrap = True
+            p_p = tf_p.paragraphs[0]
+            p_p.text = phase.get("phase_name", f"Phase {p_idx+1}")
+            p_p.font.name = self.theme.FONT_HEADING
+            p_p.font.size = Pt(11)
+            p_p.font.bold = True
+            p_p.font.color.rgb = self.theme.C_WHITE
+            p_p.alignment = PP_ALIGN.CENTER
+            apply_border(c_p, border_hex)
+
+            # Merge Product col
+            if p_len > 1:
+                table.cell(start_r, 1).merge(table.cell(end_r, 1))
+            c_prod = table.cell(start_r, 1)
+            c_prod.fill.solid()
+            c_prod.fill.fore_color.rgb = self.theme.C_WHITE
+            c_prod.vertical_anchor = MSO_ANCHOR.MIDDLE
+            tf_prod = c_prod.text_frame
+            tf_prod.word_wrap = True
+            tf_prod.margin_left = tf_prod.margin_right = Inches(0.08)
+            p_prod = tf_prod.paragraphs[0]
+            p_prod.text = phase.get("product_scope", "")
+            p_prod.font.name = self.theme.FONT_HEADING
+            p_prod.font.size = Pt(10.5)
+            p_prod.font.bold = True
+            p_prod.font.color.rgb = self.theme.C_TEXT
+            p_prod.alignment = PP_ALIGN.CENTER
+            apply_border(c_prod, border_hex)
+
+            curr_r += p_len
+
+        # Apply borders to all cells in grid
+        from pptx.oxml import parse_xml
+        for row in table.rows:
+            for cell in row.cells:
+                tcPr = cell._tc.get_or_add_tcPr()
+                for b_name in ["lnL", "lnR", "lnT", "lnB"]:
+                    xml = f'<a:{b_name} xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" w="12700"><a:solidFill><a:srgbClr val="{border_hex}"/></a:solidFill></a:{b_name}>'
+                    tcPr.append(parse_xml(xml))
+
+        return table_shape
+
+    # =========================================================================
     # COMPOSITION 10: ROLES AND TERMS (DUAL NATIVE TABLES)
     # =========================================================================
     def render_roles_and_terms(self, slide, commercial_rows: List[Tuple[str, str]],
