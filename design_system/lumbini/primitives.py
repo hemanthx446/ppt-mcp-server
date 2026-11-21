@@ -117,6 +117,7 @@ class LumbiniPrimitives:
         # Left text
         tb_f = slide.shapes.add_textbox(Inches(0.65), Inches(self.theme.raw["slide"]["footer_y_in"]), Inches(10.8), Inches(0.28))
         tf_f = tb_f.text_frame
+        tf_f.word_wrap = True
         tf_f.margin_left = tf_f.margin_right = tf_f.margin_top = tf_f.margin_bottom = 0
         pf = tf_f.paragraphs[0]
         pf.text = footer_text
@@ -522,6 +523,7 @@ class LumbiniPrimitives:
         if platform_disclaimer:
             tb_hi = slide.shapes.add_textbox(Inches(mx + mw - 3.2), Inches(my), Inches(3.05), Inches(0.38))
             tf_hi = tb_hi.text_frame
+            tf_hi.word_wrap = True
             tf_hi.vertical_anchor = MSO_ANCHOR.MIDDLE
             p_hi = tf_hi.paragraphs[0]
             p_hi.text = platform_disclaimer
@@ -557,12 +559,12 @@ class LumbiniPrimitives:
         # KPI Tiles
         for i, (label, val, delta) in enumerate(kpis[:4]):
             kx = mx + 0.15 + i * 1.78
-            tile = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(kx), Inches(my + 0.84), Inches(1.68), Inches(0.82))
+            tile = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(kx), Inches(my + 0.84), Inches(1.68), Inches(0.88))
             tile.fill.solid()
             tile.fill.fore_color.rgb = self.theme.C_SURFACE
             tile.line.fill.background()
 
-            tb_k = slide.shapes.add_textbox(Inches(kx + 0.08), Inches(my + 0.88), Inches(1.55), Inches(0.74))
+            tb_k = slide.shapes.add_textbox(Inches(kx + 0.08), Inches(my + 0.86), Inches(1.55), Inches(0.84))
             tf_k = tb_k.text_frame
             tf_k.word_wrap = True
             tf_k.auto_size = MSO_AUTO_SIZE.NONE
@@ -624,12 +626,13 @@ class LumbiniPrimitives:
 
         # 3. Drill Ladder (Right)
         rx = 8.4
-        tb_dt = slide.shapes.add_textbox(Inches(rx), Inches(2.85), Inches(4.3), Inches(0.35))
+        tb_dt = slide.shapes.add_textbox(Inches(rx), Inches(2.85), Inches(4.3), Inches(0.40))
         tf_dt = tb_dt.text_frame
+        tf_dt.word_wrap = True
         p_dt = tf_dt.paragraphs[0]
         p_dt.text = drill_title or "Root Cause Analysis Sequence"
         p_dt.font.name = self.theme.FONT_HEADING
-        p_dt.font.size = Pt(15)
+        p_dt.font.size = Pt(13)
         p_dt.font.bold = True
         p_dt.font.color.rgb = self.theme.C_TEXT
 
@@ -923,7 +926,11 @@ class LumbiniPrimitives:
             lx = 0.65 + i * leg_slot_w
             dot = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(lx), Inches(5.35), Inches(0.16), Inches(0.16))
             dot.fill.solid()
-            dot.fill.fore_color.rgb = l_col
+            if isinstance(l_col, str):
+                h = l_col.lstrip("#")
+                dot.fill.fore_color.rgb = RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
+            else:
+                dot.fill.fore_color.rgb = l_col
             dot.line.fill.background()
 
             tb_l = slide.shapes.add_textbox(Inches(lx + 0.25), Inches(5.30), Inches(leg_slot_w - 0.35), Inches(0.32))
