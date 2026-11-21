@@ -13,7 +13,7 @@ __pycache__/
 dsv_stream_*.bin
 test_*.pptx
 test_*.png
-test_*.py
+/test_*.py
 debug_*.py
 isolate_slide.py
 

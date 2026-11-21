@@ -72,6 +72,11 @@ ppt-mcp-server/
 - **`scrutiny_status(deck_path)`**: Evaluates delivery lock state (requires all 14 lenses complete with 0 P1 blockers).
 - **`run_scrutiny(deck_path, max_rounds)`**: End-to-end multi-round scrutiny orchestrator.
 
+### 5. Don Norman Human-Centered Design Engine & Pre-Render Audit
+- **`validate_deck(path)`**: Automated pre-render audit tool verifying bounding-box collisions, typography floors ($\ge 12$pt integer scale, zero fractions), density caps ($\le 65$ words/slide, $\le 12$ words/title), safe margins ($\ge 0.6$in), and WCAG contrast ratios ($\ge 4.5:1$ body, $\ge 3.0:1$ headings). Returns an executive Norman UX score (0–100) with structured diagnostic fixes.
+- **`audit_slide_ux(path, slide_index)`**: Single-slide inspector returning itemized violations and recommended actions.
+- **Dynamic PowerPoint Section Management**: Automatically groups slides into 2–4 contiguous thematic acts for presentations of 8 or more slides.
+
 ---
 
 ## The 14 Scrutiny Perspectives
