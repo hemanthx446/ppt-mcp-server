@@ -48,23 +48,27 @@ def lines_needed(text, weight, pt, inner_w_in):
     return n
 
 
-def fit_pt(text, weight, box_w_in, box_h_in, start_pt, min_pt=10, pad_in=0.08, safety=1.12):
-    """Largest size in [min_pt, start_pt] that fits with a safety factor for font fallback.
-    Returns None when even min_pt does not fit: caller must shorten the text or enlarge the box."""
+def fit_pt(text, weight, box_w_in, box_h_in, start_pt=14, min_pt=12, pad_in=0.08, safety=1.12):
+    """Largest integer size in [min_pt, start_pt] that fits with a safety factor for font fallback.
+    Returns None when even min_pt does not fit: caller must shorten the text or enlarge the box.
+    Enforces Don Norman discrete integer typography floor >= 12pt."""
     inner_w = (box_w_in - 2 * pad_in) / safety
     inner_h = box_h_in - 2 * 0.04
-    pt = start_pt
-    while pt >= min_pt:
+    pt = int(start_pt)
+    while pt >= int(min_pt):
         longest = max(width_in(w, weight, pt) for w in text.replace("\n", " ").split(" "))
         if longest <= inner_w and lines_needed(text, weight, pt, inner_w) * pt * 1.2 / 72.0 <= inner_h:
             return pt
-        pt -= 0.5
+        pt -= 1
     return None
 
 
 def set_text(shape, text, *, face="Inter", weight="regular", pt=12, color="141E2D",
              align="left", anchor="middle", pad_in=0.08, italic=False):
-    """Write text into an existing shape/textbox safely. Supports '\n' for paragraphs."""
+    """Write text into an existing shape/textbox safely. Supports '\n' for paragraphs.
+    Enforces Don Norman discrete integer typography floor >= 12pt."""
+    # Ensure minimum 12pt floor and discrete integer
+    pt = max(12, int(round(pt)))
     tf = shape.text_frame
     tf.word_wrap = True                       # wrap="square"
     tf.auto_size = MSO_AUTO_SIZE.NONE         # no spAutoFit / shrink surprises
@@ -83,7 +87,7 @@ def set_text(shape, text, *, face="Inter", weight="regular", pt=12, color="141E2
     return shape
 
 
-def label_in_shape(shape, text, *, weight="semibold", start_pt=13, min_pt=10, **kw):
+def label_in_shape(shape, text, *, weight="semibold", start_pt=14, min_pt=12, **kw):
     """Fit then write. Raises ValueError so the pipeline shortens text instead of clipping it."""
     w, h = shape.width / 914400.0, shape.height / 914400.0
     pt = fit_pt(text, weight, w, h, start_pt, min_pt)

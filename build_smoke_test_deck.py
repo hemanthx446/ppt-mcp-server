@@ -22,6 +22,11 @@ def build_deck_spec() -> dict:
             "doc_type": "Architecture Briefing",
             "platform_levels": ["L4 Enterprise ERP", "L3 MOM / Dock Execution", "L2 Automation / Scanners"]
         },
+        "sections": [
+            ("1. Executive Context & Operational Friction", 2),
+            ("2. Edge Architecture & Dock Execution", 3),
+            ("3. Performance Governance & Business Case", 3)
+        ],
         "slides": [
             # Slide 1: Cover (Lumbini Master Template Layout)
             {
@@ -144,7 +149,7 @@ def build_deck_spec() -> dict:
                     ("FRONT-LINE USABILITY", "86/100", "+24 pts SUS")
                 ],
                 "chart1_title": "CARRIER YARD DWELL TIME REDUCTION (MINS)",
-                "column_chart_labels": ["Plant 1 (Baseline)", "Plant 1 (Post-Pilot)", "Plant 2 (Target)", "Plant 3 (Target)", "Plant 4 (Target)"],
+                "column_chart_labels": ["P1 Base", "P1 Pilot", "P2 Target", "P3 Target", "P4 Target"],
                 "column_chart_values": [252, 42, 45, 45, 40],
                 "chart2_title": "VENDOR DELIVERY ON-TIME RATE VS STATISTICAL LIMITS",
                 "line_chart_categories": ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"],
@@ -253,7 +258,20 @@ def main():
     print("Building Authentic Lumbini Presentation via DeckRenderer...")
     spec = build_deck_spec()
     renderer = DeckRenderer(theme_name="lumbini")
-    rendered_path = renderer.render(spec, output_path)
+    try:
+        rendered_path = renderer.render(spec, output_path)
+    except PermissionError:
+        output_path = os.path.join(base_dir, "Supplier_Delivery_Tracker_CIO_Briefing_Updated.pptx")
+        print(f"Notice: Primary file was locked by active viewer. Saving to: {output_path}")
+        rendered_path = renderer.render(spec, output_path)
+        # Attempt copy if original lock releases
+        try:
+            import shutil
+            shutil.copy2(rendered_path, os.path.join(base_dir, "Supplier_Delivery_Tracker_CIO_Briefing.pptx"))
+            print("Successfully mirrored to primary Supplier_Delivery_Tracker_CIO_Briefing.pptx")
+        except Exception:
+            pass
+
     print(f"Presentation generated at: {rendered_path}")
 
     # Render Preview Images via PowerPoint COM

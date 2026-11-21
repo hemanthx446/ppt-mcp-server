@@ -115,14 +115,14 @@ class LumbiniPrimitives:
         footer_text = "  |  ".join(parts)
 
         # Left text
-        tb_f = slide.shapes.add_textbox(Inches(0.65), Inches(self.theme.raw["slide"]["footer_y_in"]), Inches(10.8), Inches(0.28))
+        tb_f = slide.shapes.add_textbox(Inches(0.65), Inches(self.theme.raw["slide"]["footer_y_in"]), Inches(10.2), Inches(0.28))
         tf_f = tb_f.text_frame
         tf_f.word_wrap = True
         tf_f.margin_left = tf_f.margin_right = tf_f.margin_top = tf_f.margin_bottom = 0
         pf = tf_f.paragraphs[0]
         pf.text = footer_text
         pf.font.name = self.theme.FONT_BODY
-        pf.font.size = Pt(9)
+        pf.font.size = Pt(12)
         pf.font.color.rgb = self.theme.C_MUTED
 
         # Right slide number
@@ -133,7 +133,7 @@ class LumbiniPrimitives:
         pn.text = f"{slide_num} / {total_slides}"
         pn.alignment = PP_ALIGN.RIGHT
         pn.font.name = self.theme.FONT_BODY
-        pn.font.size = Pt(9)
+        pn.font.size = Pt(12)
         pn.font.color.rgb = self.theme.C_MUTED
 
     def add_locator(self, slide, x: float, y: float, w: float, h: float, current_level: str, levels: List[str]):
@@ -156,7 +156,7 @@ class LumbiniPrimitives:
             p.text = lvl
             p.alignment = PP_ALIGN.CENTER
             p.font.name = self.theme.FONT_SEMIBOLD
-            p.font.size = Pt(10.0)
+            p.font.size = Pt(12)
             p.font.bold = is_active
             p.font.color.rgb = self.theme.C_WHITE if is_active else self.theme.C_MUTED
 
@@ -268,25 +268,25 @@ class LumbiniPrimitives:
         rule.line.fill.background()
 
         # Subtitle
-        s_box = slide.shapes.add_textbox(Inches(0.9), Inches(4.85), Inches(9.4), Inches(0.45))
+        s_box = slide.shapes.add_textbox(Inches(0.9), Inches(4.85), Inches(9.4), Inches(0.65))
         tf_s = s_box.text_frame
         tf_s.word_wrap = True
         tf_s.margin_left = tf_s.margin_right = tf_s.margin_top = tf_s.margin_bottom = 0
         p_s = tf_s.paragraphs[0]
         p_s.text = subtitle
         p_s.font.name = self.theme.FONT_SEMIBOLD
-        p_s.font.size = Pt(15)
+        p_s.font.size = Pt(16)
         p_s.font.bold = True
         p_s.font.color.rgb = RGBColor(56, 189, 248) if dark_theme else self.theme.C_PRIMARY
 
         # Metadata key-value rows
         for i, (k, v) in enumerate(metadata_rows):
             y = Inches(5.55 + i * 0.36)
-            tb_k = slide.shapes.add_textbox(Inches(0.9), y, Inches(2.0), Inches(0.3))
-            set_text(tb_k, k, face="Inter", weight="semibold", pt=11, color=meta_k_color, align="left", anchor="middle", pad_in=0.0)
+            tb_k = slide.shapes.add_textbox(Inches(0.9), y, Inches(1.8), Inches(0.3))
+            set_text(tb_k, k, face="Inter", weight="semibold", pt=12.0, color=meta_k_color, align="left", anchor="middle", pad_in=0.0)
 
-            tb_v = slide.shapes.add_textbox(Inches(2.8), y, Inches(6.0), Inches(0.3))
-            set_text(tb_v, v, face="Inter", weight="regular", pt=11.5, color=meta_v_color, align="left", anchor="middle", pad_in=0.0)
+            tb_v = slide.shapes.add_textbox(Inches(2.8), y, Inches(5.2), Inches(0.3))
+            set_text(tb_v, v, face="Inter", weight="regular", pt=12.0, color=meta_v_color, align="left", anchor="middle", pad_in=0.0)
 
         # Category Pill (measured and fitted within slide boundaries with 12% safety slack)
         if pill_text:
@@ -317,7 +317,7 @@ class LumbiniPrimitives:
             p = tf.paragraphs[0]
             p.text = h
             p.font.name = self.theme.FONT_SEMIBOLD
-            p.font.size = Pt(10.5)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = col
 
@@ -328,7 +328,7 @@ class LumbiniPrimitives:
             self.add_line(slide, 0.65, y, 12.68, y, color=self.theme.C_BORDER, width_pt=1.25)
 
             badge_col = item.get("badge_color") or colors[i % len(colors)]
-            self.add_circle_badge(slide, 0.92, y + 0.56, 0.52, str(i + 1), badge_col, font_size_pt=15)
+            self.add_circle_badge(slide, 0.92, y + 0.56, 0.52, str(i + 1), badge_col, font_size_pt=16)
 
             title = item.get("title") or item.get("requirement") or item.get("dimension") or ""
             today = item.get("today") or item.get("baseline") or item.get("from") or ""
@@ -397,7 +397,7 @@ class LumbiniPrimitives:
         p_h2 = tf_h.add_paragraph()
         p_h2.text = hub_subtitle
         p_h2.font.name = self.theme.FONT_BODY
-        p_h2.font.size = Pt(11)
+        p_h2.font.size = Pt(12)
         p_h2.font.color.rgb = self.theme.C_SURFACE
         p_h2.alignment = PP_ALIGN.CENTER
 
@@ -444,14 +444,14 @@ class LumbiniPrimitives:
             p1 = tf.paragraphs[0]
             p1.text = title
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(13)
+            p1.font.size = Pt(14)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_TEXT
 
             p2 = tf.add_paragraph()
             p2.text = desc
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10.5)
+            p2.font.size = Pt(12)
             p2.font.color.rgb = self.theme.C_MUTED
             p2.space_before = Pt(2)
 
@@ -466,7 +466,7 @@ class LumbiniPrimitives:
                 pl = tf_lbl.paragraphs[0]
                 pl.text = conn_label
                 pl.font.name = self.theme.FONT_BODY
-                pl.font.size = Pt(10.5)
+                pl.font.size = Pt(12)
                 pl.font.italic = True
                 pl.font.color.rgb = self.theme.C_MUTED
 
@@ -496,75 +496,80 @@ class LumbiniPrimitives:
             pc.text = step
             pc.alignment = PP_ALIGN.CENTER
             pc.font.name = self.theme.FONT_HEADING
-            pc.font.size = Pt(11)
+            pc.font.size = Pt(12)
             pc.font.bold = True
             pc.font.color.rgb = self.theme.C_WHITE
 
-        # 2. Main Mockup Card
-        mx, my, mw, mh = 0.65, 2.5, 7.35, 4.45
+        # 2. Main Cockpit Card (Left 62%)
+        mx, my, mw, mh = 0.65, 2.45, 7.50, 4.45
         self.add_card(slide, Inches(mx), Inches(my), Inches(mw), Inches(mh),
                       bg_color=self.theme.C_WHITE, border_color=self.theme.C_BORDER)
 
-        hbar = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(mx), Inches(my), Inches(mw), Inches(0.38))
+        hbar = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(mx), Inches(my), Inches(mw), Inches(0.40))
         hbar.fill.solid()
         hbar.fill.fore_color.rgb = self.theme.C_NAVY
         hbar.line.fill.background()
 
-        tb_ht = slide.shapes.add_textbox(Inches(mx + 0.15), Inches(my), Inches(3.2), Inches(0.38))
+        tb_ht = slide.shapes.add_textbox(Inches(mx + 0.15), Inches(my), Inches(4.20), Inches(0.40))
         tf_ht = tb_ht.text_frame
+        tf_ht.word_wrap = True
         tf_ht.vertical_anchor = MSO_ANCHOR.MIDDLE
         p = tf_ht.paragraphs[0]
         p.text = platform_title or "Operational Analytics Cockpit"
         p.font.name = self.theme.FONT_HEADING
-        p.font.size = Pt(11)
+        p.font.size = Pt(14)
         p.font.bold = True
         p.font.color.rgb = self.theme.C_WHITE
 
         if platform_disclaimer:
-            tb_hi = slide.shapes.add_textbox(Inches(mx + mw - 3.2), Inches(my), Inches(3.05), Inches(0.38))
+            tb_hi = slide.shapes.add_textbox(Inches(mx + mw - 3.10), Inches(my), Inches(2.95), Inches(0.40))
             tf_hi = tb_hi.text_frame
             tf_hi.word_wrap = True
             tf_hi.vertical_anchor = MSO_ANCHOR.MIDDLE
             p_hi = tf_hi.paragraphs[0]
             p_hi.text = platform_disclaimer
             p_hi.font.name = self.theme.FONT_BODY
-            p_hi.font.size = Pt(10)
+            p_hi.font.size = Pt(12)
             p_hi.font.italic = True
             p_hi.font.color.rgb = self.theme.C_BORDER
             p_hi.alignment = PP_ALIGN.RIGHT
 
-        # Tabs
-        tx = mx + 0.15
-        for i, t in enumerate(tabs[:5]):
-            w = 0.45 + len(t) * 0.08
+        # Tabs (Contained within Left Card mw=7.50)
+        n_tabs = min(len(tabs), 4)
+        tab_gap = 0.08
+        tab_w = (mw - 0.30 - (n_tabs - 1) * tab_gap) / max(1, n_tabs)
+        for i, t in enumerate(tabs[:n_tabs]):
+            tx = mx + 0.15 + i * (tab_w + tab_gap)
             is_active = (i == 0)
             if is_active:
-                tab_shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(tx), Inches(my + 0.46), Inches(w), Inches(0.28))
+                tab_shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(tx), Inches(my + 0.48), Inches(tab_w), Inches(0.30))
                 tab_shape.fill.solid()
                 tab_shape.fill.fore_color.rgb = self.theme.C_PRIMARY
                 tab_shape.line.fill.background()
 
-            tb_t = slide.shapes.add_textbox(Inches(tx), Inches(my + 0.46), Inches(w), Inches(0.28))
+            tb_t = slide.shapes.add_textbox(Inches(tx), Inches(my + 0.48), Inches(tab_w), Inches(0.30))
             tf_t = tb_t.text_frame
             tf_t.vertical_anchor = MSO_ANCHOR.MIDDLE
             pt = tf_t.paragraphs[0]
             pt.text = t
             pt.alignment = PP_ALIGN.CENTER
             pt.font.name = self.theme.FONT_BODY
-            pt.font.size = Pt(10)
+            pt.font.size = Pt(12)
             pt.font.bold = is_active
             pt.font.color.rgb = self.theme.C_WHITE if is_active else self.theme.C_MUTED
-            tx += w + 0.06
 
-        # KPI Tiles
+        # KPI Tiles (4 Enclosed Containers with 12pt and 22pt Typography)
+        kpi_w = 1.74
+        kpi_gap = 0.08
         for i, (label, val, delta) in enumerate(kpis[:4]):
-            kx = mx + 0.15 + i * 1.78
-            tile = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(kx), Inches(my + 0.84), Inches(1.68), Inches(0.88))
+            kx = mx + 0.12 + i * (kpi_w + kpi_gap)
+            tile = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(kx), Inches(my + 0.88), Inches(kpi_w), Inches(0.96))
             tile.fill.solid()
             tile.fill.fore_color.rgb = self.theme.C_SURFACE
-            tile.line.fill.background()
+            tile.line.color.rgb = self.theme.C_BORDER
+            tile.line.width = Pt(1)
 
-            tb_k = slide.shapes.add_textbox(Inches(kx + 0.08), Inches(my + 0.86), Inches(1.55), Inches(0.84))
+            tb_k = slide.shapes.add_textbox(Inches(kx + 0.06), Inches(my + 0.90), Inches(kpi_w - 0.12), Inches(0.92))
             tf_k = tb_k.text_frame
             tf_k.word_wrap = True
             tf_k.auto_size = MSO_AUTO_SIZE.NONE
@@ -573,39 +578,54 @@ class LumbiniPrimitives:
             p1 = tf_k.paragraphs[0]
             p1.text = label
             p1.font.name = self.theme.FONT_BODY
-            p1.font.size = Pt(10.0)
+            p1.font.size = Pt(12)
+            p1.font.bold = True
             p1.font.color.rgb = self.theme.C_MUTED
 
             p2 = tf_k.add_paragraph()
             p2.text = val
             p2.font.name = self.theme.FONT_HEADING
-            p2.font.size = Pt(15)
+            p2.font.size = Pt(22)
             p2.font.bold = True
             p2.font.color.rgb = self.theme.C_TEXT
 
             p3 = tf_k.add_paragraph()
             p3.text = delta
             p3.font.name = self.theme.FONT_BODY
-            p3.font.size = Pt(10.0)
+            p3.font.size = Pt(12)
+            p3.font.bold = True
             p3.font.color.rgb = self.theme.C_PRIMARY
 
-        # Native Chart 1
+        # Native Chart 1 (Column Clustered with Clean Concise Categories and 12pt Labels)
         chart_data1 = CategoryChartData()
-        chart_data1.categories = column_chart_labels or ["Unit A", "Unit B", "Unit C", "Unit D", "Unit E"]
+        raw_cats = column_chart_labels or ["Unit A", "Unit B", "Unit C", "Unit D", "Unit E"]
+        clean_cats = []
+        for lbl in raw_cats:
+            s = str(lbl).replace("Plant ", "P").replace("(", "").replace(")", "").replace("Baseline", "Base").replace("Post-Pilot", "Pilot")
+            clean_cats.append(s)
+        chart_data1.categories = clean_cats
         chart_data1.add_series("Metric", column_chart_values or [100, 120, 150, 180, 210])
 
         c1 = slide.shapes.add_chart(
             XL_CHART_TYPE.COLUMN_CLUSTERED,
-            Inches(mx + 0.1), Inches(my + 1.75), Inches(3.5), Inches(2.2),
+            Inches(mx + 0.12), Inches(my + 1.94), Inches(3.50), Inches(2.25),
             chart_data1
         ).chart
         c1.has_legend = False
         c1.has_title = True
         c1.chart_title.text_frame.text = chart1_title or "Distribution vs Target (%)"
-        c1.chart_title.text_frame.paragraphs[0].font.size = Pt(10)
+        c1.chart_title.text_frame.paragraphs[0].font.size = Pt(14)
         c1.chart_title.text_frame.paragraphs[0].font.name = self.theme.FONT_HEADING
+        c1.chart_title.text_frame.paragraphs[0].font.bold = True
+        try:
+            c1.category_axis.tick_labels.font.size = Pt(12)
+            c1.category_axis.tick_labels.font.name = self.theme.FONT_BODY
+            c1.value_axis.tick_labels.font.size = Pt(12)
+            c1.value_axis.tick_labels.font.name = self.theme.FONT_BODY
+        except Exception:
+            pass
 
-        # Native Chart 2
+        # Native Chart 2 (Operating Trend Line Chart with 12pt Legend & Axes)
         chart_data2 = CategoryChartData()
         chart_data2.categories = line_chart_categories or ["T1", "T2", "T3", "T4", "T5", "T6"]
         chart_data2.add_series("Actual", line_actual or [90, 95, 100, 110, 125, 140])
@@ -613,36 +633,57 @@ class LumbiniPrimitives:
 
         c2 = slide.shapes.add_chart(
             XL_CHART_TYPE.LINE,
-            Inches(mx + 3.7), Inches(my + 1.75), Inches(3.5), Inches(2.2),
+            Inches(mx + 3.82), Inches(my + 1.94), Inches(3.50), Inches(2.25),
             chart_data2
         ).chart
         c2.has_legend = True
         c2.legend.position = XL_LEGEND_POSITION.BOTTOM
         c2.legend.include_in_layout = False
+        try:
+            c2.legend.font.size = Pt(12)
+            c2.legend.font.name = self.theme.FONT_BODY
+        except Exception:
+            pass
         c2.has_title = True
         c2.chart_title.text_frame.text = chart2_title or "Operating Trend vs Target"
-        c2.chart_title.text_frame.paragraphs[0].font.size = Pt(10)
+        c2.chart_title.text_frame.paragraphs[0].font.size = Pt(14)
         c2.chart_title.text_frame.paragraphs[0].font.name = self.theme.FONT_HEADING
+        c2.chart_title.text_frame.paragraphs[0].font.bold = True
+        try:
+            c2.category_axis.tick_labels.font.size = Pt(12)
+            c2.category_axis.tick_labels.font.name = self.theme.FONT_BODY
+            c2.value_axis.tick_labels.font.size = Pt(12)
+            c2.value_axis.tick_labels.font.name = self.theme.FONT_BODY
+        except Exception:
+            pass
 
-        # 3. Drill Ladder (Right)
-        rx = 8.4
-        tb_dt = slide.shapes.add_textbox(Inches(rx), Inches(2.85), Inches(4.3), Inches(0.40))
+        # 3. AI Copilot / Drilldown Card (Right 38%, Enclosed & Balanced)
+        rx, ry, rw, rh = 8.35, 2.45, 4.33, 4.45
+        self.add_card(slide, Inches(rx), Inches(ry), Inches(rw), Inches(rh),
+                      bg_color=self.theme.C_WHITE, border_color=self.theme.C_BORDER)
+
+        r_bar = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(rx), Inches(ry), Inches(rw), Inches(0.40))
+        r_bar.fill.solid()
+        r_bar.fill.fore_color.rgb = self.theme.C_PRIMARY
+        r_bar.line.fill.background()
+
+        tb_dt = slide.shapes.add_textbox(Inches(rx + 0.15), Inches(ry), Inches(rw - 0.30), Inches(0.40))
         tf_dt = tb_dt.text_frame
-        tf_dt.word_wrap = True
+        tf_dt.vertical_anchor = MSO_ANCHOR.MIDDLE
         p_dt = tf_dt.paragraphs[0]
         p_dt.text = drill_title or "Root Cause Analysis Sequence"
         p_dt.font.name = self.theme.FONT_HEADING
-        p_dt.font.size = Pt(13)
+        p_dt.font.size = Pt(14)
         p_dt.font.bold = True
-        p_dt.font.color.rgb = self.theme.C_TEXT
+        p_dt.font.color.rgb = self.theme.C_WHITE
 
-        self.add_line(slide, rx + 0.2, 3.6, rx + 0.2, 5.5, color=self.theme.C_PRIMARY, width_pt=1.5)
+        self.add_line(slide, rx + 0.35, ry + 1.0, rx + 0.35, ry + 3.8, color=self.theme.C_PRIMARY, width_pt=1.5)
 
         for i, (st_name, st_desc) in enumerate(drill_steps[:4]):
-            y = 3.35 + i * 0.68
-            self.add_circle_badge(slide, rx + 0.2, y + 0.2, 0.4, str(i + 1), self.theme.C_PRIMARY, font_size_pt=12)
+            y = ry + 0.62 + i * 0.88
+            self.add_circle_badge(slide, rx + 0.35, y + 0.28, 0.40, str(i + 1), self.theme.C_PRIMARY, font_size_pt=14)
 
-            tb_s = slide.shapes.add_textbox(Inches(rx + 0.6), Inches(y), Inches(3.7), Inches(0.6))
+            tb_s = slide.shapes.add_textbox(Inches(rx + 0.70), Inches(y), Inches(rw - 0.85), Inches(0.80))
             tf_s = tb_s.text_frame
             tf_s.word_wrap = True
             tf_s.margin_left = tf_s.margin_right = tf_s.margin_top = tf_s.margin_bottom = 0
@@ -650,14 +691,16 @@ class LumbiniPrimitives:
             p1 = tf_s.paragraphs[0]
             p1.text = st_name
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(12.5)
+            p1.font.size = Pt(14)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_TEXT
 
             p2 = tf_s.add_paragraph()
             p2.text = st_desc
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10.5)
+            p2.font.size = Pt(12)
+            p2.font.color.rgb = self.theme.C_MUTED
+            p2.space_before = Pt(2)
             p2.font.color.rgb = self.theme.C_MUTED
 
     # =========================================================================
@@ -676,7 +719,7 @@ class LumbiniPrimitives:
             p = tf.paragraphs[0]
             p.text = ch.upper()
             p.font.name = self.theme.FONT_SEMIBOLD
-            p.font.size = Pt(10)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = self.theme.C_PRIMARY
 
@@ -703,7 +746,7 @@ class LumbiniPrimitives:
             pr2 = tf_r.add_paragraph()
             pr2.text = r_sub
             pr2.font.name = self.theme.FONT_BODY
-            pr2.font.size = Pt(10.5)
+            pr2.font.size = Pt(12)
             pr2.font.color.rgb = self.theme.C_SURFACE
             pr2.space_before = Pt(3)
 
@@ -721,7 +764,7 @@ class LumbiniPrimitives:
                 pc = tf_c.paragraphs[0]
                 pc.text = c_text
                 pc.font.name = self.theme.FONT_BODY
-                pc.font.size = Pt(11)
+                pc.font.size = Pt(12)
                 pc.font.color.rgb = self.theme.C_TEXT
 
         # Bottom Confirmed Strip
@@ -732,14 +775,14 @@ class LumbiniPrimitives:
         band.line.width = Pt(1)
 
         tb_bt = slide.shapes.add_textbox(Inches(0.85), Inches(6.05), Inches(2.8), Inches(0.75))
-        set_text(tb_bt, confirmed_title or "Verified Architectural Baseline", face="Inter", weight="bold", pt=11.0, color="0070C0", align="left", anchor="middle", pad_in=0.0)
+        set_text(tb_bt, confirmed_title or "Verified Architectural Baseline", face="Inter", weight="bold", pt=12.0, color="0070C0", align="left", anchor="middle", pad_in=0.0)
 
         for i, cap in enumerate(confirmed_caps[:4]):
             bx = 3.75 + i * 2.2
-            self.add_circle_badge(slide, bx + 0.1, 6.42, 0.22, "✓", self.theme.C_PRIMARY, font_size_pt=10)
+            self.add_circle_badge(slide, bx + 0.1, 6.42, 0.22, "✓", self.theme.C_PRIMARY, font_size_pt=12)
 
             tb_cp = slide.shapes.add_textbox(Inches(bx + 0.28), Inches(6.05), Inches(1.85), Inches(0.75))
-            set_text(tb_cp, cap, face="Inter", weight="regular", pt=10.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
+            set_text(tb_cp, cap, face="Inter", weight="regular", pt=12.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
 
     # =========================================================================
     # COMPOSITION 6: NUMBERED STEP BLOCKS + DELIVERABLES BAND
@@ -767,7 +810,7 @@ class LumbiniPrimitives:
             p_st = tf_c.paragraphs[0]
             p_st.text = title
             p_st.font.name = self.theme.FONT_HEADING
-            p_st.font.size = Pt(13)
+            p_st.font.size = Pt(14)
             p_st.font.bold = True
             p_st.font.color.rgb = self.theme.C_TEXT
 
@@ -776,7 +819,7 @@ class LumbiniPrimitives:
                 p_b = tf_c.add_paragraph()
                 p_b.text = f"• {b}"
                 p_b.font.name = self.theme.FONT_BODY
-                p_b.font.size = Pt(10.5)
+                p_b.font.size = Pt(12)
                 p_b.font.color.rgb = self.theme.C_MUTED
                 p_b.space_before = Pt(3)
 
@@ -791,65 +834,122 @@ class LumbiniPrimitives:
 
         for i, d in enumerate(deliverables[:4]):
             dx = 3.2 + i * 2.35
-            self.add_circle_badge(slide, dx + 0.1, 5.5, 0.22, "✓", self.theme.C_PRIMARY, font_size_pt=10)
+            self.add_circle_badge(slide, dx + 0.1, 5.5, 0.22, "✓", self.theme.C_PRIMARY, font_size_pt=12)
 
             tb_d = slide.shapes.add_textbox(Inches(dx + 0.28), Inches(5.1), Inches(1.95), Inches(0.8))
-            set_text(tb_d, d, face="Inter", weight="regular", pt=10.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
+            set_text(tb_d, d, face="Inter", weight="regular", pt=12.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
 
     # =========================================================================
-    # COMPOSITION 7: STEP LINE / DATA CUTOVER PIPELINE
+    # COMPOSITION 7: STEP LINE / DATA CUTOVER PIPELINE (Don Norman Process Flow)
     # =========================================================================
     def render_step_line(self, slide, steps: List[Tuple[str, str]], deliverables: List[str], caveat_text: str):
-        self.add_line(slide, 1.2, 2.3, 11.8, 2.3, color=self.theme.C_PRIMARY, width_pt=2.5)
+        """
+        Don Norman Human-Centered Process Flow:
+        Renders substantial, full-height vertical workflow cards side-by-side.
+        Natural spatial mapping (Left-to-Right sequence), zero dead white space,
+        integrated deliverables, and strict >= 12pt discrete integer typography.
+        """
+        n_steps = max(1, min(len(steps), 5))
+        total_w = 12.03  # from x=0.65 to 12.68
+        gutter = 0.20
+        card_w = (total_w - (n_steps - 1) * gutter) / n_steps
+        card_h = 4.12  # from y=1.95 to 6.07
+        top_y = 1.95
 
-        for i, (title, desc) in enumerate(steps[:6]):
-            cx = 1.2 + i * 2.05
-            self.add_circle_badge(slide, cx, 2.3, 0.44, str(i + 1), self.theme.C_PRIMARY, font_size_pt=13)
+        for i, step_data in enumerate(steps[:n_steps]):
+            title = step_data[0] if isinstance(step_data, (tuple, list)) else str(step_data)
+            desc = step_data[1] if isinstance(step_data, (tuple, list)) and len(step_data) > 1 else ""
 
-            tb = slide.shapes.add_textbox(Inches(cx - 0.95), Inches(2.65), Inches(1.9), Inches(1.8))
-            tf = tb.text_frame
-            tf.word_wrap = True
-            tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+            cx = 0.65 + i * (card_w + gutter)
 
-            p1 = tf.paragraphs[0]
-            p1.text = title
-            p1.alignment = PP_ALIGN.CENTER
-            p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(12)
-            p1.font.bold = True
-            p1.font.color.rgb = self.theme.C_TEXT
+            # Substantial vertical card container filling canvas
+            self.add_card(slide, Inches(cx), Inches(top_y), Inches(card_w), Inches(card_h),
+                          bg_color=self.theme.C_WHITE, border_color=self.theme.C_BORDER)
 
-            p2 = tf.add_paragraph()
-            p2.text = desc
-            p2.alignment = PP_ALIGN.CENTER
-            p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10)
-            p2.font.color.rgb = self.theme.C_MUTED
-            p2.space_before = Pt(2)
+            # Card Header Pill / Top Accent Strip with Step Badge
+            badge_y = top_y + 0.35
+            badge_x = cx + card_w / 2.0
+            self.add_circle_badge(slide, badge_x, badge_y, 0.44, str(i + 1), self.theme.C_PRIMARY, font_size_pt=14)
 
-        # Deliverables card
-        self.add_card(slide, Inches(0.65), Inches(4.7), Inches(12.03), Inches(1.2),
-                      bg_color=self.theme.C_SURFACE, border_color=self.theme.C_BORDER)
+            # Directional Connector Arrow linking to next step
+            if i < n_steps - 1:
+                conn_x1 = cx + card_w + 0.02
+                conn_x2 = cx + card_w + gutter - 0.02
+                self.add_line(slide, conn_x1, badge_y, conn_x2, badge_y, color=self.theme.C_PRIMARY, width_pt=2.0)
 
-        tb_h = slide.shapes.add_textbox(Inches(0.9), Inches(4.75), Inches(3.0), Inches(0.35))
-        tf_h = tb_h.text_frame
-        ph = tf_h.paragraphs[0]
-        ph.text = "Audit deliverables per stage"
-        ph.font.name = self.theme.FONT_HEADING
-        ph.font.size = Pt(12)
-        ph.font.bold = True
-        ph.font.color.rgb = self.theme.C_TEXT
+            # Step Title Textbox (14pt Bold)
+            tb_t = slide.shapes.add_textbox(Inches(cx + 0.10), Inches(top_y + 0.70), Inches(card_w - 0.20), Inches(0.68))
+            tf_t = tb_t.text_frame
+            tf_t.word_wrap = True
+            tf_t.auto_size = MSO_AUTO_SIZE.NONE
+            tf_t.margin_left = tf_t.margin_right = tf_t.margin_top = tf_t.margin_bottom = 0
+            pt = tf_t.paragraphs[0]
+            pt.text = title
+            pt.alignment = PP_ALIGN.CENTER
+            pt.font.name = self.theme.FONT_HEADING
+            pt.font.size = Pt(14)
+            pt.font.bold = True
+            pt.font.color.rgb = self.theme.C_TEXT
 
-        col_w = 1.95
-        for i, d in enumerate(deliverables[:6]):
-            tb_d = slide.shapes.add_textbox(Inches(0.9 + i * col_w), Inches(5.1), Inches(col_w - 0.1), Inches(0.7))
+            # Step Narrative Description (12pt Regular)
+            tb_d = slide.shapes.add_textbox(Inches(cx + 0.12), Inches(top_y + 1.45), Inches(card_w - 0.24), Inches(1.45))
             tf_d = tb_d.text_frame
             tf_d.word_wrap = True
+            tf_d.auto_size = MSO_AUTO_SIZE.NONE
+            tf_d.margin_left = tf_d.margin_right = tf_d.margin_top = tf_d.margin_bottom = 0
             pd = tf_d.paragraphs[0]
-            pd.text = f"• {d}"
+            pd.text = desc
+            pd.alignment = PP_ALIGN.CENTER
             pd.font.name = self.theme.FONT_BODY
-            pd.font.size = Pt(10)
+            pd.font.size = Pt(12)
             pd.font.color.rgb = self.theme.C_MUTED
+
+            # Integrated Deliverable Container at Base of Card
+            if i < len(deliverables):
+                deliv_box_y = top_y + 3.02
+                deliv_box_h = 0.96
+                deliv_w = card_w - 0.24
+                # Subtle surface pill container
+                self.add_card(slide, Inches(cx + 0.12), Inches(deliv_box_y), Inches(deliv_w), Inches(deliv_box_h),
+                              bg_color=self.theme.C_SURFACE, border_color=self.theme.C_BORDER)
+
+                tb_dl = slide.shapes.add_textbox(Inches(cx + 0.14), Inches(deliv_box_y + 0.08), Inches(deliv_w - 0.04), Inches(deliv_box_h - 0.12))
+                tf_dl = tb_dl.text_frame
+                tf_dl.word_wrap = True
+                tf_dl.auto_size = MSO_AUTO_SIZE.NONE
+                tf_dl.margin_left = tf_dl.margin_right = tf_dl.margin_top = tf_dl.margin_bottom = 0
+
+                p_dl1 = tf_dl.paragraphs[0]
+                p_dl1.text = "DELIVERABLE"
+                p_dl1.alignment = PP_ALIGN.CENTER
+                p_dl1.font.name = self.theme.FONT_HEADING
+                p_dl1.font.size = Pt(12)
+                p_dl1.font.bold = True
+                p_dl1.font.color.rgb = self.theme.C_PRIMARY
+
+                p_dl2 = tf_dl.add_paragraph()
+                p_dl2.text = str(deliverables[i])
+                p_dl2.alignment = PP_ALIGN.CENTER
+                p_dl2.font.name = self.theme.FONT_BODY
+                p_dl2.font.size = Pt(12)
+                p_dl2.font.bold = True
+                p_dl2.font.color.rgb = self.theme.C_TEXT
+                p_dl2.space_before = Pt(2)
+
+        # Bottom Executive Principle Banner (Eliminates any bottom void)
+        if caveat_text:
+            banner_y = top_y + card_h + 0.10
+            self.add_card(slide, Inches(0.65), Inches(banner_y), Inches(total_w), Inches(0.52),
+                          bg_color=self.theme.C_SURFACE, border_color=self.theme.C_BORDER)
+            tb_c = slide.shapes.add_textbox(Inches(0.85), Inches(banner_y + 0.03), Inches(total_w - 0.40), Inches(0.46))
+            tf_c = tb_c.text_frame
+            tf_c.word_wrap = True
+            tf_c.vertical_anchor = MSO_ANCHOR.MIDDLE
+            p_cv = tf_c.paragraphs[0]
+            p_cv.text = f"Operational Standard: {caveat_text}"
+            p_cv.font.name = self.theme.FONT_BODY
+            p_cv.font.size = Pt(12)
+            p_cv.font.color.rgb = self.theme.C_MUTED
 
     # =========================================================================
     # COMPOSITION 8: FLOW WITH ACTION STRIP & LEGEND
@@ -882,14 +982,14 @@ class LumbiniPrimitives:
             p1 = tf.paragraphs[0]
             p1.text = b_title
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(11.5)
+            p1.font.size = Pt(12)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_TEXT
 
             p2 = tf.add_paragraph()
             p2.text = b_sub
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10)
+            p2.font.size = Pt(12)
             p2.font.color.rgb = self.theme.C_MUTED
             p2.space_before = Pt(2)
 
@@ -916,7 +1016,7 @@ class LumbiniPrimitives:
             pa = tf_a.paragraphs[0]
             pa.text = f"Action {i+1}: {act}"
             pa.font.name = self.theme.FONT_BODY
-            pa.font.size = Pt(10)
+            pa.font.size = Pt(12)
             pa.font.color.rgb = self.theme.C_TEXT
 
         # 3. Legend (y=5.35)
@@ -941,7 +1041,7 @@ class LumbiniPrimitives:
             pl = tf_l.paragraphs[0]
             pl.text = l_text
             pl.font.name = self.theme.FONT_BODY
-            pl.font.size = Pt(10)
+            pl.font.size = Pt(12)
             pl.font.color.rgb = self.theme.C_MUTED
 
         # 4. Caveat text at bottom if present
@@ -954,7 +1054,7 @@ class LumbiniPrimitives:
             pc = tf_c.paragraphs[0]
             pc.text = caveat_text
             pc.font.name = self.theme.FONT_BODY
-            pc.font.size = Pt(10)
+            pc.font.size = Pt(12)
             pc.font.color.rgb = self.theme.C_MUTED
 
     # =========================================================================
@@ -967,7 +1067,7 @@ class LumbiniPrimitives:
             p = tf.paragraphs[0]
             p.text = h
             p.font.name = self.theme.FONT_SEMIBOLD
-            p.font.size = Pt(10)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = self.theme.C_MUTED
 
@@ -976,7 +1076,7 @@ class LumbiniPrimitives:
             self.add_line(slide, 0.65, y, 12.68, y, color=self.theme.C_BORDER, width_pt=1.25)
 
             tb_n = slide.shapes.add_textbox(Inches(0.65), Inches(y + 0.03), Inches(2.75), Inches(0.7))
-            set_text(tb_n, p_name, face="Inter", weight="bold", pt=11.5, color="0B192C", align="left", anchor="middle", pad_in=0.0)
+            set_text(tb_n, p_name, face="Inter", weight="bold", pt=12.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
 
             bx = 3.45 + i * 0.55
             bar_col = self.theme.C_NAVY if i == 4 else self.theme.C_PRIMARY
@@ -984,20 +1084,20 @@ class LumbiniPrimitives:
             bar.fill.solid()
             bar.fill.fore_color.rgb = bar_col
             bar.line.fill.background()
-            set_text(bar, f"Phase {i+1}", face="Inter", weight="bold", pt=10, color="FFFFFF", align="center", anchor="middle", pad_in=0.05)
+            set_text(bar, f"Phase {i+1}", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle", pad_in=0.05)
 
             tb_a = slide.shapes.add_textbox(Inches(7.2), Inches(y + 0.03), Inches(5.4), Inches(0.7))
-            set_text(tb_a, p_act, face="Inter", weight="regular", pt=11, color="0B192C", align="left", anchor="middle", pad_in=0.0)
+            set_text(tb_a, p_act, face="Inter", weight="regular", pt=12.0, color="0B192C", align="left", anchor="middle", pad_in=0.0)
 
         # Future readiness callout
         self.add_card(slide, Inches(0.65), Inches(6.05), Inches(12.03), Inches(0.85),
                       bg_color=self.theme.C_SURFACE, border_color=self.theme.C_BORDER)
 
         tb_ft = slide.shapes.add_textbox(Inches(0.9), Inches(6.05), Inches(3.4), Inches(0.85))
-        set_text(tb_ft, future_readiness_title or "Architecture Currency", face="Inter", weight="semibold", pt=10.5, color="1E3E62", align="left", anchor="middle", pad_in=0.0)
+        set_text(tb_ft, future_readiness_title or "Architecture Currency", face="Inter", weight="semibold", pt=12.0, color="1E3E62", align="left", anchor="middle", pad_in=0.0)
 
         tb_fd = slide.shapes.add_textbox(Inches(4.5), Inches(6.05), Inches(8.0), Inches(0.85))
-        set_text(tb_fd, future_readiness_desc, face="Inter", weight="regular", pt=10.5, color="4F6F8F", align="left", anchor="middle", pad_in=0.0)
+        set_text(tb_fd, future_readiness_desc, face="Inter", weight="regular", pt=12.0, color="4F6F8F", align="left", anchor="middle", pad_in=0.0)
 
     # =========================================================================
     # COMPOSITION 9B: PHASE-WISE CONCURRENT DELIVERY TABLE (SOW PROTECTION)
@@ -1080,7 +1180,7 @@ class LumbiniPrimitives:
         p_h = tf_h.paragraphs[0]
         p_h.text = header_title
         p_h.font.name = self.theme.FONT_HEADING
-        p_h.font.size = Pt(11)
+        p_h.font.size = Pt(12)
         p_h.font.bold = True
         p_h.font.color.rgb = self.theme.C_NAVY
         p_h.alignment = PP_ALIGN.CENTER
@@ -1117,7 +1217,7 @@ class LumbiniPrimitives:
                 p_w = tf_w.paragraphs[0]
                 p_w.text = wks
                 p_w.font.name = self.theme.FONT_HEADING
-                p_w.font.size = Pt(9.5)
+                p_w.font.size = Pt(12)
                 p_w.font.bold = True
                 p_w.font.color.rgb = self.theme.C_NAVY
                 p_w.alignment = PP_ALIGN.CENTER
@@ -1134,7 +1234,7 @@ class LumbiniPrimitives:
                 p_a = tf_a.paragraphs[0]
                 p_a.text = act_desc
                 p_a.font.name = self.theme.FONT_BODY
-                p_a.font.size = Pt(9.5)
+                p_a.font.size = Pt(12)
                 is_milestone = "Go Live" in act_desc or "Hypercare" in act_desc
                 p_a.font.bold = is_milestone
                 p_a.font.color.rgb = self.theme.C_PRIMARY if is_milestone else self.theme.C_TEXT
@@ -1153,7 +1253,7 @@ class LumbiniPrimitives:
             p_p = tf_p.paragraphs[0]
             p_p.text = phase.get("phase_name", f"Phase {p_idx+1}")
             p_p.font.name = self.theme.FONT_HEADING
-            p_p.font.size = Pt(11)
+            p_p.font.size = Pt(12)
             p_p.font.bold = True
             p_p.font.color.rgb = self.theme.C_WHITE
             p_p.alignment = PP_ALIGN.CENTER
@@ -1172,7 +1272,7 @@ class LumbiniPrimitives:
             p_prod = tf_prod.paragraphs[0]
             p_prod.text = phase.get("product_scope", "")
             p_prod.font.name = self.theme.FONT_HEADING
-            p_prod.font.size = Pt(10.5)
+            p_prod.font.size = Pt(12)
             p_prod.font.bold = True
             p_prod.font.color.rgb = self.theme.C_TEXT
             p_prod.alignment = PP_ALIGN.CENTER
@@ -1207,7 +1307,7 @@ class LumbiniPrimitives:
         pa = tf_a.paragraphs[0]
         pa.text = sec_a_title
         pa.font.name = self.theme.FONT_HEADING
-        pa.font.size = Pt(13)
+        pa.font.size = Pt(14)
         pa.font.bold = True
         pa.font.color.rgb = self.theme.C_PRIMARY
 
@@ -1224,7 +1324,7 @@ class LumbiniPrimitives:
             cell.text = h_text
             p = cell.text_frame.paragraphs[0]
             p.font.name = self.theme.FONT_HEADING
-            p.font.size = Pt(10)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = self.theme.C_WHITE
 
@@ -1235,7 +1335,7 @@ class LumbiniPrimitives:
             cell0.text = item
             p0 = cell0.text_frame.paragraphs[0]
             p0.font.name = self.theme.FONT_BODY
-            p0.font.size = Pt(10)
+            p0.font.size = Pt(12)
             p0.font.color.rgb = self.theme.C_TEXT
 
             cell1 = t_a.cell(r_idx + 1, 1)
@@ -1244,7 +1344,7 @@ class LumbiniPrimitives:
             cell1.text = amt
             p1 = cell1.text_frame.paragraphs[0]
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(10)
+            p1.font.size = Pt(12)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_ACCENT
 
@@ -1254,7 +1354,7 @@ class LumbiniPrimitives:
         pb = tf_b.paragraphs[0]
         pb.text = sec_b_title
         pb.font.name = self.theme.FONT_HEADING
-        pb.font.size = Pt(13)
+        pb.font.size = Pt(14)
         pb.font.bold = True
         pb.font.color.rgb = self.theme.C_PRIMARY
 
@@ -1272,7 +1372,7 @@ class LumbiniPrimitives:
             cell.text = h_text
             p = cell.text_frame.paragraphs[0]
             p.font.name = self.theme.FONT_HEADING
-            p.font.size = Pt(10)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = self.theme.C_WHITE
 
@@ -1283,7 +1383,7 @@ class LumbiniPrimitives:
             c0.text = role
             p0 = c0.text_frame.paragraphs[0]
             p0.font.name = self.theme.FONT_HEADING
-            p0.font.size = Pt(10)
+            p0.font.size = Pt(12)
             p0.font.bold = True
             p0.font.color.rgb = self.theme.C_TEXT
 
@@ -1293,7 +1393,7 @@ class LumbiniPrimitives:
             c1.text = resp
             p1 = c1.text_frame.paragraphs[0]
             p1.font.name = self.theme.FONT_BODY
-            p1.font.size = Pt(10)
+            p1.font.size = Pt(12)
             p1.font.color.rgb = self.theme.C_TEXT
 
             c2 = t_b.cell(r_idx + 1, 2)
@@ -1302,7 +1402,7 @@ class LumbiniPrimitives:
             c2.text = alloc
             p2 = c2.text_frame.paragraphs[0]
             p2.font.name = self.theme.FONT_HEADING
-            p2.font.size = Pt(10)
+            p2.font.size = Pt(12)
             p2.font.bold = True
             p2.font.color.rgb = self.theme.C_ACCENT
 
@@ -1312,7 +1412,7 @@ class LumbiniPrimitives:
         pc = tf_c.paragraphs[0]
         pc.text = sec_c_title
         pc.font.name = self.theme.FONT_HEADING
-        pc.font.size = Pt(13)
+        pc.font.size = Pt(14)
         pc.font.bold = True
         pc.font.color.rgb = self.theme.C_PRIMARY
 
@@ -1330,14 +1430,14 @@ class LumbiniPrimitives:
                 r1 = p.add_run()
                 r1.text = f"{t_title}: "
                 r1.font.name = self.theme.FONT_SEMIBOLD
-                r1.font.size = Pt(10)
+                r1.font.size = Pt(12)
                 r1.font.bold = True
                 r1.font.color.rgb = self.theme.C_TEXT
 
                 r2 = p.add_run()
                 r2.text = t_desc
                 r2.font.name = self.theme.FONT_BODY
-                r2.font.size = Pt(10)
+                r2.font.size = Pt(12)
                 r2.font.color.rgb = self.theme.C_MUTED
 
     # =========================================================================
@@ -1381,7 +1481,7 @@ class LumbiniPrimitives:
             p = tf.paragraphs[0]
             p.text = h_text
             p.font.name = self.theme.FONT_HEADING
-            p.font.size = Pt(10.5)
+            p.font.size = Pt(12)
             p.font.bold = True
             p.font.color.rgb = self.theme.C_WHITE
 
@@ -1399,7 +1499,7 @@ class LumbiniPrimitives:
                 p = tf.paragraphs[0]
                 p.text = val
                 p.font.name = self.theme.FONT_HEADING if c_idx == 0 else self.theme.FONT_BODY
-                p.font.size = Pt(10.0)
+                p.font.size = Pt(12)
                 p.font.bold = (c_idx == 0)
                 p.font.color.rgb = self.theme.C_TEXT
 
@@ -1409,7 +1509,7 @@ class LumbiniPrimitives:
             card = self.add_card(slide, Inches(0.65), call_y, Inches(12.03), call_h,
                                  bg_color=self.theme.C_SURFACE, border_color=self.theme.C_PRIMARY)
             tb = slide.shapes.add_textbox(Inches(0.85), call_y, Inches(11.63), call_h)
-            set_text(tb, callout_text, face="Inter", weight="regular", pt=10.0, color="1E3E62", align="left", anchor="middle", pad_in=0.0)
+            set_text(tb, callout_text, face="Inter", weight="regular", pt=12.0, color="1E3E62", align="left", anchor="middle", pad_in=0.0)
 
     # =========================================================================
     # NEW V2 COMPOSITIONS: RELATIONSHIP-FIRST VISUAL GRAMMARS
@@ -1422,8 +1522,8 @@ class LumbiniPrimitives:
         Each layer has a tier badge, title, capability tags, and bidirectional control/data flow connectors.
         """
         num_layers = min(len(layers), 5)
-        layer_h = 0.85
-        spacing = 0.15
+        layer_h = 0.98 if num_layers <= 4 else 0.85
+        spacing = 0.12 if num_layers <= 4 else 0.10
         start_y = 1.95
 
         for i, l in enumerate(layers[:num_layers]):
@@ -1436,7 +1536,7 @@ class LumbiniPrimitives:
             # Left Tier Badge Card (text written directly inside shape to prevent clipping/floating textboxes)
             tier_card = self.add_card(slide, Inches(0.65), Inches(y), Inches(2.75), Inches(layer_h),
                                       bg_color=tier_col, border_color=None)
-            set_text(tier_card, tier_name, face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle", pad_in=0.1)
+            set_text(tier_card, tier_name, face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle", pad_in=0.1)
 
             # Main Layer Card (text written directly inside shape)
             card_w = 9.13 if not callout_note else 6.3
@@ -1447,7 +1547,7 @@ class LumbiniPrimitives:
             tf_m.word_wrap = True
             tf_m.auto_size = MSO_AUTO_SIZE.NONE
             tf_m.margin_left = tf_m.margin_right = Inches(0.18)
-            tf_m.margin_top = tf_m.margin_bottom = Inches(0.08)
+            tf_m.margin_top = tf_m.margin_bottom = Inches(0.04)
             tf_m.vertical_anchor = MSO_ANCHOR.MIDDLE
 
             p1 = tf_m.paragraphs[0]
@@ -1464,7 +1564,7 @@ class LumbiniPrimitives:
             r2 = p2.add_run()
             r2.text = desc
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10.5)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_MUTED
 
             # Flow arrow to next layer
@@ -1485,7 +1585,7 @@ class LumbiniPrimitives:
             r_ct = p_ct.add_run()
             r_ct.text = "Architectural Intent"
             r_ct.font.name = self.theme.FONT_HEADING
-            r_ct.font.size = Pt(13)
+            r_ct.font.size = Pt(14)
             r_ct.font.bold = True
             r_ct.font.color.rgb = self.theme.C_PRIMARY
 
@@ -1494,7 +1594,7 @@ class LumbiniPrimitives:
             r_cb = p_cb.add_run()
             r_cb.text = callout_note
             r_cb.font.name = self.theme.FONT_BODY
-            r_cb.font.size = Pt(11)
+            r_cb.font.size = Pt(12)
             r_cb.font.color.rgb = self.theme.C_TEXT
             p_cb.space_before = Pt(8)
 
@@ -1526,7 +1626,7 @@ class LumbiniPrimitives:
         pv2 = tf_v.add_paragraph()
         pv2.text = visible_event.get("desc", "")
         pv2.font.name = self.theme.FONT_BODY
-        pv2.font.size = Pt(11)
+        pv2.font.size = Pt(12)
         pv2.font.color.rgb = self.theme.C_TEXT
 
         # 2. Submerged Layers
@@ -1541,14 +1641,14 @@ class LumbiniPrimitives:
             pl1 = tf_l.paragraphs[0]
             pl1.text = layer.get("layer_name", f"Level {i+1}").upper()
             pl1.font.name = self.theme.FONT_SEMIBOLD
-            pl1.font.size = Pt(11)
+            pl1.font.size = Pt(12)
             pl1.font.bold = True
             pl1.font.color.rgb = self.theme.C_NAVY
 
             pl2 = tf_l.add_paragraph()
             pl2.text = layer.get("finding", "")
             pl2.font.name = self.theme.FONT_BODY
-            pl2.font.size = Pt(11)
+            pl2.font.size = Pt(12)
             pl2.font.color.rgb = self.theme.C_TEXT
 
         # Right Callout Card (sized to content)
@@ -1566,7 +1666,7 @@ class LumbiniPrimitives:
         r_rc1 = prc1.add_run()
         r_rc1.text = "Transformation Reality"
         r_rc1.font.name = self.theme.FONT_HEADING
-        r_rc1.font.size = Pt(13.5)
+        r_rc1.font.size = Pt(14)
         r_rc1.font.bold = True
         r_rc1.font.color.rgb = self.theme.C_PRIMARY
 
@@ -1575,7 +1675,7 @@ class LumbiniPrimitives:
         r_rc2 = prc2.add_run()
         r_rc2.text = callout_text
         r_rc2.font.name = self.theme.FONT_BODY
-        r_rc2.font.size = Pt(11)
+        r_rc2.font.size = Pt(12)
         r_rc2.font.color.rgb = self.theme.C_TEXT
         prc2.font.color.rgb = self.theme.C_TEXT
         prc2.space_before = Pt(8)
@@ -1612,7 +1712,7 @@ class LumbiniPrimitives:
             p1 = tf.paragraphs[0]
             p1.text = st.get("name", f"Stage {i+1}")
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(12.5)
+            p1.font.size = Pt(14)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_ALERT if is_constraint else self.theme.C_TEXT
 
@@ -1620,21 +1720,21 @@ class LumbiniPrimitives:
                 p_c = tf.add_paragraph()
                 p_c.text = "★ BINDING CONSTRAINT"
                 p_c.font.name = self.theme.FONT_SEMIBOLD
-                p_c.font.size = Pt(10.0)
+                p_c.font.size = Pt(12)
                 p_c.font.bold = True
                 p_c.font.color.rgb = self.theme.C_ORANGE
 
             p2 = tf.add_paragraph()
             p2.text = st.get("desc", "")
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10.5)
+            p2.font.size = Pt(12)
             p2.font.color.rgb = self.theme.C_MUTED
             p2.space_before = Pt(4)
 
             p3 = tf.add_paragraph()
             p3.text = f"Cycle / Rate: {st.get('rate', 'N/A')}"
             p3.font.name = self.theme.FONT_SEMIBOLD
-            p3.font.size = Pt(10)
+            p3.font.size = Pt(12)
             p3.font.color.rgb = self.theme.C_TEXT
             p3.space_before = Pt(6)
 
@@ -1662,7 +1762,7 @@ class LumbiniPrimitives:
         pi2 = tf_i.add_paragraph()
         pi2.text = f"Throughput Impact (What Moves): {impact_annotation}"
         pi2.font.name = self.theme.FONT_BODY
-        pi2.font.size = Pt(11)
+        pi2.font.size = Pt(12)
         pi2.font.color.rgb = self.theme.C_TEXT
         pi2.space_before = Pt(4)
 
@@ -1684,14 +1784,14 @@ class LumbiniPrimitives:
             p1 = tf.paragraphs[0]
             p1.text = n.get("label", "")
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(13)
+            p1.font.size = Pt(14)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_TEXT
 
             p2 = tf.add_paragraph()
             p2.text = n.get("desc", "")
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(11)
+            p2.font.size = Pt(12)
             p2.font.color.rgb = self.theme.C_MUTED
 
         # Right Loop Dynamics Card
@@ -1713,7 +1813,7 @@ class LumbiniPrimitives:
             l_type = lp.get("type", "Reinforcing (R)")
             pl_t.text = f"• Loop: {l_type}"
             pl_t.font.name = self.theme.FONT_SEMIBOLD
-            pl_t.font.size = Pt(11)
+            pl_t.font.size = Pt(12)
             pl_t.font.bold = True
             pl_t.font.color.rgb = self.theme.C_NAVY
             pl_t.space_before = Pt(6)
@@ -1721,13 +1821,13 @@ class LumbiniPrimitives:
             pl_d = tf_l.add_paragraph()
             pl_d.text = lp.get("effect", "")
             pl_d.font.name = self.theme.FONT_BODY
-            pl_d.font.size = Pt(10.5)
+            pl_d.font.size = Pt(12)
             pl_d.font.color.rgb = self.theme.C_TEXT
 
         p_dy = tf_l.add_paragraph()
         p_dy.text = f"System Delay: {delay_annotation}"
         p_dy.font.name = self.theme.FONT_SEMIBOLD
-        p_dy.font.size = Pt(10.5)
+        p_dy.font.size = Pt(12)
         p_dy.font.color.rgb = self.theme.C_ACCENT
         p_dy.space_before = Pt(8)
 
@@ -1765,7 +1865,7 @@ class LumbiniPrimitives:
             p1 = tf.paragraphs[0]
             p1.text = q.get("name", f"Quadrant {i+1}")
             p1.font.name = self.theme.FONT_HEADING
-            p1.font.size = Pt(13)
+            p1.font.size = Pt(14)
             p1.font.bold = True
             p1.font.color.rgb = self.theme.C_PRIMARY if is_target else self.theme.C_TEXT
 
@@ -1773,14 +1873,14 @@ class LumbiniPrimitives:
                 pt = tf.add_paragraph()
                 pt.text = "★ TARGET OPERATING EQUILIBRIUM"
                 pt.font.name = self.theme.FONT_SEMIBOLD
-                pt.font.size = Pt(10.0)
+                pt.font.size = Pt(12)
                 pt.font.bold = True
                 pt.font.color.rgb = self.theme.C_PRIMARY
 
             p2 = tf.add_paragraph()
             p2.text = q.get("desc", "")
             p2.font.name = self.theme.FONT_BODY
-            p2.font.size = Pt(10.5)
+            p2.font.size = Pt(12)
             p2.font.color.rgb = self.theme.C_MUTED
             p2.space_before = Pt(4)
 
@@ -1801,7 +1901,7 @@ class LumbiniPrimitives:
         pr2 = tf_r.add_paragraph()
         pr2.text = callout_note
         pr2.font.name = self.theme.FONT_BODY
-        pr2.font.size = Pt(11.5)
+        pr2.font.size = Pt(12)
         pr2.font.color.rgb = self.theme.C_TEXT
         pr2.space_before = Pt(8)
 
@@ -1856,7 +1956,7 @@ class LumbiniPrimitives:
                 rc = pc.add_run()
                 rc.text = f"• {c}"
                 rc.font.name = self.theme.FONT_BODY
-                rc.font.size = Pt(10.0)
+                rc.font.size = Pt(12)
                 rc.font.color.rgb = self.theme.C_MUTED
                 pc.space_before = Pt(2)
 
@@ -1866,14 +1966,14 @@ class LumbiniPrimitives:
                 rg = pg.add_run()
                 rg.text = f"Gate: {st['gate_criterion']}"
                 rg.font.name = self.theme.FONT_SEMIBOLD
-                rg.font.size = Pt(10.0)
+                rg.font.size = Pt(12)
                 rg.font.bold = True
                 rg.font.color.rgb = self.theme.C_ACCENT
                 pg.space_before = Pt(4)
 
         if caveat_text:
             tb_cv = slide.shapes.add_textbox(Inches(0.65), Inches(6.25), Inches(12.03), Inches(0.35))
-            set_text(tb_cv, caveat_text, face="Inter", weight="regular", pt=10.0, color="646E78", align="left", anchor="middle", pad_in=0.0, italic=True)
+            set_text(tb_cv, caveat_text, face="Inter", weight="regular", pt=12.0, color="646E78", align="left", anchor="middle", pad_in=0.0, italic=True)
 
     # --- GRAMMAR G: ANNOTATED NATIVE CHART WITH EVIDENCE CALLOUT ---
     def render_annotated_chart(self, slide, chart_type: str, categories: List[str], series_data: List[Dict[str, Any]],
@@ -1925,14 +2025,14 @@ class LumbiniPrimitives:
         p2 = tf_c.add_paragraph()
         p2.text = key_takeaway
         p2.font.name = self.theme.FONT_BODY
-        p2.font.size = Pt(11.5)
+        p2.font.size = Pt(12)
         p2.font.color.rgb = self.theme.C_TEXT
         p2.space_before = Pt(6)
 
         p3 = tf_c.add_paragraph()
         p3.text = "Operational Implication:"
         p3.font.name = self.theme.FONT_SEMIBOLD
-        p3.font.size = Pt(11)
+        p3.font.size = Pt(12)
         p3.font.bold = True
         p3.font.color.rgb = self.theme.C_NAVY
         p3.space_before = Pt(8)
@@ -1940,7 +2040,7 @@ class LumbiniPrimitives:
         p4 = tf_c.add_paragraph()
         p4.text = callout_annotation
         p4.font.name = self.theme.FONT_BODY
-        p4.font.size = Pt(11)
+        p4.font.size = Pt(12)
         p4.font.color.rgb = self.theme.C_MUTED
 
         if source_id:
@@ -1948,7 +2048,7 @@ class LumbiniPrimitives:
             clean_src = source_id.strip("[]")
             p_src.text = f"Source: {clean_src}"
             p_src.font.name = self.theme.FONT_BODY
-            p_src.font.size = Pt(10.0)
+            p_src.font.size = Pt(12)
             p_src.font.italic = True
             p_src.font.color.rgb = self.theme.C_PRIMARY
             p_src.space_before = Pt(8)
@@ -1975,7 +2075,7 @@ class LumbiniPrimitives:
         h1.fill.solid()
         h1.fill.fore_color.rgb = self.theme.C_NAVY
         h1.line.fill.background()
-        set_text(h1, "Role Profile & Compensation", face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle")
+        set_text(h1, "Role Profile & Compensation", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle")
 
         for idx, (role, comp) in enumerate(roles[:4]):
             ry = top_y + 0.52 + idx * 1.02
@@ -1991,7 +2091,7 @@ class LumbiniPrimitives:
             r1 = p1.add_run()
             r1.text = role
             r1.font.name = self.theme.FONT_HEADING
-            r1.font.size = Pt(11.5)
+            r1.font.size = Pt(12)
             r1.font.bold = True
             r1.font.color.rgb = self.theme.C_TEXT
 
@@ -2000,7 +2100,7 @@ class LumbiniPrimitives:
             r2 = p2.add_run()
             r2.text = f"Benchmark: {comp}"
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10.5)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_PRIMARY
 
         # --- Zone 2: Certification Credential Sequence (Width 3.8in) ---
@@ -2013,7 +2113,7 @@ class LumbiniPrimitives:
         h2.fill.solid()
         h2.fill.fore_color.rgb = self.theme.C_PRIMARY
         h2.line.fill.background()
-        set_text(h2, "Credentialing Sequence", face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle")
+        set_text(h2, "Credentialing Sequence", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle")
 
         for idx, (code, title, plat) in enumerate(certifications[:3]):
             cy = top_y + 0.55 + idx * 1.35
@@ -2029,7 +2129,7 @@ class LumbiniPrimitives:
             r1 = p1.add_run()
             r1.text = code
             r1.font.name = self.theme.FONT_HEADING
-            r1.font.size = Pt(11.5)
+            r1.font.size = Pt(12)
             r1.font.bold = True
             r1.font.color.rgb = self.theme.C_PRIMARY
 
@@ -2037,7 +2137,7 @@ class LumbiniPrimitives:
             r2 = p2.add_run()
             r2.text = title
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_TEXT
             p2.space_before = Pt(2)
 
@@ -2045,7 +2145,7 @@ class LumbiniPrimitives:
             r3 = p3.add_run()
             r3.text = f"Platform: {plat}"
             r3.font.name = self.theme.FONT_BODY
-            r3.font.size = Pt(10)
+            r3.font.size = Pt(12)
             r3.font.color.rgb = self.theme.C_MUTED
             p3.space_before = Pt(2)
 
@@ -2059,7 +2159,7 @@ class LumbiniPrimitives:
         h3.fill.solid()
         h3.fill.fore_color.rgb = self.theme.C_MUTED
         h3.line.fill.background()
-        set_text(h3, "90-Day Execution Pathway", face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle")
+        set_text(h3, "90-Day Execution Pathway", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle")
 
         for idx, (tf_step, action) in enumerate(action_plan[:4]):
             ay = top_y + 0.52 + idx * 1.02
@@ -2075,7 +2175,7 @@ class LumbiniPrimitives:
             r1 = p1.add_run()
             r1.text = tf_step
             r1.font.name = self.theme.FONT_HEADING
-            r1.font.size = Pt(11)
+            r1.font.size = Pt(12)
             r1.font.bold = True
             r1.font.color.rgb = self.theme.C_TEXT
 
@@ -2083,7 +2183,7 @@ class LumbiniPrimitives:
             r2 = p2.add_run()
             r2.text = action
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_MUTED
             p2.space_before = Pt(2)
 
@@ -2108,7 +2208,7 @@ class LumbiniPrimitives:
         h_left.fill.solid()
         h_left.fill.fore_color.rgb = self.theme.C_NAVY
         h_left.line.fill.background()
-        set_text(h_left, "System Metadata: What Exists", face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle")
+        set_text(h_left, "System Metadata: What Exists", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle")
 
         tb_lm = slide.shapes.add_textbox(Inches(0.85), Inches(top_y + 0.52), Inches(col_w - 0.4), Inches(card_h - 0.6))
         tf_lm = tb_lm.text_frame
@@ -2121,14 +2221,14 @@ class LumbiniPrimitives:
             r1 = p.add_run()
             r1.text = f"• {lbl}: "
             r1.font.name = self.theme.FONT_HEADING
-            r1.font.size = Pt(10.5)
+            r1.font.size = Pt(12)
             r1.font.bold = True
             r1.font.color.rgb = self.theme.C_NAVY
 
             r2 = p.add_run()
             r2.text = desc
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_TEXT
             if k > 0:
                 p.space_before = Pt(4)
@@ -2141,7 +2241,7 @@ class LumbiniPrimitives:
         h_right.fill.solid()
         h_right.fill.fore_color.rgb = self.theme.C_PRIMARY
         h_right.line.fill.background()
-        set_text(h_right, "Business Context: What Matters, When & Why", face="Inter", weight="bold", pt=11.5, color="FFFFFF", align="center", anchor="middle")
+        set_text(h_right, "Business Context: What Matters, When & Why", face="Inter", weight="bold", pt=12.0, color="FFFFFF", align="center", anchor="middle")
 
         tb_rm = slide.shapes.add_textbox(Inches(right_x + 0.2), Inches(top_y + 0.52), Inches(col_w - 0.4), Inches(card_h - 0.6))
         tf_rm = tb_rm.text_frame
@@ -2154,14 +2254,14 @@ class LumbiniPrimitives:
             r1 = p.add_run()
             r1.text = f"• {lbl}: "
             r1.font.name = self.theme.FONT_HEADING
-            r1.font.size = Pt(10.5)
+            r1.font.size = Pt(12)
             r1.font.bold = True
             r1.font.color.rgb = self.theme.C_PRIMARY
 
             r2 = p.add_run()
             r2.text = desc
             r2.font.name = self.theme.FONT_BODY
-            r2.font.size = Pt(10)
+            r2.font.size = Pt(12)
             r2.font.color.rgb = self.theme.C_TEXT
             if k > 0:
                 p.space_before = Pt(4)
@@ -2184,14 +2284,14 @@ class LumbiniPrimitives:
         r_eh = p_ex1.add_run()
         r_eh.text = f"PRACTICAL UTILITY ILLUSTRATION — {example_box.get('title', 'Distribution Transformer (DTR) Asset')}: "
         r_eh.font.name = self.theme.FONT_HEADING
-        r_eh.font.size = Pt(10.5)
+        r_eh.font.size = Pt(12)
         r_eh.font.bold = True
         r_eh.font.color.rgb = self.theme.C_PRIMARY
 
         r_em = p_ex1.add_run()
         r_em.text = f"Metadata: {example_box.get('metadata_text', '')}"
         r_em.font.name = self.theme.FONT_BODY
-        r_em.font.size = Pt(10)
+        r_em.font.size = Pt(12)
         r_em.font.color.rgb = self.theme.C_MUTED
 
         p_ex2 = tf_ex.add_paragraph()
@@ -2199,14 +2299,14 @@ class LumbiniPrimitives:
         r_ec1 = p_ex2.add_run()
         r_ec1.text = "Operational Context: "
         r_ec1.font.name = self.theme.FONT_HEADING
-        r_ec1.font.size = Pt(10.5)
+        r_ec1.font.size = Pt(12)
         r_ec1.font.bold = True
         r_ec1.font.color.rgb = self.theme.C_NAVY
 
         r_ec2 = p_ex2.add_run()
         r_ec2.text = example_box.get('context_text', '')
         r_ec2.font.name = self.theme.FONT_BODY
-        r_ec2.font.size = Pt(10)
+        r_ec2.font.size = Pt(12)
         r_ec2.font.color.rgb = self.theme.C_TEXT
 
     # =========================================================================
@@ -2227,7 +2327,7 @@ class LumbiniPrimitives:
 
         # Title
         t_box = slide.shapes.add_textbox(Inches(0.9), Inches(0.7), Inches(11.5), Inches(0.9))
-        set_text(t_box, title, face="Inter", weight="bold", pt=26, color="FFFFFF", align="left", anchor="top", pad_in=0.0)
+        set_text(t_box, title, face="Inter", weight="bold", pt=26.0, color="FFFFFF", align="left", anchor="top", pad_in=0.0)
 
         # Orange Accent Rule
         rule = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.9), Inches(1.65), Inches(4.5), Inches(0.04))
@@ -2250,7 +2350,7 @@ class LumbiniPrimitives:
         p_c = tf_c.paragraphs[0]
         p_c.text = f'"{core_message}"'
         p_c.font.name = self.theme.FONT_HEADING
-        p_c.font.size = Pt(13)
+        p_c.font.size = Pt(14)
         p_c.font.bold = True
         p_c.font.italic = True
         p_c.font.color.rgb = RGBColor(224, 242, 254)   # #E0F2FE
@@ -2274,14 +2374,14 @@ class LumbiniPrimitives:
             pp1 = tf_p.paragraphs[0]
             pp1.text = p_name
             pp1.font.name = self.theme.FONT_HEADING
-            pp1.font.size = Pt(11.5)
+            pp1.font.size = Pt(12)
             pp1.font.bold = True
             pp1.font.color.rgb = RGBColor(56, 189, 248)      # #38BDF8
 
             pp2 = tf_p.add_paragraph()
             pp2.text = p_desc
             pp2.font.name = self.theme.FONT_BODY
-            pp2.font.size = Pt(10)
+            pp2.font.size = Pt(12)
             pp2.font.color.rgb = RGBColor(203, 213, 225)     # #CBD5E1
             pp2.space_before = Pt(4)
 
@@ -2294,7 +2394,7 @@ class LumbiniPrimitives:
         pm1 = tf_m.paragraphs[0]
         pm1.text = "STRATEGIC IMPERATIVE"
         pm1.font.name = self.theme.FONT_SEMIBOLD
-        pm1.font.size = Pt(10)
+        pm1.font.size = Pt(12)
         pm1.font.bold = True
         pm1.font.color.rgb = self.theme.C_ACCENT
 

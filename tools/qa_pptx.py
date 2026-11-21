@@ -9,7 +9,7 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from textfit import measure
 EMU = 914400.0
-ap = argparse.ArgumentParser(); ap.add_argument("deck"); ap.add_argument("--min-pt", type=float, default=10)
+ap = argparse.ArgumentParser(); ap.add_argument("deck"); ap.add_argument("--min-pt", type=float, default=12)
 ap.add_argument("--slack", type=float, default=1.06); ap.add_argument("--reference", action="append", default=[])
 ap.add_argument("--brief"); ap.add_argument("--json"); ap.add_argument("--min-slides-for-sections", type=int, default=8)
 a = ap.parse_args()

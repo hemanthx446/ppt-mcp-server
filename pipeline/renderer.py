@@ -308,7 +308,7 @@ class DeckRenderer:
             if notes and hasattr(slide, "notes_slide"):
                 slide.notes_slide.notes_text_frame.text = notes
 
-        # Dynamic Section Management (UPDATE v3 §2)
+        # Dynamic Section Management (UPDATE v3 §2 & Norman Hierarchy)
         # Rules: Decks < 8 slides get 0 sections; >= 8 slides get 2-5 contiguous acts covering all slides
         from tools.sections import plan_ok, write_sections, remove_sections
         sections_data = deck_spec.get("sections", [])
@@ -335,7 +335,31 @@ class DeckRenderer:
             else:
                 remove_sections(prs)
         else:
-            remove_sections(prs)
+            # Auto-generate 3 contiguous thematic acts if >= 8 slides and not explicitly provided
+            n_tot = len(slides_data)
+            # Default 3 acts split: ~25%, ~45%, ~30%
+            act1_count = max(2, round(n_tot * 0.25))
+            act3_count = max(2, round(n_tot * 0.35))
+            act2_count = n_tot - act1_count - act3_count
+            if act2_count < 2:
+                # Fallback to 2 acts
+                act1_count = n_tot // 2
+                act2_count = n_tot - act1_count
+                auto_acts = [
+                    ("1. Executive Context & Core Architecture", act1_count),
+                    ("2. Operational Execution & Transformation Roadmap", act2_count)
+                ]
+            else:
+                auto_acts = [
+                    ("1. Executive Context & Operational Reality", act1_count),
+                    ("2. Architecture & Execution Mechanics", act2_count),
+                    ("3. Governance, Roadmap & Business Case", act3_count)
+                ]
+            ok, _ = plan_ok(n_tot, auto_acts)
+            if ok:
+                write_sections(prs, auto_acts)
+            else:
+                remove_sections(prs)
 
         prs.save(output_path)
         apply_lumbini_theme_to_pptx(output_path)

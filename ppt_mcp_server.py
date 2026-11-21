@@ -2739,6 +2739,56 @@ def run_scrutiny(deck: str) -> Dict[str, Any]:
     return get_scrutiny_status(deck)
 
 
+# =============================================================================
+# DON NORMAN HUMAN-CENTERED DESIGN AUDIT TOOLS
+# =============================================================================
+
+@mcp.tool
+def validate_deck(path: str) -> Dict[str, Any]:
+    """
+    Don Norman Human-Centered Design Pre-Render Audit Tool.
+    Audits the entire presentation for:
+    - Bounding-box collisions & overlaps
+    - Typography floor violations (< 12pt or fractions)
+    - Cognitive density violations (> 65 words per slide, > 12 words per title)
+    - Contrast ratio checks (>= 4.5:1 body, >= 3.0:1 headings)
+    - Off-canvas overflow violations
+    Returns structured JSON with overall status ('pass' | 'warning' | 'fail'),
+    norman_ux_score (0-100), and itemized violations with recommended fixes.
+    """
+    from design_system.norman_ux import validate_deck as run_norman_validate_deck
+    abs_path = os.path.abspath(path)
+    if not os.path.exists(abs_path):
+        return {"status": "fail", "error": f"File not found: {abs_path}"}
+    return run_norman_validate_deck(abs_path)
+
+
+@mcp.tool
+def audit_slide_ux(path: str, slide_index: int) -> Dict[str, Any]:
+    """
+    Don Norman Human-Centered Design Single-Slide Audit.
+    Inspects a specific 1-indexed slide for collisions, font floor (< 12pt),
+    word caps (<= 65 words), title length, and safe margins.
+    """
+    from design_system.norman_ux import audit_slide_ux as run_norman_audit_slide_ux
+    abs_path = os.path.abspath(path)
+    if not os.path.exists(abs_path):
+        return {"status": "fail", "error": f"File not found: {abs_path}"}
+    prs = Presentation(abs_path)
+    if slide_index < 1 or slide_index > len(prs.slides):
+        return {"status": "fail", "error": f"Slide index {slide_index} out of range (1-{len(prs.slides)})"}
+    slide = prs.slides[slide_index - 1]
+    slide_w = prs.slide_width / 914400.0 if prs.slide_width else 13.333
+    slide_h = prs.slide_height / 914400.0 if prs.slide_height else 7.5
+    violations = run_norman_audit_slide_ux(slide, slide_index, slide_w, slide_h)
+    return {
+        "slide_index": slide_index,
+        "violations_count": len(violations),
+        "status": "pass" if not violations else ("fail" if any(v["severity"] == "fail" for v in violations) else "warning"),
+        "violations": violations
+    }
+
+
 if __name__ == "__main__":
     mcp.run()
 
